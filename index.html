@@ -31,7 +31,7 @@
 </div>
 
 <div class="main-wrapper">
-  <!-- 敵将エリア（点対称：左に持ち駒、中央に情報、右に大型絵柄ポートレート） -->
+  <!-- 敵将エリア（点対称：左に駒台、中央に情報、右に大型絵柄ポートレート） -->
   <div class="warlord-panel panel-enemy" id="ai-panel">
     <div class="warlord-hand-area" id="ai-hand" title="敵軍持ち駒"></div>
     <div class="warlord-info">
@@ -92,15 +92,18 @@
     </div>
   </div>
 
-  <!-- 合戦伝令メッセージ帯（軍師進言時は軍師ポートレートを自動表示） -->
+  <!-- 合戦伝令メッセージ帯（左に家紋、中央に伝令文、右側に軍師ポートレートを配置） -->
   <div class="order-message-banner" id="order-message-banner">
-    <div class="order-avatar-slot" id="order-avatar-slot">
+    <div class="order-crest-slot">
       <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
     </div>
     <div class="order-message-text" id="order-message-text">【初陣の刻】上下のパネルより「自将」と「進軍先」を選定されよ。<br>陣容が定まり次第、「対局開始」にて振り駒を執り行われよ！</div>
+    <div class="order-avatar-slot" id="order-avatar-slot">
+      <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
+    </div>
   </div>
 
-  <!-- 自将エリア（点対称：左に大型絵柄ポートレート、中央に情報、右に持ち駒） -->
+  <!-- 自将エリア（点対称：左に大型絵柄ポートレート、中央に情報、右に駒台） -->
   <div class="warlord-panel panel-player" id="player-panel">
     <div class="warlord-avatar" id="player-avatar-container" onclick="openPlayerWarlordModal()" title="自将変更"></div>
     <div class="warlord-info">
@@ -399,5 +402,4 @@
 <script src="main.js"></script>
 </body>
 </html>
-
 
