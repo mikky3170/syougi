@@ -103,6 +103,11 @@
     border: 1.5px solid #c99832; border-radius: 4px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,235,150,0.4);
     display: flex; align-items: center; padding: 2px 6px; gap: 6px; flex-shrink: 0;
+    transition: all 0.3s ease;
+  }
+  .warlord-panel.player-active {
+    box-shadow: 0 0 16px rgba(255, 60, 60, 0.65), inset 0 1px 0 rgba(255,235,150,0.8) !important;
+    border-color: #ffd700 !important;
   }
 
   /* 家紋アバター */
@@ -310,29 +315,51 @@
     text-shadow: 0 0 12px #ffe57f, 0 2px 5px #000 !important; font-weight: 900 !important;
   }
 
-  /* 開始・合戦伝令メッセージ帯 */
+  /* ========================================================
+     開始・合戦伝令メッセージ帯（一回り大きく拡大 ＆ ブレス点滅）
+     ======================================================== */
   .order-message-banner {
-    width: 100%; height: clamp(38px, 5.2vh, 44px);
+    width: 100%; height: clamp(46px, 6.2vh, 54px);
     background: linear-gradient(90deg, #281409 0%, #4a2410 50%, #281409 100%);
-    border: 1.5px solid #b88a32; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    padding: 2px 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.85); flex-shrink: 0;
+    border: 1.8px solid #b88a32; border-radius: 5px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 3px 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.9); flex-shrink: 0;
     transition: all 0.3s ease;
   }
-  .order-crest-icon { width: 16px; height: 16px; fill: #ffd700; flex-shrink: 0; }
+  .order-crest-icon { width: 22px; height: 22px; fill: #ffd700; flex-shrink: 0; filter: drop-shadow(0 0 4px #ffd700); }
   .order-message-text {
-    font-size: 12px; font-weight: 800; color: #ffe699; letter-spacing: 0.8px;
-    line-height: 1.25; text-align: center; flex: 1;
+    font-size: clamp(12.5px, 1.9vh, 15px); font-weight: 900; color: #ffe699; letter-spacing: 0.8px;
+    line-height: 1.3; text-align: center; flex: 1;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    text-shadow: 0 1px 3px #000;
   }
 
-  @keyframes pulse-gold-banner {
-    0% { border-color: #ffd700; box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
-    50% { border-color: #fff6bd; box-shadow: 0 0 18px rgba(255, 215, 0, 0.95); }
-    100% { border-color: #ffd700; box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
+  /* 自軍手番時の優雅な黄金×赤備え呼吸点滅アニメーション */
+  @keyframes breathe-player-turn {
+    0% {
+      border-color: #ffd700;
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.4), inset 0 0 4px rgba(255, 215, 0, 0.2);
+      background: linear-gradient(90deg, #381208 0%, #5c1c0c 50%, #381208 100%);
+    }
+    50% {
+      border-color: #fff4a3;
+      box-shadow: 0 0 22px rgba(255, 215, 0, 0.95), inset 0 0 12px rgba(255, 100, 100, 0.5);
+      background: linear-gradient(90deg, #541708 0%, #8c2a0f 50%, #541708 100%);
+    }
+    100% {
+      border-color: #ffd700;
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.4), inset 0 0 4px rgba(255, 215, 0, 0.2);
+      background: linear-gradient(90deg, #381208 0%, #5c1c0c 50%, #381208 100%);
+    }
   }
-  .order-message-banner.my-turn { animation: pulse-gold-banner 1.8s infinite ease-in-out; }
-  .order-message-banner.my-turn .order-message-text { color: #ffffff; text-shadow: 0 0 6px #ffd700; }
+  .order-message-banner.my-turn {
+    animation: breathe-player-turn 2.4s infinite ease-in-out !important;
+    border-width: 2px !important;
+  }
+  .order-message-banner.my-turn .order-message-text {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px #ffd700, 0 1px 3px #000 !important;
+  }
 
   /* 戦歴棋譜 */
   .kifu-bottom-banner {
@@ -401,8 +428,18 @@
     background: linear-gradient(180deg, #b81414 0%, #520505 100%) !important;
     border: 1.8px solid #ffd700 !important; color: #ffffff !important; font-weight: 900;
     box-shadow: 0 0 14px rgba(255, 30, 30, 0.65), inset 0 1px 0 rgba(255,245,180,0.8) !important;
-    animation: pulse-gold-banner 2.2s infinite ease-in-out;
   }
+
+  /* 誘導時の激しい鼓動点滅 */
+  @keyframes urgent-pulse {
+    0% { transform: scale(1); box-shadow: 0 0 10px #ffd700; border-color: #ffd700; }
+    50% { transform: scale(1.08); box-shadow: 0 0 26px #ff2222, 0 0 16px #ffd700; border-color: #ffffff; }
+    100% { transform: scale(1); box-shadow: 0 0 10px #ffd700; border-color: #ffd700; }
+  }
+  .cmd-btn.urgent-glow {
+    animation: urgent-pulse 0.45s 4 ease-in-out !important;
+  }
+
   /* 軍師進言：織部碧緑漆 */
   .btn-hint {
     background: linear-gradient(180deg, #184422 0%, #081d0d 100%);
@@ -444,8 +481,8 @@
     .situation-banner { min-height: 34px; font-size: 13px; }
     .situation-title { font-size: 16px; }
     .situation-text { font-size: 12.5px; }
-    .order-message-banner { height: 46px; }
-    .order-message-text { font-size: 14px; }
+    .order-message-banner { height: 56px; }
+    .order-message-text { font-size: 16px; }
     .bottom-command-bar { height: 44px; gap: 6px; }
     .cmd-btn { font-size: 13px; }
   }
@@ -482,10 +519,11 @@
       grid-column: 1; grid-row: 6; height: 30px; min-height: 30px;
     }
 
-    /* 右翼：軍師司令室（敵将・戦況・自将・伝令・棋譜・コマンドバー） */
+    /* 右翼：軍師司令室（敵将・戦況・伝令・自将・棋譜・コマンドバー） */
     .warlord-panel:nth-of-type(1) { grid-column: 2; grid-row: 1; height: 60px; }
     .situation-banner { grid-column: 2; grid-row: 2; min-height: 32px; }
-    .order-message-banner { grid-column: 2; grid-row: 3; height: 40px; }
+    .order-message-banner { grid-column: 2; grid-row: 3; height: 46px; }
+    .order-message-text { font-size: 15px; }
     .warlord-panel:nth-of-type(2) { grid-column: 2; grid-row: 4; height: 60px; }
     .kifu-bottom-banner { grid-column: 2; grid-row: 5; height: 100%; min-height: 65px; }
 
@@ -670,7 +708,7 @@
 
 <div class="main-wrapper">
   <!-- 敵将エリア -->
-  <div class="warlord-panel">
+  <div class="warlord-panel" id="ai-panel">
     <div class="warlord-avatar" id="ai-avatar-container"></div>
     <div class="warlord-info">
       <div class="warlord-name-row">
@@ -728,14 +766,14 @@
     </div>
   </div>
 
-  <!-- 開始・合戦伝令メッセージ帯 -->
+  <!-- 開始・合戦伝令メッセージ帯（一回り拡大 ＆ 手番時ブレス点滅） -->
   <div class="order-message-banner" id="order-message-banner">
     <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
     <div class="order-message-text" id="order-message-text">「対局開始」を押し、天運の振り駒を執り行われよ。<br>真田赤備隊、天下統一の初陣に候！</div>
   </div>
 
   <!-- 自将エリア：真田幸村 -->
-  <div class="warlord-panel">
+  <div class="warlord-panel" id="player-panel">
     <div class="warlord-avatar sanada-avatar">
       <svg viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="46" fill="#630a0a" stroke="#ffd700" stroke-width="2.5"/>
@@ -1096,7 +1134,7 @@ function genLegalMoves(owner, capturesOnly = false) {
           if (!board[r][c]) {
             if (code === 'FU') {
               let nifu = false;
-              for (let kr=0; kr<9; kr++) if (board[kr][c]?.owner === owner && board[kr][c]?.code === 'FU') { nifu = true; break; }
+              for(let kr=0; kr<9; kr++) if (board[kr][c]?.owner === owner && board[kr][c]?.code === 'FU') { nifu = true; break; }
               if (nifu) continue;
             }
             pseudo.push({ type: 'drop', code, to: {r, c}, owner });
@@ -1641,10 +1679,28 @@ function checkFirstVisitGuide() {
   }
 }
 
+/* ================= 伝令メッセージ表示 ＆ 手番点滅制御 ================= */
 function setOrderMessage(htmlText, isMyTurn = false) {
   const banner = document.getElementById('order-message-banner');
+  const playerPanel = document.getElementById('player-panel');
   document.getElementById('order-message-text').innerHTML = htmlText;
-  if (isMyTurn) banner.classList.add('my-turn'); else banner.classList.remove('my-turn');
+
+  if (isMyTurn) {
+    banner.classList.add('my-turn');
+    if (playerPanel) playerPanel.classList.add('player-active');
+  } else {
+    banner.classList.remove('my-turn');
+    if (playerPanel) playerPanel.classList.remove('player-active');
+  }
+}
+
+function highlightStartButton() {
+  const btn = document.getElementById('furigoma-btn');
+  if (!btn) return;
+  btn.classList.remove('urgent-glow');
+  void btn.offsetWidth;
+  btn.classList.add('urgent-glow');
+  setTimeout(() => { btn.classList.remove('urgent-glow'); }, 2000);
 }
 
 function updateMoraleAndSituation(scoreAI = 0) {
@@ -2020,10 +2076,22 @@ function downloadKifu() {
   document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
+/* 持ち駒クリック処理 */
 function handleHandClick(code) {
-  if (isGameOver || turn !== 'PLAYER' || isAiThinking) return;
   if (reviewingIndex !== -1) jumpToKifuStep(historyStates.length - 1);
   initAudio(); hintTargetCell = null; hintSourceCell = null;
+
+  if (isGameOver) {
+    playPieceSound();
+    setOrderMessage('【合戦前】まずは「⚜ 対局開始」を押し、<br>天運の振り駒を執り行われよ！', false);
+    highlightStartButton();
+    return;
+  }
+  if (turn !== 'PLAYER' || isAiThinking) {
+    playPieceSound();
+    setOrderMessage('【敵将思案中】敵軍が軍略を巡らせております。<br>自軍の手番までしばしお待ち下され！', false);
+    return;
+  }
 
   if(selectedPos?.handCode === code) {
     selectedPos = null; currentValidMoves = [];
@@ -2036,19 +2104,33 @@ function handleHandClick(code) {
   renderBoard();
 }
 
+/* 盤上セルクリック処理（親切誘導 ＆ 確実な判定） */
 function handleCellClick(e) {
-  if (isGameOver || turn !== 'PLAYER' || isAiThinking) return;
   if (reviewingIndex !== -1) jumpToKifuStep(historyStates.length - 1);
   initAudio(); hintTargetCell = null; hintSourceCell = null;
+
+  if (isGameOver) {
+    playPieceSound();
+    setOrderMessage('【合戦前】まずは「⚜ 対局開始」を押し、<br>天運の振り駒を執り行われよ！', false);
+    highlightStartButton();
+    return;
+  }
+  if (turn !== 'PLAYER' || isAiThinking) {
+    playPieceSound();
+    setOrderMessage('【敵将思案中】敵軍が軍略を巡らせております。<br>自軍の手番までしばしお待ち下され！', false);
+    return;
+  }
 
   const r = parseInt(e.currentTarget.dataset.row), c = parseInt(e.currentTarget.dataset.col);
   const target = board[r][c];
 
+  /* 持ち駒を打つ処理 */
   if(selectedPos?.handCode && currentValidMoves.some(m => m.r === r && m.c === c)) {
     executeMove({ type: 'drop', code: selectedPos.handCode, to: {r, c}, owner: 'PLAYER' });
     selectedPos = null; currentValidMoves = []; finishPlayerTurn(); return;
   }
 
+  /* 盤上の駒を移動する処理 */
   if(selectedPos?.r !== undefined && currentValidMoves.some(m => m.r === r && m.c === c)) {
     const sr = selectedPos.r, sc = selectedPos.c, piece = board[sr][sc];
     const canP = PROMOTE_MAP[piece.code] && (sr <= 2 || r <= 2);
@@ -2063,6 +2145,7 @@ function handleCellClick(e) {
     }
   }
 
+  /* プレイヤーの駒を選択 */
   if(target?.owner === 'PLAYER') {
     selectedPos = {r, c};
     currentValidMoves = getLegalMoves('PLAYER').filter(m => m.type === 'move' && m.from.r === r && m.from.c === c).map(m => m.to);
@@ -2291,7 +2374,7 @@ function getLegalMoves(owner) {
       const item = board[m.from.r][m.from.c], target = board[m.to.r][m.to.c], prevCode = item.code;
       if (target && target.code !== 'OU') hands[m.owner][UNPROMOTE_MAP[target.code]] = (hands[m.owner][UNPROMOTE_MAP[target.code]] || 0) + 1;
       if (m.promote) item.code = PROMOTE_MAP[item.code];
-      board[m.to.r][move.to.c] = item; board[m.from.r][m.from.c] = null;
+      board[m.to.r][m.to.c] = item; board[m.from.r][m.from.c] = null;
       undo = () => {
         item.code = prevCode; board[m.from.r][m.from.c] = item;
         board[m.to.r][m.to.c] = target;
@@ -2371,4 +2454,5 @@ checkFirstVisitGuide();
 </script>
 </body>
 </html>
+
 
