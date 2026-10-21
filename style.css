@@ -1,0 +1,772 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Klee+One:wght@600;900&family=Shippori+Mincho:wght@700;900&family=Yuji+Boku&display=swap');
+
+:root {
+  --gold-bright: #fff3a8;
+  --gold-rich: linear-gradient(135deg, #ffffff 0%, #fff3b3 20%, #ffd700 50%, #e6a100 80%, #fffbe6 100%);
+  --board-wood: linear-gradient(135deg, #fcedc5 0%, #e5be7a 40%, #eed69c 70%, #d6a152 100%);
+  --grid-line: #2b1403;
+  --piece-bg: linear-gradient(180deg, #fffcf2 0%, #fae6bc 60%, #e2bf75 100%);
+  --player-color: #120903;
+  --ai-color: #0c183a;
+  --promoted-crimson: #a60000;
+  --border-frame: linear-gradient(135deg, #3d1c08 0%, #160802 50%, #2a1104 100%);
+  
+  /* 書体定義 */
+  --font-ui: 'Shippori Mincho', serif;
+  --font-kaisho: 'Klee One', serif;      /* 表・生駒の楷書体 */
+  --font-gyosho: 'Yuji Boku', cursive;    /* 裏・成駒の行書・草書体 */
+  --player-theme-color: #e61919;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0; width: 100%; height: 100%;
+  overflow: hidden; background: #070301;
+  font-family: var(--font-ui);
+  color: #f7eed8; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 漆黒梨地塗（金粉散らし背景） */
+body {
+  display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+  padding: 1px 1px 2px 1px;
+  background-color: #070301;
+  background-image:
+    radial-gradient(1.5px 1.5px at 15px 20px, rgba(255, 230, 110, 0.45), rgba(0,0,0,0)),
+    radial-gradient(1.2px 1.2px at 80px 75px, rgba(235, 185, 95, 0.35), rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 145px 35px, rgba(255, 215, 0, 0.3), rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 185px 115px, rgba(255, 245, 160, 0.25), rgba(0,0,0,0));
+  background-size: 140px 140px;
+}
+
+#celebration-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 2800; }
+
+/* 本丸扁額風・極彩山吹黄金立体銘板（金覆輪立体タイトル） */
+.top-header {
+  width: 100%; max-width: 500px; height: 44px;
+  display: flex; justify-content: space-between; align-items: center;
+  border: 2.5px solid #ffd700; border-radius: 6px;
+  background: linear-gradient(180deg, #441d0c 0%, #170702 50%, #351406 100%);
+  box-shadow: 
+    0 5px 0 #120501,
+    0 8px 18px rgba(0,0,0,0.98),
+    inset 0 1.5px 0 rgba(255, 255, 220, 0.9),
+    inset 0 -1.5px 0 rgba(0, 0, 0, 0.8),
+    inset 0 0 16px rgba(255, 215, 0, 0.45);
+  padding: 2px 6px; flex-shrink: 0; position: relative; gap: 4px;
+  transition: max-width 0.3s ease;
+}
+.app-title-group {
+  display: flex; align-items: center; justify-content: center;
+  flex: 1; min-width: 0; padding: 0 4px;
+}
+.app-title-main {
+  font-family: var(--font-kaisho);
+  font-size: clamp(14px, 3.2vw, 18.5px);
+  letter-spacing: 1.6px; font-weight: 900;
+  margin: 0; line-height: 1; text-align: center; white-space: nowrap;
+  background: linear-gradient(180deg, #ffffff 0%, #fffbe6 20%, #ffe066 50%, #ffcc00 75%, #ffa600 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.95)) drop-shadow(0 0 14px rgba(255, 235, 120, 0.95));
+  -webkit-text-stroke: 0.4px #8a1515;
+}
+
+.header-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.header-btn {
+  font-family: var(--font-ui); font-size: 10px; font-weight: 900;
+  padding: 3px 7px; border-radius: 4px; border: 1.2px solid #ffd700;
+  color: #fff8d6; cursor: pointer; white-space: nowrap;
+}
+.btn-guide { background: linear-gradient(180deg, #664311 0%, #301f05 100%); border-color: #ffd700; color: #ffefa8; }
+.btn-kifu { background: linear-gradient(180deg, #1b3a57 0%, #0c1a29 100%); border-color: #5ea8e6; color: #d8eeff; }
+.btn-snd { background: linear-gradient(180deg, #442a4f 0%, #1f1124 100%); border-color: #b97de6; color: #f2e1ff; }
+
+/* 3D押し込みボタン共通設計 */
+.btn-3d {
+  position: relative;
+  box-shadow: 
+    0 3px 0 rgba(0,0,0,0.85),
+    0 4px 6px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.45);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+}
+.btn-3d:active {
+  transform: translateY(2.5px) !important;
+  box-shadow: 
+    0 0.5px 0 rgba(0,0,0,0.9),
+    0 1.5px 3px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.2) !important;
+}
+
+/* メイン骨格 */
+.main-wrapper {
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  width: 100%; max-width: 500px; flex: 1; min-height: 0; gap: 2px;
+  transition: max-width 0.3s ease;
+}
+
+@media (min-width: 600px) {
+  .top-header, .main-wrapper, .bottom-command-bar {
+    max-width: min(94vw, 680px) !important;
+  }
+}
+
+/* =========================================================
+   武将金蒔絵パネル（角丸四角形大型ポートレート対応）
+   ========================================================= */
+.warlord-panel {
+  width: 100%; height: clamp(62px, 8.6vh, 74px);
+  background: linear-gradient(180deg, rgba(38, 19, 8, 0.98) 0%, rgba(14, 6, 2, 0.98) 100%);
+  border: 1.8px solid #c99832; border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,235,150,0.4);
+  display: flex; align-items: center; padding: 2px 6px; gap: 7px; flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+.warlord-panel.player-active {
+  box-shadow: 0 0 16px var(--player-theme-color), inset 0 1px 0 rgba(255,235,150,0.8) !important;
+  border-color: #ffd700 !important;
+}
+
+/* 【角を少し丸くした四角形（角丸長方形の大型額縁）】 */
+.warlord-avatar {
+  width: clamp(52px, 7.2vh, 60px) !important;
+  height: clamp(58px, 8.0vh, 68px) !important;
+  border-radius: 6px !important; /* 丸型を撤廃し、角丸四角形へ */
+  border: 2px solid #ffd700 !important;
+  background: radial-gradient(circle at 35% 35%, #3d1c0c 0%, #080301 100%);
+  overflow: hidden !important; position: relative; flex-shrink: 0 !important;
+  box-shadow: 
+    0 3px 6px rgba(0,0,0,0.95),
+    0 0 12px rgba(255, 215, 0, 0.5),
+    inset 0 0 4px rgba(0,0,0,0.8);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.warlord-avatar:hover { transform: scale(1.04); }
+
+/* 兜の角から胸元まで完璧に収める画像配置 */
+.warlord-avatar img, .warlord-avatar svg {
+  width: 100% !important; height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 10% !important; /* 兜の頂点を切らず顔を最適配置 */
+  display: block !important;
+}
+
+.warlord-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; text-align: left; }
+.warlord-name-row { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
+.name-left-group { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.warlord-name { font-size: 13.5px; font-weight: 900; color: #ffe699; letter-spacing: 0.8px; white-space: nowrap; }
+
+/* 軍師バッジ銘板 */
+.warlord-strategist-badge {
+  font-size: 8.5px; font-weight: 900; color: #fff8e7;
+  background: linear-gradient(180deg, #5c2009 0%, #290a02 100%);
+  border: 0.8px solid #ffd700; border-radius: 3px;
+  padding: 0.5px 4px; white-space: nowrap; line-height: 1.1;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.panel-select-btn {
+  font-family: var(--font-ui); font-size: 8.5px; font-weight: 900;
+  padding: 2px 6px; border-radius: 3px; cursor: pointer; white-space: nowrap;
+  display: flex; align-items: center; gap: 2px;
+}
+.btn-select-enemy {
+  background: linear-gradient(180deg, #593112 0%, #220c02 100%);
+  border: 1px solid #ffd700; color: #ffe899;
+}
+.btn-select-player {
+  background: linear-gradient(180deg, #8a1515 0%, #300505 100%);
+  border: 1px solid #ff9999; color: #ffffff;
+}
+
+.warlord-clan { font-size: 8.5px; color: #d6be89; font-weight: 700; line-height: 1.1; }
+.warlord-quote { font-size: 8.5px; color: #fff4d9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: all 0.3s ease; }
+
+.gauge-group { display: flex; flex-direction: column; gap: 1px; margin-top: 1px; }
+.gauge-label-row { display: flex; justify-content: space-between; font-size: 8px; color: #f2e3c6; font-weight: 900; }
+.morale-bar-frame { width: 100%; height: 5px; background: #000; border: 0.5px solid #8e6c31; border-radius: 2px; overflow: hidden; }
+.morale-bar-fill { height: 100%; width: 50%; transition: width 0.4s ease-out; }
+.morale-enemy { background: linear-gradient(90deg, #991414, #ff4d4d); }
+.morale-player { background: linear-gradient(90deg, #b86b14, #ffd700); }
+
+.warlord-hand-area {
+  flex: 1.15; height: 90%;
+  background: rgba(10, 5, 2, 0.88); border: 1.2px solid #8f692c;
+  border-radius: 3px; padding: 2px 3px;
+  display: flex; align-items: center; overflow-x: auto; gap: 4px;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.95);
+}
+
+/* 軍師戦況評定エリア */
+.situation-banner {
+  width: 100%; min-height: 25px; max-height: 30px;
+  background: linear-gradient(90deg, #1f0f06 0%, #44210c 50%, #1f0f06 100%);
+  border: 1.2px solid #b88a32; border-radius: 3px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 2px 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.85); flex-shrink: 0;
+}
+.situation-title {
+  font-size: 13.5px; font-weight: 900; white-space: nowrap;
+  border-right: 1.5px solid #8c671a; padding-right: 7px; line-height: 1; letter-spacing: 1.5px;
+  background: var(--gold-rich); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.situation-text {
+  font-size: 10px; font-weight: 800; color: #fff8e7; line-height: 1.2;
+  flex: 1; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* 将棋盤＆目盛り枠 */
+.board-wrapper {
+  width: 100%; display: flex; justify-content: center; align-items: center;
+  flex-grow: 1; min-height: 0; position: relative;
+}
+.shogi-board-frame {
+  display: flex; flex-direction: column;
+  background: var(--border-frame);
+  border: 2px solid #cca135; border-radius: 4px;
+  padding: 1px 1px 2px 1px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.98), inset 0 0 10px rgba(0,0,0,0.95);
+  width: 99.5vw; max-width: min(99.5vw, 53vh, 470px);
+  position: relative;
+}
+@media (min-width: 600px) {
+  .shogi-board-frame {
+    max-width: min(94vw, 58vh, 560px) !important;
+  }
+}
+
+.shogi-board-frame::after {
+  content: ''; position: absolute; inset: 1px;
+  border: 1px solid rgba(255, 215, 0, 0.4); pointer-events: none; border-radius: 2px;
+}
+
+.board-top-row { display: flex; width: 100%; height: 13px; margin-bottom: 1px; }
+.rank-index-container { flex: 1; display: grid; grid-template-columns: repeat(9, 1fr); }
+.rank-cell {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 900; color: #ffe57f; text-shadow: 0 1px 2px #000;
+}
+.rank-corner-spacer { width: 14px; flex-shrink: 0; }
+
+.board-main-row { display: flex; width: 100%; align-items: stretch; }
+
+#board {
+  flex: 1; aspect-ratio: 1 / 1;
+  display: grid; grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(9, 1fr);
+  gap: 1px; background-color: var(--grid-line);
+  border: 1.2px solid var(--grid-line);
+  position: relative; box-shadow: 0 3px 10px rgba(0,0,0,0.8);
+}
+
+.cell {
+  background: var(--board-wood);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; position: relative; transition: background 0.15s ease;
+}
+.cell.selected { background: rgba(255, 215, 0, 0.88) !important; }
+
+/* 【直近の手：着地点1点のみの黄金脈動】 */
+@keyframes pulse-last-to {
+  0% {
+    box-shadow: inset 0 0 8px #ffd700, 0 0 6px #ff6f00;
+    border-color: #ffd700;
+  }
+  50% {
+    box-shadow: inset 0 0 20px #ff9100, 0 0 14px #ff3d00;
+    border-color: #ffffff;
+  }
+  100% {
+    box-shadow: inset 0 0 8px #ffd700, 0 0 6px #ff6f00;
+    border-color: #ffd700;
+  }
+}
+.cell.last-move-to {
+  background: linear-gradient(135deg, rgba(230, 81, 0, 0.85) 0%, rgba(255, 179, 0, 0.95) 100%) !important;
+  animation: pulse-last-to 2.2s infinite ease-in-out !important;
+  border: 2px solid #ffffff !important;
+  z-index: 2;
+}
+
+.cell.target-move {
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.9) 0%, rgba(27, 94, 32, 0.96) 100%) !important;
+  box-shadow: inset 0 0 8px #76ff03;
+}
+
+@keyframes spark-gold {
+  0% { box-shadow: inset 0 0 0px #ffd700, 0 0 0px #fff; opacity: 1; }
+  50% { box-shadow: inset 0 0 18px #ffd700, 0 0 14px #ffe57f; opacity: 1; }
+  100% { box-shadow: inset 0 0 0px #ffd700, 0 0 0px #fff; opacity: 0; }
+}
+.cell.sparkle::after {
+  content: ''; position: absolute; inset: 0; border: 2px solid #fff; pointer-events: none;
+  animation: spark-gold 0.6s ease-out forwards;
+}
+
+.cell.hint-source { animation: hint-soft-pulse 1.3s infinite ease-in-out; }
+.cell.hint-target { animation: hint-soft-pulse 1.3s infinite ease-in-out; border: 1.5px dashed #ffeb3b; }
+
+.board-star {
+  position: absolute; width: 4.5px; height: 4.5px; background: #261103;
+  border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 5;
+}
+#star-1 { top: calc(100% * 3 / 9); left: calc(100% * 3 / 9); }
+#star-2 { top: calc(100% * 3 / 9); left: calc(100% * 6 / 9); }
+#star-3 { top: calc(100% * 6 / 9); left: calc(100% * 3 / 9); }
+#star-4 { top: calc(100% * 6 / 9); left: calc(100% * 6 / 9); }
+
+.file-index-col { width: 14px; flex-shrink: 0; display: grid; grid-template-rows: repeat(9, 1fr); margin-left: 1px; }
+.file-cell {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 900; color: #ffe57f; text-shadow: 0 1px 2px #000;
+}
+
+/* 本格二文字駒 */
+.piece {
+  width: 94%; height: 96%;
+  background: var(--piece-bg); border: 1.2px solid #5a3813;
+  clip-path: polygon(50% 0%, 90% 18%, 100% 100%, 0% 100%, 10% 18%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: var(--font-kaisho);
+  font-size: clamp(11.5px, 2.1vh, 15px);
+  line-height: 1.0; font-weight: 900;
+  pointer-events: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.95);
+  text-align: center;
+}
+.piece.player { color: var(--player-color); }
+.piece.ai { color: var(--ai-color); transform: rotate(180deg); }
+
+.piece.promoted {
+  font-family: var(--font-gyosho) !important;
+  font-size: clamp(12.5px, 2.3vh, 16.5px) !important;
+  color: var(--promoted-crimson) !important;
+  text-shadow: 0 0 1.5px rgba(186,12,12,0.6);
+}
+.piece-char-top { margin-bottom: 0.5px; }
+.piece-char-bottom { margin-top: 0.5px; }
+
+.hand-piece {
+  width: 30px; height: 36px;
+  background: var(--piece-bg); border: 1.2px solid #5a3813;
+  clip-path: polygon(50% 0%, 90% 20%, 100% 100%, 0% 100%, 10% 20%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: var(--font-kaisho); font-size: 9.5px; line-height: 1.0; font-weight: 900;
+  cursor: pointer; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.7); flex-shrink: 0;
+  text-align: center;
+}
+.hand-piece.player { color: var(--player-color); }
+.hand-piece.ai { color: var(--ai-color); transform: rotate(180deg); }
+.hand-piece.selected { background: #fff59d; box-shadow: 0 0 10px #ffd700; border-color: #ffd700; }
+.hand-piece-count {
+  position: absolute; bottom: 0; right: 0; font-size: 8px;
+  color: #fff; font-weight: 900; background: #960d0d;
+  border-radius: 50%; padding: 0 3px; line-height: 1.1;
+  border: 0.5px solid #ffd700; box-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+/* カットイン演出 */
+.cutin-slot {
+  width: 100%; height: 26px; min-height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; flex-shrink: 0; pointer-events: none;
+}
+.cutin-banner {
+  width: 95%; max-width: 460px; height: 26px;
+  background: linear-gradient(180deg, rgba(30,10,5,0.98) 0%, rgba(150,15,15,0.98) 50%, rgba(30,10,5,0.98) 100%);
+  border: 1.8px solid #ffd700; border-radius: 4px;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.85);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.9);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.cutin-banner.rivalry {
+  background: linear-gradient(180deg, rgba(40,10,0,0.98) 0%, rgba(180,60,0,0.98) 50%, rgba(40,10,0,0.98) 100%) !important;
+  border-color: #ffea70 !important;
+  box-shadow: 0 0 25px rgba(255, 120, 0, 0.9) !important;
+}
+.cutin-text {
+  font-size: 13.5px; font-weight: 900; color: #fff9e6;
+  text-shadow: 0 0 10px #ffd700, 0 2px 4px #000; letter-spacing: 1.2px;
+  white-space: nowrap; line-height: 1;
+}
+.cutin-active .cutin-banner { opacity: 1 !important; transform: scale(1) !important; }
+
+/* 伝令メッセージ帯 */
+@keyframes breathe-player-turn {
+  0% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.3), inset 0 0 4px rgba(255, 215, 0, 0.2); border-color: #cca135; }
+  50% { box-shadow: 0 0 22px rgba(255, 215, 0, 0.85), inset 0 0 12px rgba(255, 235, 120, 0.6); border-color: #ffffff; }
+  100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.3), inset 0 0 4px rgba(255, 215, 0, 0.2); border-color: #cca135; }
+}
+
+@keyframes pulse-text-glow {
+  0% { color: #ffd700; text-shadow: 0 0 4px #ffd700, 0 1px 3px #000; }
+  50% { color: #ffffff; text-shadow: 0 0 14px #ffffff, 0 0 22px #ffd700, 0 1px 3px #000; }
+  100% { color: #ffd700; text-shadow: 0 0 4px #ffd700, 0 1px 3px #000; }
+}
+
+.order-message-banner {
+  width: 100%; height: clamp(44px, 5.8vh, 50px);
+  background: linear-gradient(90deg, #281409 0%, #4a2410 50%, #281409 100%);
+  border: 1.8px solid #b88a32; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 3px 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.9); flex-shrink: 0;
+  transition: all 0.4s ease;
+}
+.order-crest-icon { width: 22px; height: 22px; fill: #ffd700; flex-shrink: 0; filter: drop-shadow(0 0 4px #ffd700); }
+.order-message-text {
+  font-size: clamp(11.5px, 1.6vh, 13.5px); font-weight: 900; color: #ffe699; letter-spacing: 0.6px;
+  line-height: 1.25; text-align: center; flex: 1;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  text-shadow: 0 1px 3px #000;
+}
+.order-message-banner.my-turn { animation: breathe-player-turn 3.2s infinite ease-in-out !important; }
+.order-message-banner.my-turn .order-message-text { animation: pulse-text-glow 2.2s infinite ease-in-out !important; }
+
+/* 棋譜帯 */
+.kifu-bottom-banner {
+  width: 100%; height: clamp(56px, 7.8vh, 64px);
+  background: linear-gradient(180deg, rgba(25, 12, 5, 0.98) 0%, rgba(10, 5, 2, 0.98) 100%);
+  border: 1.5px solid #a67c33; border-radius: 4px;
+  display: flex; align-items: stretch; padding: 2px 4px; gap: 4px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.95); flex-shrink: 0;
+}
+.kifu-nav-col {
+  display: flex; flex-direction: column; justify-content: space-between;
+  width: 44px; border-right: 1px solid #73511f; padding-right: 3px; flex-shrink: 0;
+}
+.kifu-banner-title { font-size: 8.5px; font-weight: 900; color: #ffd700; text-align: center; line-height: 1.05; }
+.kifu-step-btn-group { display: flex; gap: 2px; }
+.kifu-step-btn {
+  flex: 1; font-size: 8.5px; padding: 2px 0; border: 1px solid #a67c33;
+  background: #2b170c; color: #ffd700; cursor: pointer; border-radius: 2px;
+}
+.kifu-stream-box {
+  display: grid; grid-template-rows: repeat(3, 16px); grid-auto-flow: column;
+  gap: 1px 12px; overflow-x: auto; overflow-y: hidden;
+  flex-grow: 1; font-size: 10px; color: #fcedcb; text-align: left;
+  white-space: nowrap; align-items: center; padding-bottom: 2px;
+}
+.kifu-item-cell { display: flex; align-items: center; white-space: nowrap; cursor: pointer; line-height: 16px; }
+.kifu-item-cell:hover { color: #ffd700; text-decoration: underline; }
+.kifu-item-cell.active-review { color: #ffeb3b; font-weight: 900; text-shadow: 0 0 5px #ffd700; }
+
+/* 最下部コマンドバー（工芸色分け立体小判ボタン群） */
+.bottom-command-bar {
+  width: 100%; max-width: 500px; height: 38px;
+  display: grid; grid-template-columns: 1fr 1fr 1.65fr 1.15fr 1fr;
+  gap: 5px; padding: 2px 2px 3px 2px; flex-shrink: 0;
+  transition: max-width 0.3s ease;
+}
+.cmd-btn {
+  font-family: var(--font-ui); font-size: clamp(9.5px, 1.35vh, 11px); font-weight: 900;
+  border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 2px;
+  white-space: nowrap; padding: 0 2px; text-shadow: 0 1.2px 2px rgba(0,0,0,0.95);
+  position: relative; overflow: hidden;
+}
+
+/* 待った：本紫漆 */
+.btn-undo {
+  background: linear-gradient(180deg, #591b4f 0%, #260a22 100%);
+  border: 1.5px solid #e094f7; color: #fce8ff;
+  box-shadow: 0 3px 0 #140312, 0 5px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.45);
+}
+
+/* 投了：藍鉄漆 */
+.btn-surrender {
+  background: linear-gradient(180deg, #1b324a 0%, #081522 100%);
+  border: 1.5px solid #7cb5eb; color: #e1f0ff;
+  box-shadow: 0 3px 0 #04090f, 0 5px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.45);
+}
+
+/* 対局開始：燃える朱漆塗り・特大立体小判 */
+.btn-start {
+  background: linear-gradient(180deg, #d11919 0%, #6e0808 50%, #450404 100%) !important;
+  border: 2px solid #ffd700 !important; color: #ffffff !important; font-weight: 900;
+  box-shadow: 
+    0 3.5px 0 #2b0202,
+    0 6px 14px rgba(255, 30, 30, 0.7),
+    inset 0 1.5px 0 rgba(255,245,180,0.9) !important;
+  font-size: clamp(10.5px, 1.5vh, 12px) !important;
+}
+
+/* 軍師進言：翡翠青漆 */
+.btn-hint {
+  background: linear-gradient(180deg, #195228 0%, #07240f 100%);
+  border: 1.5px solid #6ee08b; color: #e5ffe9;
+  box-shadow: 0 3px 0 #031207, 0 5px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.45);
+}
+
+@keyframes kanbei-awakened-glow {
+  0% { box-shadow: 0 3px 0 #3b0500, 0 0 8px #ff3300, inset 0 0 4px #ffd700; border-color: #ffd700; }
+  50% { box-shadow: 0 3px 0 #3b0500, 0 0 20px #ff1100, 0 0 10px #ffd700, inset 0 0 8px #ff7700; border-color: #ffffff; }
+  100% { box-shadow: 0 3px 0 #3b0500, 0 0 8px #ff3300, inset 0 0 4px #ffd700; border-color: #ffd700; }
+}
+.btn-hint.awakened {
+  background: linear-gradient(180deg, #ba1600 0%, #590800 100%) !important;
+  border: 2px solid #ffd700 !important; color: #fff9db !important;
+  animation: kanbei-awakened-glow 1.4s infinite ease-in-out !important;
+}
+
+/* 天下絵巻：黄金小判 */
+.btn-book {
+  background: linear-gradient(180deg, #704c16 0%, #301f05 100%);
+  border: 1.5px solid #ffd700; color: #fff2d6;
+  box-shadow: 0 3px 0 #170d01, 0 5px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+/* モーダル共用スタイル */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.88); display: flex; justify-content: center; align-items: center; z-index: 2500;
+}
+.modal-content {
+  background: radial-gradient(circle at center, #351a0c 0%, #120803 100%);
+  border: 2.2px solid #ffd700; padding: 12px 14px; border-radius: 6px;
+  color: #f7eed8; box-shadow: 0 10px 35px rgba(0,0,0,0.95); text-align: left;
+}
+.modal-buttons { margin-top: 10px; display: flex; gap: 8px; justify-content: center; }
+.modal-buttons button {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 900;
+  padding: 5px 18px; border-radius: 4px; border: 1.5px solid #d4af37;
+  background: linear-gradient(180deg, #3d2111 0%, #170a04 100%); color: #ffe58f; cursor: pointer;
+}
+
+/* 振り駒モーダル */
+.furigoma-modal {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.92); z-index: 3000;
+  display: none; align-items: center; justify-content: center;
+}
+.furigoma-board {
+  width: 90vw; max-width: 380px;
+  background: radial-gradient(circle at center, #381c0f 0%, #0e0502 100%);
+  border: 2.5px solid #ffd700; border-radius: 8px; padding: 18px 12px;
+  text-align: center; box-shadow: 0 0 35px rgba(255, 215, 0, 0.6);
+}
+.furigoma-pieces-row { display: flex; justify-content: center; gap: 8px; margin: 15px 0; min-height: 52px; }
+.furigoma-piece-box { width: 40px; height: 48px; perspective: 600px; }
+.furigoma-card {
+  width: 100%; height: 100%; position: relative;
+  transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.furigoma-card.flipped { transform: rotateY(180deg); }
+.furigoma-face {
+  position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+  background: var(--piece-bg); border: 1.3px solid #5a3813;
+  clip-path: polygon(50% 0%, 90% 20%, 100% 100%, 0% 100%, 10% 20%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+}
+.furigoma-front { font-family: var(--font-kaisho); color: #1a0c02; font-size: 11.5px; font-weight: 900; line-height: 1.0; }
+.furigoma-back { font-family: var(--font-gyosho); transform: rotateY(180deg); color: var(--promoted-crimson); font-size: 13.5px; font-weight: 900; line-height: 1.0; }
+
+/* 国盗り絵巻モーダル */
+.conquest-modal-box {
+  width: 96vw !important; max-width: 540px !important; height: 88vh !important;
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: radial-gradient(circle at center, #2e1408 0%, #0d0401 100%) !important;
+  border: 2px solid #ffd700 !important;
+}
+.conquest-header-stat {
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px;
+  border: 1px solid #8e6c31; margin-bottom: 6px; font-size: 11px; font-weight: 900;
+}
+.conquest-progress-fill {
+  width: 120px; height: 7px; background: #261103; border-radius: 3px; border: 0.5px solid #ffd700; overflow: hidden;
+}
+.conquest-progress-bar { height: 100%; background: linear-gradient(90deg, #ffd700, #ff3b30); width: 0%; transition: width 0.5s ease; }
+
+.conquest-map-stage {
+  width: 100%; height: 175px; position: relative; background: #0b1524;
+  border: 1.5px solid #a67c33; border-radius: 4px; overflow: hidden;
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.9); flex-shrink: 0;
+}
+#japan-conquest-svg { width: 100%; height: 100%; display: block; }
+
+.map-province-node { cursor: pointer; transition: transform 0.2s ease; }
+.map-province-node:hover { transform: scale(1.15); }
+.map-province-node.cleared circle { fill: #d41313 !important; stroke: #ffd700 !important; }
+.map-province-node.current circle { fill: #ffd700 !important; stroke: #ffffff !important; }
+.map-province-node.locked { opacity: 0.45; cursor: not-allowed; }
+.map-province-node.locked circle { fill: #1c100a !important; stroke: #665029 !important; }
+
+.conquest-warlord-list {
+  flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;
+  padding-right: 3px; margin: 6px 0;
+}
+.conquest-card-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 7px;
+  background: rgba(22, 10, 4, 0.94); border: 1.2px solid #73511f; border-radius: 4px;
+  padding: 5px 8px; cursor: pointer; transition: all 0.2s ease;
+}
+.conquest-card-item.selected {
+  background: linear-gradient(90deg, #4f1f0a 0%, #7d3312 100%);
+  border-color: #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+.conquest-card-item.cleared { border-color: #ffb300; }
+.conquest-card-item.locked { opacity: 0.5; cursor: not-allowed; background: rgba(14, 7, 3, 0.85); border-color: #4a3416; }
+.conquest-card-left { display: flex; align-items: center; gap: 7px; }
+
+/* 国盗り絵巻内の角丸四角形サムネイル */
+.conquest-avatar-thumb {
+  width: 44px !important; height: 52px !important;
+  border-radius: 5px !important; border: 1.5px solid #ffd700 !important;
+  overflow: hidden !important; flex-shrink: 0; background: #140502;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+.conquest-avatar-thumb img, .conquest-avatar-thumb svg {
+  width: 100% !important; height: 100% !important;
+  object-fit: cover !important; object-position: center 10% !important;
+}
+
+.conquest-status-badge {
+  font-size: 8.5px; font-weight: 900; padding: 1.5px 5px; border-radius: 3px;
+  border: 0.8px solid #ffd700; white-space: nowrap;
+}
+.badge-conquered { background: #8a1414; color: #ffe699; }
+.badge-challenge { background: #b87b14; color: #ffffff; }
+.badge-locked { background: #26160d; color: #a68f6d; border-color: #5c411e; }
+
+/* 自将モーダル */
+.warlord-card-list { display: flex; flex-direction: column; gap: 7px; overflow-y: auto; flex: 1; padding-right: 3px; }
+.warlord-select-card {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(22, 10, 4, 0.95); border: 1.5px solid #8e6c31; border-radius: 5px;
+  padding: 6px 8px; cursor: pointer; transition: all 0.2s ease;
+}
+.warlord-select-card.active {
+  border-color: #ffd700; background: linear-gradient(90deg, #4f1e0d 0%, #7e2d14 100%);
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+}
+
+/* 自将モーダル内の角丸四角形大型ポートレート枠 */
+.card-avatar-mini {
+  width: 54px !important; height: 64px !important;
+  border-radius: 6px !important; border: 2px solid #ffd700 !important;
+  overflow: hidden !important; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  background: #140502; box-shadow: 0 2px 5px rgba(0,0,0,0.9);
+}
+.card-avatar-mini img, .card-avatar-mini svg {
+  width: 100% !important; height: 100% !important;
+  object-fit: cover !important; object-position: center 10% !important;
+}
+.card-info-col { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.card-name-title { font-size: 13.5px; font-weight: 900; color: #ffd700; line-height: 1.1; }
+.card-clan-tag { font-size: 9.5px; color: #d6be89; }
+.card-strategist-tag {
+  font-size: 9px; font-weight: 800; color: #fff3cc;
+  background: rgba(80, 25, 10, 0.85); border: 0.8px solid #e0a348;
+  border-radius: 3px; padding: 1px 5px; display: inline-block; width: fit-content;
+  margin-top: 2px;
+}
+
+/* 棋譜＆形勢推移モーダル */
+.modal-kifu-panorama {
+  width: 96vw; max-width: 530px; height: 88vh; display: flex; flex-direction: column; gap: 5px;
+}
+.kifu-situation-summary {
+  background: linear-gradient(90deg, #281409 0%, #52250d 50%, #281409 100%);
+  border: 1.5px solid #ffd700; border-radius: 4px; padding: 4px 8px;
+  font-size: 11px; font-weight: 800; color: #fff8e7; line-height: 1.3;
+  display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.8);
+}
+.kifu-situation-summary .badge {
+  background: #b81414; color: #fff; font-size: 9.5px; font-weight: 900;
+  padding: 1px 5px; border-radius: 3px; border: 0.8px solid #ffd700; white-space: nowrap;
+}
+
+.chart-container {
+  width: 100%; height: 140px; background: #080301; border: 1.5px solid #a67c33;
+  border-radius: 5px; position: relative; overflow: hidden;
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.95);
+}
+#chart-canvas { width: 100%; height: 100%; display: block; }
+
+.chart-legend-top {
+  position: absolute; top: 3px; left: 8px; right: 8px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 9.5px; font-weight: 900; pointer-events: none; z-index: 5;
+}
+.chart-legend-bottom {
+  position: absolute; bottom: 3px; left: 8px; right: 8px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 9.5px; font-weight: 900; pointer-events: none; z-index: 5;
+}
+.chart-tag-player { color: #ffe066; text-shadow: 0 1px 3px #000; display: flex; align-items: center; gap: 3px; }
+.chart-tag-enemy { color: #90caf9; text-shadow: 0 1px 3px #000; display: flex; align-items: center; gap: 3px; }
+.chart-tag-mid {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  font-size: 8.5px; color: #c9a35b; text-shadow: 0 1px 3px #000; font-weight: 900;
+}
+
+.modal-kifu-content {
+  flex: 1; overflow-y: auto; border: 1.2px solid #73511f; background: rgba(10,5,2,0.92);
+  padding: 4px; font-size: 11px; line-height: 1.6; border-radius: 3px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.kifu-row-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 2px 6px; border-radius: 3px; cursor: pointer; transition: background 0.15s ease;
+}
+.kifu-row-item:hover { background: rgba(255, 215, 0, 0.18); }
+.kifu-row-critical {
+  background: linear-gradient(90deg, rgba(160, 20, 20, 0.45) 0%, rgba(255, 140, 0, 0.25) 100%) !important;
+  border-left: 3px solid #ff3300;
+}
+.kifu-row-critical .kifu-move-txt { color: #ffeb3b; font-weight: 900; text-shadow: 0 0 4px #ff3d00; }
+.kifu-badge-critical {
+  font-size: 8.5px; font-weight: 900; padding: 0.5px 4px; border-radius: 2px;
+  border: 0.5px solid #ffd700;
+}
+.badge-tennozan { background: #b71c1c; color: #fff; }
+.badge-shock { background: #0d47a1; color: #fff; }
+
+/* 指南モーダル */
+.guide-modal-box {
+  width: 96vw; max-width: 530px; height: 88vh; display: flex; flex-direction: column;
+  background: radial-gradient(circle at center, #2e1408 0%, #0c0401 100%) !important;
+  border: 2px solid #ffd700 !important; box-shadow: 0 0 35px rgba(255, 215, 0, 0.45) !important;
+}
+.guide-tab-bar {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 8px;
+}
+.guide-tab-btn {
+  font-family: var(--font-ui); font-size: 10px; font-weight: 900;
+  padding: 6px 2px; border-radius: 3px; border: 1.2px solid #a67c33;
+  background: linear-gradient(180deg, #2f1607 0%, #150802 100%); color: #ebd4a0; cursor: pointer; text-align: center;
+  white-space: nowrap;
+}
+.guide-tab-btn.active {
+  background: linear-gradient(180deg, #8a1414 0%, #3d0505 100%);
+  border-color: #ffd700; color: #ffffff; box-shadow: 0 0 10px rgba(255,215,0,0.6);
+}
+.guide-scroll-body {
+  flex: 1; overflow-y: auto; padding-right: 5px; font-size: 11.5px; line-height: 1.75;
+  background: rgba(10, 4, 1, 0.85); border: 1px solid #8e6c31; border-radius: 4px; padding: 10px;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.9);
+}
+.guide-pane { display: none; }
+.guide-pane.active { display: block; }
+
+.guide-card-box {
+  background: linear-gradient(180deg, rgba(38, 17, 7, 0.95) 0%, rgba(18, 7, 2, 0.95) 100%);
+  border: 1.2px solid #8e6c31; border-radius: 5px; padding: 9px 11px; margin-bottom: 9px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.85);
+}
+.guide-card-box h4 {
+  margin: 0 0 6px 0; color: #ffd700; font-size: 13px; font-weight: 900;
+  border-bottom: 1.2px solid #8c671a; padding-bottom: 3px; display: flex; align-items: center; gap: 5px;
+  letter-spacing: 0.5px;
+}
+.kw-gold { color: #ffd700; font-weight: 900; }
+.kw-crimson { color: #ff4d4d; font-weight: 900; }
+.kw-green { color: #76ff03; font-weight: 900; }
+.kw-blue { color: #4fc3f7; font-weight: 900; }
+
+
