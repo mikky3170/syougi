@@ -19,7 +19,10 @@
     <button class="header-btn btn-3d btn-guide" onclick="openGuideModal()">📜 指南</button>
   </div>
   <div class="app-title-group">
-    <h1 class="app-title-main">将棋王 2026 〜 天下統一・戦国決戦 〜</h1>
+    <h1 class="app-title-main">
+      <span class="title-main-txt">将棋王 2026</span>
+      <span class="title-sub-txt">〜 天下統一・戦国決戦 〜</span>
+    </h1>
   </div>
   <div class="header-actions">
     <button class="header-btn btn-3d btn-kifu" onclick="openKifuModal()">📖 棋譜</button>
@@ -28,15 +31,15 @@
 </div>
 
 <div class="main-wrapper">
-  <!-- 敵将エリア（蒔絵フレーム・武将絵柄ポートレート） -->
-  <div class="warlord-panel" id="ai-panel">
-    <div class="warlord-avatar" id="ai-avatar-container" onclick="openConquestMapModal()" title="天下統一・国盗り絵巻"></div>
+  <!-- 敵将エリア（点対称：左に持ち駒、中央に情報、右に大型絵柄ポートレート） -->
+  <div class="warlord-panel panel-enemy" id="ai-panel">
+    <div class="warlord-hand-area" id="ai-hand" title="敵軍持ち駒"></div>
     <div class="warlord-info">
       <div class="warlord-name-row">
-        <div class="name-left-group">
+        <button class="panel-select-btn btn-3d btn-select-enemy" onclick="openConquestMapModal()" id="btn-enemy-change">🗺 国盗り絵巻</button>
+        <div class="name-right-group">
           <span class="warlord-name" id="ai-name-disp">木下藤吉郎</span>
         </div>
-        <button class="panel-select-btn btn-3d btn-select-enemy" onclick="openConquestMapModal()" id="btn-enemy-change">🗺 国盗り絵巻</button>
       </div>
       <div class="warlord-clan" id="ai-clan-disp">尾張国｜織田足軽隊 (Lv.1)</div>
       <div class="warlord-quote" id="ai-quote-disp">「草履取りとて天下を夢見候！ 足軽の意地、見せてくれよう！」</div>
@@ -45,7 +48,7 @@
         <div class="morale-bar-frame"><div id="ai-morale-bar" class="morale-bar-fill morale-enemy" style="width: 50%;"></div></div>
       </div>
     </div>
-    <div class="warlord-hand-area" id="ai-hand"></div>
+    <div class="warlord-avatar" id="ai-avatar-container" onclick="openConquestMapModal()" title="天下統一・国盗り絵巻"></div>
   </div>
 
   <!-- 軍師戦況評定エリア -->
@@ -89,14 +92,16 @@
     </div>
   </div>
 
-  <!-- 合戦伝令メッセージ帯 -->
+  <!-- 合戦伝令メッセージ帯（軍師進言時は軍師ポートレートを自動表示） -->
   <div class="order-message-banner" id="order-message-banner">
-    <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
+    <div class="order-avatar-slot" id="order-avatar-slot">
+      <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
+    </div>
     <div class="order-message-text" id="order-message-text">【初陣の刻】上下のパネルより「自将」と「進軍先」を選定されよ。<br>陣容が定まり次第、「対局開始」にて振り駒を執り行われよ！</div>
   </div>
 
-  <!-- 自将エリア（蒔絵フレーム・武将絵柄ポートレート） -->
-  <div class="warlord-panel" id="player-panel">
+  <!-- 自将エリア（点対称：左に大型絵柄ポートレート、中央に情報、右に持ち駒） -->
+  <div class="warlord-panel panel-player" id="player-panel">
     <div class="warlord-avatar" id="player-avatar-container" onclick="openPlayerWarlordModal()" title="自将変更"></div>
     <div class="warlord-info">
       <div class="warlord-name-row">
@@ -113,7 +118,7 @@
         <div class="morale-bar-frame"><div id="player-morale-bar" class="morale-bar-fill morale-player" style="width: 50%;"></div></div>
       </div>
     </div>
-    <div class="warlord-hand-area" id="player-hand"></div>
+    <div class="warlord-hand-area" id="player-hand" title="自軍持ち駒"></div>
   </div>
 
   <!-- 戦歴棋譜（最新復帰ボタン完備） -->
@@ -394,4 +399,5 @@
 <script src="main.js"></script>
 </body>
 </html>
+
 

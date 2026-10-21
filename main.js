@@ -1,4 +1,3 @@
-
 /* =========================================================
    将棋王 2026 〜 天下統一・戦国決戦 〜
    メインスクリプト（軍略・演出・思考エンジン統合管理）
@@ -63,7 +62,7 @@ function getValidBoardMoves(r, c, owner) {
   return moves;
 }
 
-// 駒の利きマス取得（味方のマスも守りの連結としてカウント）
+// 駒の利きマス取得
 function getControlSquares(r, c, owner) {
   const item = board[r][c]; if (!item) return [];
   const dir = owner === 'AI' ? 1 : -1, squares = [];
@@ -171,7 +170,7 @@ function isUchifuzume(move) {
   return enemyLegals.length === 0;
 }
 
-// 局面評価関数（武将の気風ボーナス＆紐付き防御判定を完全反映）
+// 局面評価関数
 function evaluatePosition() {
   let score = 0;
   let pKing = null, aiKing = null;
@@ -197,16 +196,16 @@ function evaluatePosition() {
       if (p.owner === 'AI') {
         if (currentLevel === 2) {
           if (p.code === 'HI' || p.code === 'KE') val *= 1.15;
-          if (p.code === 'HI' && c === 4) score += 45; // 中飛車の気風
+          if (p.code === 'HI' && c === 4) score += 45;
         }
         if (currentLevel === 4) {
-          if (p.code === 'HI' && c === 2) score += 40; // 三間飛車の気風
+          if (p.code === 'HI' && c === 2) score += 40;
         }
         if (currentLevel === 6) {
-          if (p.code === 'KA' || p.code === 'UM') val *= 1.25; // 軍神の角行射程
+          if (p.code === 'KA' || p.code === 'UM') val *= 1.25;
         }
         if (currentLevel === 8) {
-          if (p.code === 'RY' || p.code === 'UM') val *= 1.25; // 信長の猛攻
+          if (p.code === 'RY' || p.code === 'UM') val *= 1.25;
         }
       }
 
@@ -580,10 +579,10 @@ function launchFireworksCelebration() {
 }
 
 /* =========================================================
-   武将ポートレート・画像ローダー（対局画面＆モーダル完全同期）
+   武将・軍師ポートレート画像ローダー（SVGフォールバック完全対応）
    ========================================================= */
 
-// .png / .jpg / .webp の自動多段階フォールバック付きHTMLジェネレーター
+// 武将用画像ローダー（画像がない場合は兜・家紋SVGを中央表示）
 function getWarlordPortraitHtml(warlordData) {
   const baseName = warlordData.customImg || `images/${warlordData.id}`;
   const pngPath = `${baseName}.png`;
@@ -591,32 +590,68 @@ function getWarlordPortraitHtml(warlordData) {
   const webpPath = `${baseName}.webp`;
 
   return `
-    <img src="${pngPath}" 
-         alt="${warlordData.name}" 
-         onerror="
-           if (!this.dataset.triedJpg) {
-             this.dataset.triedJpg = 'true';
-             this.src = '${jpgPath}';
-           } else if (!this.dataset.triedWebp) {
-             this.dataset.triedWebp = 'true';
-             this.src = '${webpPath}';
-           } else {
-             this.style.display = 'none';
-             if (this.nextElementSibling) this.nextElementSibling.style.display = 'block';
-           }
-         "
-         style="width:100%; height:100%; object-fit:cover; object-position:center 10%; display:block;">
-    <svg viewBox="0 0 100 100" style="display:none; width:100%; height:100%;">
-      ${warlordData.portraitSvg}
-    </svg>
+    <div style="width:100%; height:100%; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+      <img src="${pngPath}" 
+           alt="${warlordData.name}" 
+           onerror="
+             if (!this.dataset.triedJpg) {
+               this.dataset.triedJpg = 'true';
+               this.src = '${jpgPath}';
+             } else if (!this.dataset.triedWebp) {
+               this.dataset.triedWebp = 'true';
+               this.src = '${webpPath}';
+             } else {
+               this.style.display = 'none';
+               var svg = this.parentElement.querySelector('svg');
+               if (svg) svg.style.display = 'block';
+             }
+           "
+           style="width:100%; height:100%; object-fit:cover; object-position:center 10%; display:block;">
+      <svg viewBox="0 0 100 100" style="display:none; width:100%; height:100%;">
+        ${warlordData.portraitSvg}
+      </svg>
+    </div>
   `;
 }
 
-/* 主役五傑（専属軍師 ＆ 兜ポートレートアート） */
+// 軍師用画像ローダー（画像がない場合は軍師専用SVGを中央表示）
+function getStrategistPortraitHtml(warlordData) {
+  const baseName = `images/${warlordData.strategistImgId}`;
+  const pngPath = `${baseName}.png`;
+  const jpgPath = `${baseName}.jpg`;
+  const webpPath = `${baseName}.webp`;
+
+  return `
+    <div style="width:100%; height:100%; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+      <img src="${pngPath}" 
+           alt="${warlordData.strategistName}" 
+           onerror="
+             if (!this.dataset.triedJpg) {
+               this.dataset.triedJpg = 'true';
+               this.src = '${jpgPath}';
+             } else if (!this.dataset.triedWebp) {
+               this.dataset.triedWebp = 'true';
+               this.src = '${webpPath}';
+             } else {
+               this.style.display = 'none';
+               var svg = this.parentElement.querySelector('svg');
+               if (svg) svg.style.display = 'block';
+             }
+           "
+           style="width:100%; height:100%; object-fit:cover; object-position:center 10%; display:block;">
+      <svg viewBox="0 0 100 100" style="display:none; width:100%; height:100%;">
+        ${warlordData.strategistSvg}
+      </svg>
+    </div>
+  `;
+}
+
+/* 主役五傑（専属軍師 ＆ 兜・軍師ポートレートアート） */
 const PLAYER_WARLORDS = {
   sanada: {
     id: 'sanada', name: '真田幸村', clan: '信濃国 ｜ 真田赤備隊・日本一の兵', themeColor: '#e61919',
     strategistName: '真田昌幸', strategistTitle: '表裏比興の父', strategistShort: '昌幸',
+    strategistImgId: 'strategist_masayuki',
     bgGrad: 'radial-gradient(circle at 35% 35%, #6a0b0b 0%, #180202 100%)',
     quotes: {
       default: '「不惜身命！ この一手に命を懸ける！」',
@@ -634,11 +669,22 @@ const PLAYER_WARLORDS = {
         <circle cx="42" cy="52" r="4.5"/><circle cx="50" cy="52" r="4.5"/><circle cx="58" cy="52" r="4.5"/>
       </g>
       <path d="M 24,72 Q 50,96 76,72 L 72,82 Q 50,100 28,82 Z" fill="#ffd700"/>
+    `,
+    strategistSvg: `
+      <rect width="100" height="100" rx="6" fill="#2d1306"/>
+      <polygon points="50,12 66,32 50,26 34,32" fill="#ffd700"/>
+      <circle cx="50" cy="52" r="22" fill="#170902" stroke="#ffd700" stroke-width="2"/>
+      <g fill="#ffd700">
+        <circle cx="44" cy="46" r="3.5"/><circle cx="50" cy="46" r="3.5"/><circle cx="56" cy="46" r="3.5"/>
+        <circle cx="44" cy="56" r="3.5"/><circle cx="50" cy="56" r="3.5"/><circle cx="56" cy="56" r="3.5"/>
+      </g>
+      <text x="50" y="88" font-size="11" font-weight="900" fill="#ffd700" text-anchor="middle">謀将昌幸</text>
     `
   },
   keiji: {
     id: 'keiji', name: '前田慶次', clan: '加賀国 ｜ 天下無双の傾奇者', themeColor: '#ffd700',
     strategistName: '奥村助右衛門', strategistTitle: '加賀前田の親友', strategistShort: '助右衛門',
+    strategistImgId: 'strategist_sukeemon',
     bgGrad: 'radial-gradient(circle at 35% 35%, #4a2800 0%, #140500 100%)',
     quotes: {
       default: '「大ふへん者とは大武辺者のことよ！ いざ参る！」',
@@ -653,11 +699,19 @@ const PLAYER_WARLORDS = {
       <circle cx="50" cy="45" r="9" fill="#ffd700"/>
       <circle cx="50" cy="26" r="6" fill="#ffd700"/><circle cx="68" cy="38" r="6" fill="#ffd700"/>
       <circle cx="62" cy="62" r="6" fill="#ffd700"/><circle cx="38" cy="62" r="6" fill="#ffd700"/><circle cx="32" cy="38" r="6" fill="#ffd700"/>
+    `,
+    strategistSvg: `
+      <rect width="100" height="100" rx="6" fill="#1b1d28"/>
+      <polygon points="50,15 70,38 30,38" fill="#ffd700"/>
+      <path d="M 26,44 Q 50,28 74,44 L 76,74 Q 50,82 24,74 Z" fill="#2d354d" stroke="#ffd700" stroke-width="1.8"/>
+      <circle cx="50" cy="56" r="12" fill="#ffd700"/>
+      <text x="50" y="90" font-size="11" font-weight="900" fill="#ffd700" text-anchor="middle">助右衛門</text>
     `
   },
   masamune: {
     id: 'masamune', name: '伊達政宗', clan: '陸奥国 ｜ 独眼竜の牙', themeColor: '#4fc3f7',
     strategistName: '片倉小十郎', strategistTitle: '竜の右目・天下二大軍師', strategistShort: '小十郎',
+    strategistImgId: 'strategist_kojuro',
     bgGrad: 'radial-gradient(circle at 35% 35%, #0d2847 0%, #030a14 100%)',
     quotes: {
       default: '「天下の隙、この独眼竜が見逃さぬ！ 派手に行こうぜ！」',
@@ -671,11 +725,19 @@ const PLAYER_WARLORDS = {
       <path d="M 28,48 Q 50,28 72,48 L 76,76 Q 50,84 24,76 Z" fill="#0d1f36" stroke="#4fc3f7" stroke-width="1.8"/>
       <circle cx="40" cy="60" r="4" fill="#ffd700"/>
       <path d="M 34,58 L 46,62" stroke="#000" stroke-width="2"/>
+    `,
+    strategistSvg: `
+      <rect width="100" height="100" rx="6" fill="#071b26"/>
+      <path d="M 20,40 Q 50,15 80,40 L 76,75 Q 50,85 24,75 Z" fill="#13364b" stroke="#ffd700" stroke-width="2"/>
+      <circle cx="50" cy="46" r="15" fill="#ffd700"/>
+      <circle cx="50" cy="46" r="10" fill="#071b26"/>
+      <text x="50" y="90" font-size="11" font-weight="900" fill="#ffd700" text-anchor="middle">竜の右目</text>
     `
   },
   kanetsugu: {
     id: 'kanetsugu', name: '直江兼続', clan: '越後国 ｜ 義と愛の軍師', themeColor: '#ba68c8',
     strategistName: '上杉景勝', strategistTitle: '越後の総帥・寡黙の主君', strategistShort: '景勝',
+    strategistImgId: 'strategist_kagekatsu',
     bgGrad: 'radial-gradient(circle at 35% 35%, #2a0836 0%, #0b0110 100%)',
     quotes: {
       default: '「義を見てせざるは勇なきなり！ 義の刃を受けてみよ！」',
@@ -688,11 +750,19 @@ const PLAYER_WARLORDS = {
       <text x="50" y="44" font-size="34" font-weight="900" fill="#ffd700" text-anchor="middle" font-family="Shippori Mincho, serif">愛</text>
       <path d="M 28,48 Q 50,32 72,48 L 75,76 Q 50,84 25,76 Z" fill="#30103b" stroke="#ffd700" stroke-width="1.8"/>
       <path d="M 24,72 Q 50,94 76,72" fill="none" stroke="#ba68c8" stroke-width="3"/>
+    `,
+    strategistSvg: `
+      <rect width="100" height="100" rx="6" fill="#1d1226"/>
+      <path d="M 26,45 Q 50,18 74,45 L 76,78 Q 50,86 24,78 Z" fill="#38214a" stroke="#ffd700" stroke-width="1.8"/>
+      <circle cx="50" cy="46" r="16" fill="#150a1c"/>
+      <text x="50" y="52" font-size="14" font-weight="900" fill="#ffd700" text-anchor="middle">懸</text>
+      <text x="50" y="90" font-size="11" font-weight="900" fill="#ffd700" text-anchor="middle">総帥景勝</text>
     `
   },
   tadakatsu: {
     id: 'tadakatsu', name: '本多忠勝', clan: '三河国 ｜ 徳川四天王・蜻蛉切', themeColor: '#ffb74d',
     strategistName: '本多正信', strategistTitle: '徳川の知謀・佐渡守', strategistShort: '正信',
+    strategistImgId: 'strategist_masanobu',
     bgGrad: 'radial-gradient(circle at 35% 35%, #3d2406 0%, #0f0701 100%)',
     quotes: {
       default: '「我が蜻蛉切に切れぬものなし！ 迎え撃ってくれよう！」',
@@ -706,6 +776,13 @@ const PLAYER_WARLORDS = {
       <path d="M 78,25 Q 88,46 68,54 Q 82,36 72,26 Z" fill="#ffd700"/>
       <path d="M 30,48 Q 50,30 70,48 L 74,76 Q 50,84 26,76 Z" fill="#241505" stroke="#ffd700" stroke-width="1.8"/>
       <circle cx="50" cy="62" r="14" fill="none" stroke="#ffd700" stroke-width="3.5" stroke-dasharray="3,3"/>
+    `,
+    strategistSvg: `
+      <rect width="100" height="100" rx="6" fill="#261705"/>
+      <polygon points="50,16 68,36 50,30 32,36" fill="#ffd700"/>
+      <path d="M 28,45 Q 50,28 72,45 L 75,76 Q 50,84 25,76 Z" fill="#4d2f0a" stroke="#ffd700" stroke-width="1.8"/>
+      <circle cx="50" cy="58" r="13" fill="#ffd700"/>
+      <text x="50" y="90" font-size="11" font-weight="900" fill="#ffd700" text-anchor="middle">佐渡守</text>
     `
   }
 };
@@ -1135,11 +1212,23 @@ function updateStrategistUI() {
   }
 }
 
-function setOrderMessage(txt, isMyTurn = false) {
+// 伝令メッセージ表示（軍師ポートレート連動）
+function setOrderMessage(txt, isMyTurn = false, showStrategistAvatar = false) {
   const el = document.getElementById('order-message-banner');
+  const slot = document.getElementById('order-avatar-slot');
   document.getElementById('order-message-text').innerHTML = txt;
   el.classList.toggle('my-turn', isMyTurn);
   document.getElementById('player-panel').classList.toggle('player-active', isMyTurn);
+
+  if (slot) {
+    if (showStrategistAvatar) {
+      slot.classList.add('has-strategist');
+      slot.innerHTML = getStrategistPortraitHtml(PLAYER_WARLORDS[currentMyWarlordId]);
+    } else {
+      slot.classList.remove('has-strategist');
+      slot.innerHTML = `<svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>`;
+    }
+  }
 }
 
 function openFurigomaModal() {
@@ -1308,7 +1397,7 @@ document.getElementById('btn-promote-no').onclick = () => {
   if (pendingMove) { executeMove({...pendingMove, promote:false}); pendingMove = null; document.getElementById('promote-modal').style.display = 'none'; selectedPos = null; currentValidMoves = []; finishTurn(); }
 };
 
-// 手の実行＆記録（駒コードを確実に保存）
+// 手の実行＆記録
 function executeMove(m) {
   playPieceSound();
 
@@ -1375,14 +1464,14 @@ function handleWorkerMessage(e) {
   if (data.type === 'hintDone') {
     isHintThinking = false;
     const bm = data.bestMove;
-    if (!bm) { setOrderMessage(`${p.strategistShort}「進言できる妙手がござらぬ…！」`, true); return; }
+    if (!bm) { setOrderMessage(`${p.strategistShort}「進言できる妙手がござらぬ…！」`, true, true); return; }
     const pName = bm.type === 'drop' ? PIECES[bm.code] : PIECES[board[bm.from.r][bm.from.c]?.code || bm.code];
     
     if (data.isAwakened) {
       triggerCutin(`軍師覚醒！ ${p.strategistName}の神算鬼謀！`, true);
-      setOrderMessage(`【覚醒進言】${p.strategistShort}「これぞ天下を動かす一手！ <b>${9 - bm.to.c}${KANJI_NUMS[bm.to.r]}へ${pName}</b>を進軍されよ！」`, true);
+      setOrderMessage(`【覚醒進言】${p.strategistShort}「これぞ天下を動かす一手！ <b>${9 - bm.to.c}${KANJI_NUMS[bm.to.r]}へ${pName}</b>を進軍されよ！」`, true, true);
     } else {
-      setOrderMessage(`【軍師進言】${p.strategistShort}「<b>${9 - bm.to.c}${KANJI_NUMS[bm.to.r]}へ${pName}</b>を進軍されよ！」`, true);
+      setOrderMessage(`【軍師進言】${p.strategistShort}「<b>${9 - bm.to.c}${KANJI_NUMS[bm.to.r]}へ${pName}</b>を進軍されよ！」`, true, true);
     }
     
     hintSourceCell = bm.type === 'move' ? { r: bm.from.r, c: bm.from.c } : null;
@@ -1436,15 +1525,15 @@ function showMasterHint() {
   const isAwakenedNow = hintBtn.classList.contains('awakened');
   
   if (isAwakenedNow) {
-    setOrderMessage(`【覚醒軍師思案中】${p.strategistName}、深淵の神算鬼謀を探索中…！`, false);
+    setOrderMessage(`【覚醒軍師思案中】${p.strategistName}、深淵の神算鬼謀を探索中…！`, false, true);
     aiWorker.postMessage({ board, hands, level: 10, isHintRequest: true, isAwakened: true, history: moveObjectsHistory });
   } else {
-    setOrderMessage(`【軍師思案中】${p.strategistName}、勝機の一手を探索中…`, false);
+    setOrderMessage(`【軍師思案中】${p.strategistName}、勝機の一手を探索中…`, false, true);
     aiWorker.postMessage({ board, hands, level: 8, isHintRequest: true, isAwakened: false, history: moveObjectsHistory });
   }
 }
 
-// 待った：形勢グラフ履歴を1件のみ安全に巻き戻す
+// 待った
 function undoMove() {
   if (isGameOver || historyStates.length <= 1) return;
   playPieceSound();
@@ -1556,7 +1645,7 @@ function resetToLatestReview() {
   setOrderMessage(`【最新局面復帰】${PLAYER_WARLORDS[currentMyWarlordId].name}公、一手をお決め下され！`, turn === 'PLAYER');
 }
 
-// 棋譜帯の描画（駒名の正確な表示）
+// 棋譜帯の描画
 function renderKifu() {
   const st = document.getElementById('kifu-stream'); st.innerHTML = '';
   moveObjectsHistory.forEach((m, idx) => {
@@ -1581,7 +1670,7 @@ function renderKifu() {
   if (reviewingIndex === -1 || reviewingIndex === historyStates.length - 1) st.scrollLeft = st.scrollWidth;
 }
 
-/* 棋譜モーダル表示：戦況評定＆天王山ハイライト連動 */
+/* 棋譜モーダル表示 */
 function openKifuModal() {
   const pName = PLAYER_WARLORDS[currentMyWarlordId].name;
   const eName = WARLORDS_DATA[currentAiLevel].name;
@@ -1768,7 +1857,7 @@ function switchGuideTab(tabIdx) {
 function openConquestMapModal() { updateConquestMapUI(); document.getElementById('conquest-modal').style.display = 'flex'; }
 function closeConquestMapModal() { document.getElementById('conquest-modal').style.display = 'none'; }
 
-// 自将モーダル（専属軍師情報 ＆ 角丸四角形ポートレート）
+// 自将モーダル
 function openPlayerWarlordModal() {
   const l = document.getElementById('player-warlord-list'); l.innerHTML = '';
   for(let k in PLAYER_WARLORDS) {
@@ -1791,7 +1880,7 @@ function openPlayerWarlordModal() {
 }
 function closePlayerWarlordModal() { document.getElementById('player-warlord-modal').style.display = 'none'; }
 
-// 国盗り絵巻UI：個別平定フラグ＆進軍ロック（角丸四角形サムネイル）
+// 国盗り絵巻UI
 function updateConquestMapUI() {
   const clearedCount = clearedProvinces.length;
   document.getElementById('conquest-pct-disp').textContent = `${clearedCount * 10}%`;
