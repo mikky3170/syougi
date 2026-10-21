@@ -11,7 +11,6 @@
   :root {
     --gold-bright: #ffd700;
     --gold-shine: linear-gradient(135deg, #fff1a8 0%, #d4af37 40%, #aa8010 70%, #ffd700 100%);
-    --gold-border: linear-gradient(180deg, #f3e098 0%, #aa8222 50%, #583c07 100%);
     --board-wood: linear-gradient(135deg, #f5d89f 0%, #e6be7e 40%, #edd297 70%, #d8ac67 100%);
     --grid-line: #3b220c;
     --piece-bg: linear-gradient(180deg, #fffbee 0%, #fae6ba 60%, #e0c283 100%);
@@ -44,20 +43,20 @@
 
   /* 最上部：薄型戦国金泥ヘッダー */
   .top-header {
-    width: 100%; max-width: 480px; height: 26px;
+    width: 100%; max-width: 480px; height: 24px;
     display: flex; justify-content: space-between; align-items: center;
     border-bottom: 1px solid rgba(212, 175, 55, 0.45);
     padding: 0 4px; flex-shrink: 0;
   }
   .app-title {
-    font-family: 'Yuji Boku', serif; font-size: 13.5px; letter-spacing: 2.5px;
+    font-family: 'Yuji Boku', serif; font-size: 13px; letter-spacing: 2px;
     background: var(--gold-shine); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.95)); margin: 0; line-height: 1; font-weight: 900;
   }
   .header-actions { display: flex; gap: 5px; }
   .header-btn {
-    font-family: 'Shippori Mincho', serif; font-size: 9px; font-weight: 800;
-    padding: 2px 6px; border-radius: 3px; border: 1px solid #c59b27;
+    font-family: 'Shippori Mincho', serif; font-size: 8.5px; font-weight: 800;
+    padding: 1px 6px; border-radius: 3px; border: 1px solid #c59b27;
     background: linear-gradient(180deg, #2e1c12 0%, #140a05 100%);
     color: #ffd86b; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.8);
   }
@@ -67,9 +66,9 @@
     width: 100%; max-width: 480px; flex: 1; min-height: 0; gap: 2px;
   }
 
-  /* 武将パネル（織田信長・徳川家康） */
+  /* 武将パネル */
   .warlord-panel {
-    width: 100%; height: clamp(62px, 8.8vh, 74px);
+    width: 100%; height: clamp(58px, 8vh, 68px);
     background: linear-gradient(180deg, rgba(38, 22, 13, 0.98) 0%, rgba(15, 8, 4, 0.98) 100%);
     border: 1.5px solid #9e7934; border-radius: 4px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.95), inset 0 0 12px rgba(0,0,0,0.85);
@@ -81,9 +80,9 @@
     pointer-events: none; border-radius: 3px;
   }
 
-  /* 重厚・戦国家紋レリーフアバター */
+  /* 戦国家紋レリーフアバター */
   .warlord-avatar {
-    width: clamp(48px, 7vh, 56px); height: clamp(48px, 7vh, 56px);
+    width: clamp(44px, 6.5vh, 52px); height: clamp(44px, 6.5vh, 52px);
     border-radius: 50%; border: 2px solid #d4af37;
     background: radial-gradient(circle at 35% 35%, #2a180e 0%, #050201 100%);
     overflow: hidden; position: relative; flex-shrink: 0;
@@ -98,18 +97,18 @@
   }
   .warlord-name-row { display: flex; align-items: center; gap: 4px; }
   .crest-icon-mini { width: 13px; height: 13px; fill: #ffd700; flex-shrink: 0; }
-  .warlord-name { font-family: 'Yuji Boku', serif; font-size: 14.5px; font-weight: 900; color: #ffd86b; letter-spacing: 1px; }
-  .warlord-clan { font-size: 8px; color: #cbb27a; line-height: 1.1; font-weight: 600; }
+  .warlord-name { font-family: 'Yuji Boku', serif; font-size: 13.5px; font-weight: 900; color: #ffd86b; letter-spacing: 1px; }
+  .warlord-clan { font-size: 7.5px; color: #cbb27a; line-height: 1.1; font-weight: 600; }
   .warlord-quote { font-size: 7.5px; color: #ebdcb9; font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   .gauge-group { display: flex; flex-direction: column; gap: 1px; margin-top: 2px; }
-  .gauge-label-row { display: flex; justify-content: space-between; font-size: 7.5px; color: #e8dbbe; font-weight: bold; }
-  .morale-bar-frame { width: 100%; height: 5px; background: #000; border: 0.5px solid #856434; border-radius: 2px; overflow: hidden; }
+  .gauge-label-row { display: flex; justify-content: space-between; font-size: 7px; color: #e8dbbe; font-weight: bold; }
+  .morale-bar-frame { width: 100%; height: 4px; background: #000; border: 0.5px solid #856434; border-radius: 2px; overflow: hidden; }
   .morale-bar-fill { height: 100%; width: 50%; transition: width 0.4s ease-out; }
   .morale-enemy { background: linear-gradient(90deg, #a71d1d, #ff4d4d); }
   .morale-player { background: linear-gradient(90deg, #135da4, #448aff); }
 
-  /* 持ち駒エリア（黒漆硯箱風） */
+  /* 持ち駒エリア */
   .warlord-hand-area {
     flex: 1.05; height: 88%;
     background: rgba(10, 5, 2, 0.7); border: 1px solid #775624;
@@ -118,20 +117,38 @@
     box-shadow: inset 0 2px 6px rgba(0,0,0,0.9);
   }
 
-  /* 戦況アナウンスバー */
+  /* 【上部】軍師戦況評定エリア（2〜3行の重厚な情勢文） */
   .situation-banner {
-    width: 100%; height: 20px;
-    background: linear-gradient(90deg, #170d07 0%, #3a1e0b 50%, #170d07 100%);
+    width: 100%; min-height: 28px; max-height: 36px;
+    background: linear-gradient(90deg, #180d06 0%, #351a09 50%, #180d06 100%);
     border: 1px solid #8d6b2c; border-radius: 3px;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    padding: 0 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.8); flex-shrink: 0;
+    display: flex; align-items: center; gap: 6px;
+    padding: 2px 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.8); flex-shrink: 0;
   }
-  .situation-title { font-size: 8.5px; font-weight: 900; color: #ffd700; white-space: nowrap; }
-  .situation-text { font-size: 9px; font-weight: 800; color: #fff3cf; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .situation-title {
+    font-size: 9px; font-weight: 900; color: #ffd700; white-space: nowrap;
+    border-right: 1px solid #6b4d1c; padding-right: 6px; align-self: flex-start; margin-top: 2px;
+  }
+  .situation-text {
+    font-size: 8.5px; font-weight: 700; color: #fff3cf; line-height: 1.25;
+    flex: 1; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
 
-  /* =========================================================
-     将棋盤＆目盛り枠：完全調和レイアウト
-     ========================================================= */
+  /* 【新設・盤と自軍の間】合戦伝令メッセージ帯（手番・思考中・伝令） */
+  .order-message-banner {
+    width: 100%; height: 22px;
+    background: linear-gradient(90deg, #24140a 0%, #4a2610 50%, #24140a 100%);
+    border: 1.2px solid #c59b27; border-radius: 3px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 0 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.85); flex-shrink: 0;
+  }
+  .order-crest-icon { width: 12px; height: 12px; fill: #ffd700; flex-shrink: 0; }
+  .order-message-text {
+    font-size: 9.5px; font-weight: 900; color: #ffd86b; letter-spacing: 0.5px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  /* 将棋盤＆目盛り枠 */
   .board-wrapper {
     width: 100%; display: flex; justify-content: center; align-items: center;
     flex-grow: 1; min-height: 0;
@@ -139,10 +156,10 @@
   .shogi-board-frame {
     display: flex; flex-direction: column;
     background: var(--border-frame-wood);
-    border: 3px solid #b88f28; border-radius: 4px;
-    padding: 4px 5px 6px 4px;
+    border: 2.5px solid #b88f28; border-radius: 4px;
+    padding: 3px 4px 5px 3px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.98), inset 0 0 10px rgba(0,0,0,0.9);
-    width: calc(100vw - 8px); max-width: min(96vw, 53vh, 450px);
+    width: calc(100vw - 8px); max-width: min(96vw, 52vh, 440px);
     position: relative;
   }
   .shogi-board-frame::after {
@@ -150,24 +167,21 @@
     border: 1px solid rgba(255, 215, 0, 0.35); pointer-events: none; border-radius: 2px;
   }
 
-  /* 盤上部：筋目盛り帯（9〜1）＋ 右端の漢数字列幅分のスペーサー */
+  /* 上部筋目盛り帯（9〜1）＋ 右側スペーサー */
   .board-top-row {
-    display: flex; width: 100%; height: 16px; margin-bottom: 2px;
+    display: flex; width: 100%; height: 15px; margin-bottom: 2px;
   }
   .rank-index-container {
     flex: 1; display: grid; grid-template-columns: repeat(9, 1fr);
   }
   .rank-cell {
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 900; color: #ffd700;
+    font-size: 10.5px; font-weight: 900; color: #ffd700;
     text-shadow: 0 1px 2px #000;
   }
-  /* 右側の漢数字列と幅を完全一致させるためのスペーサー */
-  .rank-corner-spacer {
-    width: 20px; flex-shrink: 0;
-  }
+  .rank-corner-spacer { width: 19px; flex-shrink: 0; }
 
-  /* 盤中央：盤面（9×9） ＋ 右側目盛り列（一〜九） */
+  /* 中央：盤面 ＋ 右側段目盛り（一〜九） */
   .board-main-row {
     display: flex; width: 100%; align-items: stretch;
   }
@@ -184,19 +198,19 @@
     background: var(--board-wood);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; position: relative;
+    transition: background 0.15s ease;
   }
-  .cell.selected { background: rgba(255, 215, 0, 0.75) !important; }
+  .cell.selected { background: rgba(255, 215, 0, 0.8) !important; }
   .cell.last-move { background: rgba(230, 81, 0, 0.58) !important; }
 
-  /* 移動候補ドット */
-  .cell.target-move::after {
-    content: ''; width: 28%; height: 28%; background: rgba(30, 142, 62, 0.9);
-    border-radius: 50%; box-shadow: 0 0 6px rgba(0, 255, 100, 0.8); pointer-events: none;
+  /* 【ご要望反映】ドット廃止！ マス全体が美しく発光し駒が絶対にずれない方式 */
+  .cell.target-move {
+    background: linear-gradient(135deg, rgba(67, 134, 37, 0.78) 0%, rgba(35, 80, 18, 0.88) 100%) !important;
+    box-shadow: inset 0 0 8px #76ff03;
   }
 
-  /* 将棋盤の星（黒点マーカー） */
   .board-star {
-    position: absolute; width: 6px; height: 6px; background: #281404;
+    position: absolute; width: 5.5px; height: 5.5px; background: #281404;
     border-radius: 50%; transform: translate(-50%, -50%);
     pointer-events: none; z-index: 5; box-shadow: 0 0 1px rgba(255,255,255,0.4);
   }
@@ -207,25 +221,25 @@
 
   /* 右側：段目盛り帯（一〜九） */
   .file-index-col {
-    width: 20px; flex-shrink: 0;
+    width: 19px; flex-shrink: 0;
     display: grid; grid-template-rows: repeat(9, 1fr);
     margin-left: 2px;
   }
   .file-cell {
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 900; color: #ffd700;
+    font-size: 10.5px; font-weight: 900; color: #ffd700;
     text-shadow: 0 1px 2px #000;
   }
 
-  /* 将棋駒：伝統の五角形・重厚な本黄楊彫り調 */
+  /* 将棋駒 */
   .piece {
     width: 90%; height: 93%;
     background: var(--piece-bg); border: 1px solid #5a3813;
     clip-path: polygon(50% 0%, 90% 18%, 100% 100%, 0% 100%, 10% 18%);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     font-family: 'HGP行書体', 'HGS行書体', 'Yuji Mai', 'Shippori Mincho', serif;
-    font-size: clamp(9px, 1.8vh, 13px); line-height: 1.02; font-weight: 900;
-    letter-spacing: -0.5px;
+    font-size: clamp(9px, 1.7vh, 12.5px); line-height: 1.02; font-weight: 900;
+    letter-spacing: -0.5px; pointer-events: none;
     box-shadow: 0 1.5px 3px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.8);
   }
   .piece.player { color: var(--player-color); }
@@ -234,12 +248,12 @@
 
   /* 持ち駒デザイン */
   .hand-piece {
-    width: 26px; height: 31px;
+    width: 25px; height: 30px;
     background: var(--piece-bg); border: 1px solid #5a3813;
     clip-path: polygon(50% 0%, 90% 20%, 100% 100%, 0% 100%, 10% 20%);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     font-family: 'HGP行書体', 'HGS行書体', 'Yuji Mai', 'Shippori Mincho', serif;
-    font-size: 9.5px; line-height: 1.02; font-weight: 900;
+    font-size: 9px; line-height: 1.02; font-weight: 900;
     cursor: pointer; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.7); flex-shrink: 0;
   }
   .hand-piece.player { color: var(--player-color); }
@@ -252,9 +266,9 @@
     border: 0.5px solid #ffd700; box-shadow: 0 1px 3px rgba(0,0,0,0.8);
   }
 
-  /* プレイヤー直下の戦歴棋譜バー */
+  /* 自将直下：戦歴棋譜バー */
   .kifu-bottom-banner {
-    width: 100%; height: 25px;
+    width: 100%; height: 24px;
     background: linear-gradient(180deg, rgba(22, 12, 6, 0.98) 0%, rgba(10, 5, 2, 0.98) 100%);
     border: 1px solid #8d6b2c; border-radius: 3px;
     display: flex; align-items: center; padding: 0 6px; gap: 6px;
@@ -271,7 +285,7 @@
 
   /* 最下部：戦国蒔絵コマンドバー */
   .bottom-command-bar {
-    width: 100%; max-width: 480px; height: 35px;
+    width: 100%; max-width: 480px; height: 34px;
     display: grid; grid-template-columns: 1fr 1fr 1.6fr 1fr 1fr;
     gap: 4px; padding: 1px 1px; flex-shrink: 0;
   }
@@ -310,7 +324,51 @@
   .cutin-active { opacity: 1 !important; }
   .cutin-active .cutin-banner { transform: scale(1) !important; }
 
-  /* 戦国格調モーダル */
+  /* =========================================================
+     【新設】振り駒合戦儀礼モーダル
+     ========================================================= */
+  .furigoma-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.88); z-index: 3000;
+    display: none; align-items: center; justify-content: center;
+  }
+  .furigoma-board {
+    width: 90vw; max-width: 360px;
+    background: radial-gradient(circle at center, #2e180d 0%, #100602 100%);
+    border: 2px solid #ffd700; border-radius: 8px; padding: 16px 12px;
+    text-align: center; box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+  }
+  .furigoma-title {
+    font-family: 'Yuji Boku', serif; font-size: 18px; color: #ffd700; margin-bottom: 6px; letter-spacing: 2px;
+  }
+  .furigoma-sub { font-size: 10px; color: #e2d2b0; margin-bottom: 14px; }
+  .furigoma-pieces-row {
+    display: flex; justify-content: center; gap: 8px; margin: 15px 0; min-height: 48px;
+  }
+  .furigoma-piece-box {
+    width: 38px; height: 46px; perspective: 600px;
+  }
+  .furigoma-card {
+    width: 100%; height: 100%; position: relative;
+    transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .furigoma-card.flipped { transform: rotateY(180deg); }
+  .furigoma-face {
+    position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+    background: var(--piece-bg); border: 1.5px solid #5a3813;
+    clip-path: polygon(50% 0%, 90% 20%, 100% 100%, 0% 100%, 10% 20%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: 'HGP行書体', 'HGS行書体', 'Yuji Mai', serif;
+    font-size: 13px; font-weight: 900; line-height: 1;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+  }
+  .furigoma-front { color: #1a0c02; }
+  .furigoma-back { transform: rotateY(180deg); color: #a80000; }
+  .furigoma-result-text {
+    font-size: 14px; font-weight: 900; color: #ffd86b; min-height: 24px; margin-top: 10px; letter-spacing: 1px;
+  }
+
+  /* モーダル */
   .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000;
@@ -345,22 +403,18 @@
 </div>
 
 <div class="main-wrapper">
-  <!-- 敵将エリア：織田信長（織田木瓜紋・重厚黄金レリーフ） -->
+  <!-- 敵将エリア：織田信長（織田木瓜紋レリーフ） -->
   <div class="warlord-panel">
     <div class="warlord-avatar">
       <svg viewBox="0 0 100 100">
-        <!-- 背景漆黒と金輪 -->
         <circle cx="50" cy="50" r="46" fill="#140606" stroke="#ffd700" stroke-width="2.5"/>
         <circle cx="50" cy="50" r="41" fill="none" stroke="#7a1212" stroke-width="1.5"/>
-        <!-- 織田木瓜（おだもっこう）紋 黄金レリーフ -->
         <g fill="#ffd700" stroke="#8a5a00" stroke-width="0.8">
-          <!-- 5つの外弁 -->
           <circle cx="50" cy="27" r="14"/>
           <circle cx="72" cy="43" r="14"/>
           <circle cx="64" cy="68" r="14"/>
           <circle cx="36" cy="68" r="14"/>
           <circle cx="28" cy="43" r="14"/>
-          <!-- 内郭と芯 -->
           <circle cx="50" cy="50" r="15" fill="#9b111e" stroke="#ffd700" stroke-width="2"/>
           <circle cx="50" cy="50" r="5" fill="#ffd700"/>
         </g>
@@ -378,20 +432,18 @@
         <div class="morale-bar-frame"><div id="ai-morale-bar" class="morale-bar-fill morale-enemy" style="width: 50%;"></div></div>
       </div>
     </div>
-    <!-- 敵陣持ち駒 -->
     <div class="warlord-hand-area" id="ai-hand"></div>
   </div>
 
-  <!-- 戦況アナウンスバー -->
+  <!-- 【上部】軍師戦況評定エリア（2〜3行の情勢文） -->
   <div class="situation-banner">
     <div class="situation-title">【戦況】</div>
-    <div class="situation-text" id="situation-text">互角の戦い。一手一手が天下を動かす。</div>
+    <div class="situation-text" id="situation-text">互角の戦い。両軍ともに布陣を整え、緊迫の機を伺っております。一手一手が天下を動かす刻に候。</div>
   </div>
 
-  <!-- 将棋盤（筋・段の目盛り枠をミリ単位で完全一体化） -->
+  <!-- 将棋盤（完全調和グリッド＆色変わりハイライト） -->
   <div class="board-wrapper">
     <div class="shogi-board-frame">
-      <!-- 上部筋目盛り（9〜1）＋ 右側スペーサー -->
       <div class="board-top-row">
         <div class="rank-index-container">
           <div class="rank-cell">9</div><div class="rank-cell">8</div><div class="rank-cell">7</div>
@@ -401,7 +453,6 @@
         <div class="rank-corner-spacer"></div>
       </div>
 
-      <!-- 中央：盤面 ＋ 右側段目盛り（一〜九） -->
       <div class="board-main-row">
         <div id="board">
           <div class="board-star" id="star-1"></div>
@@ -418,23 +469,23 @@
     </div>
   </div>
 
-  <!-- 自将エリア：徳川家康（三つ葉葵紋・重厚黄金レリーフ） -->
+  <!-- 【ご要望・新設】合戦伝令ゾーン（将棋盤とプレイヤーの間） -->
+  <div class="order-message-banner">
+    <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
+    <div class="order-message-text" id="order-message-text">「対局開始」を押し、天運の振り駒を執り行われよ。</div>
+  </div>
+
+  <!-- 自将エリア：徳川家康（三つ葉葵紋レリーフ） -->
   <div class="warlord-panel">
     <div class="warlord-avatar">
       <svg viewBox="0 0 100 100">
-        <!-- 背景漆黒と金輪 -->
         <circle cx="50" cy="50" r="46" fill="#070c18" stroke="#ffd700" stroke-width="2.5"/>
         <circle cx="50" cy="50" r="41" fill="none" stroke="#122a61" stroke-width="1.5"/>
-        <!-- 徳川三つ葉葵 黄金レリーフ -->
         <g fill="#ffd700" stroke="#8a5a00" stroke-width="0.8">
           <circle cx="50" cy="50" r="39" fill="none" stroke="#ffd700" stroke-width="3"/>
-          <!-- 上の葵葉 -->
           <path d="M50 48 C44 32, 36 24, 50 18 C64 24, 56 32, 50 48 Z"/>
-          <!-- 左下の葵葉 -->
           <path d="M49 52 C33 50, 24 60, 26 74 C38 74, 46 64, 49 52 Z"/>
-          <!-- 右下の葵葉 -->
           <path d="M51 52 C67 50, 76 60, 74 74 C62 74, 54 64, 51 52 Z"/>
-          <!-- 中心留め具 -->
           <circle cx="50" cy="50" r="4" fill="#ffffff"/>
         </g>
       </svg>
@@ -451,7 +502,6 @@
         <div class="morale-bar-frame"><div id="player-morale-bar" class="morale-bar-fill morale-player" style="width: 50%;"></div></div>
       </div>
     </div>
-    <!-- プレイヤー持ち駒 -->
     <div class="warlord-hand-area" id="player-hand"></div>
   </div>
 
@@ -466,9 +516,19 @@
 <div class="bottom-command-bar">
   <button class="cmd-btn" onclick="undoMove()">🪭 待った</button>
   <button class="cmd-btn" onclick="surrenderGame()">🏳 投了</button>
-  <button class="cmd-btn cmd-btn-main" id="furigoma-btn" onclick="startFurigoma()">⚜ 対局開始</button>
+  <button class="cmd-btn cmd-btn-main" id="furigoma-btn" onclick="openFurigomaModal()">⚜ 対局開始</button>
   <button class="cmd-btn" onclick="showHint()">💡 ヒント</button>
   <button class="cmd-btn" onclick="openExplainModal('book')">📜 定石</button>
+</div>
+
+<!-- 【新設】振り駒儀礼モーダル -->
+<div id="furigoma-modal" class="furigoma-modal">
+  <div class="furigoma-board">
+    <div class="furigoma-title">【振り駒の儀】</div>
+    <div class="furigoma-sub">歩を五枚振り、先手・後手を定めます</div>
+    <div class="furigoma-pieces-row" id="furigoma-pieces-row"></div>
+    <div class="furigoma-result-text" id="furigoma-result-text">天運を見届けております…</div>
+  </div>
 </div>
 
 <!-- 武将カットイン演出 -->
@@ -1091,6 +1151,12 @@ function triggerCutin(text) {
   setTimeout(() => { overlay.classList.remove('cutin-active'); }, 1600);
 }
 
+/* 伝令メッセージの更新 */
+function setOrderMessage(text) {
+  document.getElementById('order-message-text').textContent = text;
+}
+
+/* 軍師戦況評定（上部2〜3行）の更新 */
 function updateMoraleAndSituation(scoreAI = 0) {
   const scorePlayer = -scoreAI;
   let playerPercent = Math.round(100 / (1 + Math.exp(-scorePlayer / 700)));
@@ -1103,11 +1169,17 @@ function updateMoraleAndSituation(scoreAI = 0) {
   document.getElementById('ai-morale-val').textContent = `士気 ${aiPercent}`;
 
   const sitEl = document.getElementById('situation-text');
-  if (playerPercent >= 70) sitEl.textContent = '自軍、圧倒的優勢！ 敵本陣を包囲し天下を掴め！';
-  else if (playerPercent >= 55) sitEl.textContent = '自軍、やや有利！ 油断なく敵の隙を突くべし。';
-  else if (playerPercent <= 30) sitEl.textContent = '自軍、窮地！ 陣形を固め、逆転の機を待て。';
-  else if (playerPercent <= 45) sitEl.textContent = '敵軍が攻勢！ 堅固に受け止める刻。';
-  else sitEl.textContent = '互角の戦い。一手一手が天下を動かす。';
+  if (playerPercent >= 75) {
+    sitEl.textContent = '自軍、圧倒的優勢！ 敵本陣を完全に包囲せり。勝機は今、天下を我が手に掴む刻にござる！';
+  } else if (playerPercent >= 58) {
+    sitEl.textContent = '自軍、やや有利！ 敵陣にわずかな乱れあり。焦らず歩を進め、確実に好機を広げるべし。';
+  } else if (playerPercent <= 25) {
+    sitEl.textContent = '自軍、重大なる窮地！ 敵の猛攻を受け本陣が動揺。陣形を再構築し起死回生の反撃を待て！';
+  } else if (playerPercent <= 42) {
+    sitEl.textContent = '敵軍が攻勢！ 織田軍の精鋭が前線を圧迫。ここは堅固に耐え忍び、隙を見極めるべし。';
+  } else {
+    sitEl.textContent = '互角の戦い。両軍ともに布陣を整え、緊迫の機を伺っております。一手一手が天下を動かす刻に候。';
+  }
 }
 
 const PIECES = {
@@ -1158,15 +1230,96 @@ function handleWorkerMessage(e) {
 
     if(!checkGameOver('PLAYER')) {
       turn = 'PLAYER';
+      setOrderMessage('【自軍手番】御屋形様、次なる一手をお決め下され。');
       const isCheck = isCheckState('PLAYER');
       if(isCheck) {
         playCheckSound();
         triggerCutin('敵の奇襲！ 御屋形様、お逃げあれ！');
+        setOrderMessage('【王手回避！】御屋形様、敵の刃が迫っております！ 玉をお逃がしあれ！');
       }
     }
   }
 }
 createNewWorker();
+
+/* ================= 振り駒合戦儀礼 ================= */
+function openFurigomaModal() {
+  initAudio();
+  playPieceSound();
+  if (isAiThinking) createNewWorker();
+
+  const modal = document.getElementById('furigoma-modal');
+  const container = document.getElementById('furigoma-pieces-row');
+  const resultText = document.getElementById('furigoma-result-text');
+  modal.style.display = 'flex';
+  container.innerHTML = '';
+  resultText.textContent = '天運を見届けております…';
+  setOrderMessage('【天運】振り駒にて先手・後手を定め候…');
+
+  const results = [];
+  let toCount = 0;
+
+  for(let i=0; i<5; i++) {
+    const isTo = (Math.random() < 0.5);
+    results.push(isTo);
+    if(isTo) toCount++;
+
+    const pBox = document.createElement('div');
+    pBox.className = 'furigoma-piece-box';
+    pBox.innerHTML = `
+      <div class="furigoma-card" id="fg-card-${i}">
+        <div class="furigoma-face furigoma-front"><span>歩</span><span>兵</span></div>
+        <div class="furigoma-face furigoma-back"><span>と</span><span>金</span></div>
+      </div>
+    `;
+    container.appendChild(pBox);
+  }
+
+  // 1枚ずつ時間差でコトコト回転する戦国演出
+  results.forEach((isTo, i) => {
+    setTimeout(() => {
+      playPieceSound();
+      if(isTo) {
+        document.getElementById(`fg-card-${i}`).classList.add('flipped');
+      }
+    }, 400 + i * 300);
+  });
+
+  setTimeout(() => {
+    const fuCount = 5 - toCount;
+    const isPlayerSente = (fuCount >= 3);
+    senteRole = isPlayerSente ? 'PLAYER' : 'AI';
+    turn = senteRole;
+
+    if (isPlayerSente) {
+      resultText.innerHTML = `歩が <span style="color:#ffd700;font-size:16px;">${fuCount}</span> 枚！ <span style="color:#448aff;">徳川軍（貴殿）の先手！</span>`;
+    } else {
+      resultText.innerHTML = `と金が <span style="color:#ff5252;font-size:16px;">${toCount}</span> 枚！ <span style="color:#ff5252;">織田軍の先手！</span>`;
+    }
+    playVictorySound();
+
+    setTimeout(() => {
+      modal.style.display = 'none';
+      startBattleAfterFurigoma();
+    }, 2000);
+  }, 400 + 5 * 300 + 500);
+}
+
+function startBattleAfterFurigoma() {
+  isGameOver = false;
+  gameStartTime = new Date();
+  initBoardState();
+
+  triggerCutin('合戦開始！ いざ推して参る！');
+  renderBoard();
+
+  if(turn === 'PLAYER') {
+    setOrderMessage('【先手・自軍】御屋形様、先鋒としての一手をお繰り出し下され。');
+  } else {
+    setOrderMessage('【先手・敵軍】織田信長公が軍略を巡らせております…');
+    setTimeout(aiTurn, 700);
+  }
+}
 
 const OPENING_BOOK = {};
 function openingMoveKey(move) {
@@ -1309,33 +1462,14 @@ function initBoardState() {
   });
 }
 
-function startFurigoma() {
-  playPieceSound();
-  if (isAiThinking) createNewWorker();
-
-  let toCount = 0;
-  for(let i=0; i<5; i++) if (Math.random() < 0.5) toCount++;
-
-  senteRole = (toCount >= 3) ? 'PLAYER' : 'AI';
-  turn = senteRole;
-
-  isGameOver = false;
-  gameStartTime = new Date();
-  initBoardState();
-
-  triggerCutin('合戦開始！ いざ推して参る！');
-
-  renderBoard();
-  if(turn === 'AI') setTimeout(aiTurn, 600);
-}
-
 function surrenderGame() {
   if (isGameOver) return;
   playPieceSound();
   if (confirm('軍を退き、敵将に降伏（投了）いたしますか？')) {
     isGameOver = true;
     triggerCutin('無念… ここまでか…');
-    document.getElementById('situation-text').textContent = '【降伏】徳川軍は軍を退き、織田軍の勝利となりました。';
+    document.getElementById('situation-text').textContent = '【降伏】徳川軍は軍を退き、織田軍の勝利となりました。天下の夢、ここに潰え候。';
+    setOrderMessage('【投了】徳川軍、降伏いたしました。');
   }
 }
 
@@ -1392,9 +1526,14 @@ function renderBoard() {
       cell.className = 'cell';
       cell.dataset.row = r; cell.dataset.col = c;
 
-      if(selectedPos && selectedPos.r === r && selectedPos.c === c) cell.classList.add('selected');
-      else if(currentValidMoves.some(m => m.r === r && m.c === c)) cell.classList.add('target-move');
-      if(lastMoveTo && lastMoveTo.r === r && lastMoveTo.c === c) cell.classList.add('last-move');
+      if(selectedPos && selectedPos.r === r && selectedPos.c === c) {
+        cell.classList.add('selected');
+      } else if(currentValidMoves.some(m => m.r === r && m.c === c)) {
+        cell.classList.add('target-move');
+      }
+      if(lastMoveTo && lastMoveTo.r === r && lastMoveTo.c === c) {
+        cell.classList.add('last-move');
+      }
 
       const item = board[r][c];
       if(item) {
@@ -1513,9 +1652,11 @@ function handleHandClick(code) {
   initAudio();
   if(selectedPos && selectedPos.handCode === code) {
     selectedPos = null; currentValidMoves = [];
+    setOrderMessage('【自軍手番】御屋形様、次なる一手をお決め下され。');
   } else {
     selectedPos = { handCode: code };
     currentValidMoves = getLegalMoves('PLAYER').filter(m => m.type === 'drop' && m.code === code).map(m => m.to);
+    setOrderMessage(`【持ち駒・${PIECES[code]}】打ち込むマス（緑の陣）をお選び下され。`);
   }
   renderBoard();
 }
@@ -1564,8 +1705,10 @@ function handleCellClick(e) {
   if(target && target.owner === 'PLAYER') {
     selectedPos = {r, c};
     currentValidMoves = getLegalMoves('PLAYER').filter(m => m.type === 'move' && m.from.r === r && m.from.c === c).map(m => m.to);
+    setOrderMessage(`【選択中】${PIECES[target.code]}の進軍先（緑の陣）をお選び下され。`);
   } else {
     selectedPos = null; currentValidMoves = [];
+    setOrderMessage('【自軍手番】御屋形様、次なる一手をお決め下され。');
   }
   renderBoard();
 }
@@ -1598,6 +1741,7 @@ function finishPlayerTurn() {
 
   if(checkGameOver('AI')) return;
   turn = 'AI';
+  setOrderMessage('【敵将思案】織田信長公、天下の軍略を巡らせ中…');
   setTimeout(aiTurn, 100);
 }
 
@@ -1669,6 +1813,7 @@ function undoMove() {
   document.getElementById('promote-modal').style.display = 'none';
 
   isBookOut = false;
+  setOrderMessage('【待った行使】局面を戻し候。御屋形様、良手を再考下され。');
   renderBoard();
   renderKifu();
 }
@@ -1860,6 +2005,7 @@ function aiTurn() {
     renderKifu();
     if(!checkGameOver('PLAYER')) {
       turn = 'PLAYER';
+      setOrderMessage('【自軍手番】御屋形様、次なる一手をお決め下され。');
       const isCheck = isCheckState('PLAYER');
       if(isCheck) { playCheckSound(); triggerCutin('敵の奇襲！ 御屋形様、お逃げあれ！'); }
     }
@@ -1869,6 +2015,7 @@ function aiTurn() {
   isBookOut = true;
   const level = "3";
   isAiThinking = true;
+  setOrderMessage('【敵将思案】織田信長公、天下の軍略を巡らせ中…');
   aiWorker.postMessage({ board, hands, level });
 }
 
@@ -1883,7 +2030,8 @@ function checkGameOver(nextTurnOwner) {
     isGameOver = true;
     playVictorySound();
     triggerCutin('四度同じ布陣！ 和睦成立！');
-    document.getElementById('situation-text').textContent = '【千日手引き分け】同一布陣が四度現れ、和睦となりました。';
+    document.getElementById('situation-text').textContent = '【千日手引き分け】同一布陣が四度現れ、両雄相譲らず和睦となりました。';
+    setOrderMessage('【和睦成立】千日手により引き分けに候。');
     return true;
   }
 
@@ -1895,12 +2043,15 @@ function checkGameOver(nextTurnOwner) {
 
     if (isPlayerWin && isCheck) {
       triggerCutin('敵将、見事に討ち取ったり！');
-      document.getElementById('situation-text').textContent = '【勝利！】敵将・織田信長を討ち取り、天下統一を果たしたり！';
+      document.getElementById('situation-text').textContent = '【大勝利！】敵将・織田信長を討ち取り、徳川軍が天下統一を果たしたり！ 万歳！';
+      setOrderMessage('【天下統一】徳川軍の大勝利にござる！');
     } else if (!isPlayerWin && isCheck) {
       triggerCutin('無念… ここまでか…');
-      document.getElementById('situation-text').textContent = '【敗北…】本陣が討ち取られ候。無念の敗戦にござる。';
+      document.getElementById('situation-text').textContent = '【敗北…】本陣が討ち取られ候。無念の敗戦、天下の行方は織田の手に…';
+      setOrderMessage('【合戦決着】本陣陥落。敗戦にござる…');
     } else {
-      document.getElementById('situation-text').textContent = '【合戦終幕】指し手なし';
+      document.getElementById('situation-text').textContent = '【合戦終幕】指し手尽き、合戦の幕が閉じられました。';
+      setOrderMessage('【合戦終幕】指し手なし');
     }
     return true;
   }
