@@ -90,7 +90,7 @@
   .btn-kifu { background: linear-gradient(180deg, #1b3a57 0%, #0c1a29 100%); border-color: #5ea8e6; color: #d8eeff; }
   .btn-snd { background: linear-gradient(180deg, #442a4f 0%, #1f1124 100%); border-color: #b97de6; color: #f2e1ff; }
 
-  /* メイン骨格（スマホ時は縦積み中央揃えを100%保持） */
+  /* メイン骨格 */
   .main-wrapper {
     display: flex; flex-direction: column; align-items: center; justify-content: space-between;
     width: 100%; max-width: 500px; flex: 1; min-height: 0; gap: 2px;
@@ -225,12 +225,14 @@
     animation: spark-gold 0.6s ease-out forwards;
   }
 
-  @keyframes hint-pulse {
-    0% { background: rgba(255, 215, 0, 0.6) !important; }
-    50% { background: rgba(255, 255, 255, 0.95) !important; box-shadow: inset 0 0 12px #ffd700; }
-    100% { background: rgba(255, 215, 0, 0.6) !important; }
+  /* ヒントマスの点滅（selectedやtarget-moveを阻害しない設計） */
+  @keyframes hint-soft-pulse {
+    0% { box-shadow: inset 0 0 3px #ffd700; background-color: rgba(255, 215, 0, 0.35); }
+    50% { box-shadow: inset 0 0 14px #ffd700, 0 0 8px #fff; background-color: rgba(255, 255, 255, 0.7); }
+    100% { box-shadow: inset 0 0 3px #ffd700; background-color: rgba(255, 215, 0, 0.35); }
   }
-  .cell.hint-source, .cell.hint-target { animation: hint-pulse 1.2s infinite ease-in-out; }
+  .cell.hint-source { animation: hint-soft-pulse 1.3s infinite ease-in-out; }
+  .cell.hint-target { animation: hint-soft-pulse 1.3s infinite ease-in-out; border: 1.5px dashed #ffeb3b; }
 
   .board-star {
     position: absolute; width: 4.5px; height: 4.5px; background: #261103;
@@ -316,7 +318,7 @@
   }
 
   /* ========================================================
-     開始・合戦伝令メッセージ帯（一回り大きく拡大 ＆ ブレス点滅）
+     開始・合戦伝令メッセージ帯（じわじわ幽玄篝火ブレス点滅）
      ======================================================== */
   .order-message-banner {
     width: 100%; height: clamp(46px, 6.2vh, 54px);
@@ -324,41 +326,41 @@
     border: 1.8px solid #b88a32; border-radius: 5px;
     display: flex; align-items: center; justify-content: center; gap: 8px;
     padding: 3px 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.9); flex-shrink: 0;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
   }
   .order-crest-icon { width: 22px; height: 22px; fill: #ffd700; flex-shrink: 0; filter: drop-shadow(0 0 4px #ffd700); }
   .order-message-text {
-    font-size: clamp(12.5px, 1.9vh, 15px); font-weight: 900; color: #ffe699; letter-spacing: 0.8px;
-    line-height: 1.3; text-align: center; flex: 1;
+    font-size: clamp(12px, 1.8vh, 14.5px); font-weight: 900; color: #ffe699; letter-spacing: 0.6px;
+    line-height: 1.25; text-align: center; flex: 1;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     text-shadow: 0 1px 3px #000;
   }
 
-  /* 自軍手番時の優雅な黄金×赤備え呼吸点滅アニメーション */
-  @keyframes breathe-player-turn {
+  /* じわ〜っと深く満ちて引く幽玄な篝火・呼吸アニメーション（3.8秒） */
+  @keyframes breathe-player-turn-slow {
     0% {
-      border-color: #ffd700;
-      box-shadow: 0 0 8px rgba(255, 215, 0, 0.4), inset 0 0 4px rgba(255, 215, 0, 0.2);
-      background: linear-gradient(90deg, #381208 0%, #5c1c0c 50%, #381208 100%);
+      border-color: #c99832;
+      box-shadow: 0 0 6px rgba(255, 215, 0, 0.3), inset 0 0 3px rgba(255, 215, 0, 0.15);
+      background: linear-gradient(90deg, #2b1107 0%, #471b0b 50%, #2b1107 100%);
     }
     50% {
-      border-color: #fff4a3;
-      box-shadow: 0 0 22px rgba(255, 215, 0, 0.95), inset 0 0 12px rgba(255, 100, 100, 0.5);
-      background: linear-gradient(90deg, #541708 0%, #8c2a0f 50%, #541708 100%);
+      border-color: #ffe680;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.85), inset 0 0 10px rgba(255, 70, 70, 0.45);
+      background: linear-gradient(90deg, #4f1508 0%, #82240d 50%, #4f1508 100%);
     }
     100% {
-      border-color: #ffd700;
-      box-shadow: 0 0 8px rgba(255, 215, 0, 0.4), inset 0 0 4px rgba(255, 215, 0, 0.2);
-      background: linear-gradient(90deg, #381208 0%, #5c1c0c 50%, #381208 100%);
+      border-color: #c99832;
+      box-shadow: 0 0 6px rgba(255, 215, 0, 0.3), inset 0 0 3px rgba(255, 215, 0, 0.15);
+      background: linear-gradient(90deg, #2b1107 0%, #471b0b 50%, #2b1107 100%);
     }
   }
   .order-message-banner.my-turn {
-    animation: breathe-player-turn 2.4s infinite ease-in-out !important;
+    animation: breathe-player-turn-slow 3.8s infinite cubic-bezier(0.4, 0.0, 0.2, 1) !important;
     border-width: 2px !important;
   }
   .order-message-banner.my-turn .order-message-text {
     color: #ffffff !important;
-    text-shadow: 0 0 10px #ffd700, 0 1px 3px #000 !important;
+    text-shadow: 0 0 8px #ffd700, 0 1px 3px #000 !important;
   }
 
   /* 戦歴棋譜 */
@@ -399,7 +401,7 @@
   /* 最下部コマンドバー */
   .bottom-command-bar {
     width: 100%; max-width: 500px; height: 36px;
-    display: grid; grid-template-columns: 1fr 1fr 1.6fr 1.1fr 1fr;
+    display: grid; grid-template-columns: 1fr 1fr 1.6fr 1.15fr 1fr;
     gap: 4px; padding: 1px; flex-shrink: 0;
   }
   .cmd-btn {
@@ -411,26 +413,22 @@
   }
   .cmd-btn:active { transform: translateY(1.5px); }
 
-  /* 待った：古代紫漆 */
   .btn-undo {
     background: linear-gradient(180deg, #4d1844 0%, #20081d 100%);
     border: 1.5px solid #d48ceb; color: #fce8ff;
     box-shadow: 0 3px 6px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,215,255,0.4);
   }
-  /* 投了：鉄紺漆 */
   .btn-surrender {
     background: linear-gradient(180deg, #182838 0%, #08111a 100%);
     border: 1.5px solid #6fa8dc; color: #e1f0ff;
     box-shadow: 0 3px 6px rgba(0,0,0,0.85), inset 0 1px 0 rgba(200,230,255,0.35);
   }
-  /* 対局開始：真田赤備え朱漆×黄金象嵌 */
   .btn-start {
     background: linear-gradient(180deg, #b81414 0%, #520505 100%) !important;
     border: 1.8px solid #ffd700 !important; color: #ffffff !important; font-weight: 900;
     box-shadow: 0 0 14px rgba(255, 30, 30, 0.65), inset 0 1px 0 rgba(255,245,180,0.8) !important;
   }
 
-  /* 誘導時の激しい鼓動点滅 */
   @keyframes urgent-pulse {
     0% { transform: scale(1); box-shadow: 0 0 10px #ffd700; border-color: #ffd700; }
     50% { transform: scale(1.08); box-shadow: 0 0 26px #ff2222, 0 0 16px #ffd700; border-color: #ffffff; }
@@ -440,38 +438,40 @@
     animation: urgent-pulse 0.45s 4 ease-in-out !important;
   }
 
-  /* 軍師進言：織部碧緑漆 */
+  /* 通常軍師進言 */
   .btn-hint {
     background: linear-gradient(180deg, #184422 0%, #081d0d 100%);
     border: 1.5px solid #5cb874; color: #e5ffe9;
     box-shadow: 0 3px 6px rgba(0,0,0,0.85), inset 0 1px 0 rgba(200,255,215,0.4);
+    transition: all 0.3s ease;
   }
-  /* 定石・兵法：金茶琥珀 */
+  /* 覚醒・神軍師進言（黄金と真紅の神算鬼謀オーラ） */
+  @keyframes kanbei-awakened-glow {
+    0% { box-shadow: 0 0 6px #ffd700, inset 0 0 4px #ff3b30; border-color: #ffd700; }
+    50% { box-shadow: 0 0 18px #ff9500, 0 0 10px #ffd700, inset 0 0 8px #ffeb3b; border-color: #ffffff; }
+    100% { box-shadow: 0 0 6px #ffd700, inset 0 0 4px #ff3b30; border-color: #ffd700; }
+  }
+  .btn-hint.awakened {
+    background: linear-gradient(180deg, #8a1f0a 0%, #3d0a02 100%) !important;
+    border: 1.8px solid #ffd700 !important;
+    color: #fff9db !important;
+    animation: kanbei-awakened-glow 1.8s infinite ease-in-out !important;
+  }
+
   .btn-book {
     background: linear-gradient(180deg, #593c12 0%, #261804 100%);
     border: 1.5px solid #e0a348; color: #fff2d6;
     box-shadow: 0 3px 6px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,235,170,0.4);
   }
 
-  /* ========================================================
-     タブレット最適化レスポンシブスタイル（16:10 等）
-     ※スマホ（幅600px未満）では上記ルールがそのまま100%維持されます
-     ======================================================== */
-
-  /* ① タブレット縦持ち時（幅600px以上 かつ 縦画面） */
+  /* タブレット対応レスポンシブスタイル */
   @media screen and (min-width: 600px) and (orientation: portrait) {
-    .top-header, .main-wrapper, .bottom-command-bar {
-      max-width: min(92vw, 750px);
-    }
+    .top-header, .main-wrapper, .bottom-command-bar { max-width: min(92vw, 750px); }
     .top-header { height: 44px; padding: 2px 10px; }
     .app-title-main { font-size: 19px; letter-spacing: 3.5px; }
     .app-title-sub { font-size: 11px; }
     .header-btn { font-size: 11.5px; padding: 4px 10px; }
-
-    .shogi-board-frame {
-      max-width: min(90vw, 54vh, 580px);
-      padding: 4px 4px 5px 4px;
-    }
+    .shogi-board-frame { max-width: min(90vw, 54vh, 580px); padding: 4px 4px 5px 4px; }
     .piece { font-size: clamp(13px, 2.3vh, 18px); }
     .hand-piece { width: 34px; height: 40px; font-size: 12px; }
     .warlord-panel { height: 68px; padding: 3px 10px; gap: 10px; }
@@ -487,17 +487,10 @@
     .cmd-btn { font-size: 13px; }
   }
 
-  /* ② タブレット横持ち時（16:10 等のワイド画面・横向き） */
   @media screen and (min-width: 768px) and (orientation: landscape) {
-    body {
-      padding: 4px 8px; justify-content: center; gap: 4px;
-    }
-    .top-header {
-      max-width: 1280px; width: 98vw; height: 38px;
-    }
+    body { padding: 4px 8px; justify-content: center; gap: 4px; }
+    .top-header { max-width: 1280px; width: 98vw; height: 38px; }
     .app-title-main { font-size: 17px; }
-
-    /* メインエリアを左右分割2翼配置に変更 */
     .main-wrapper {
       max-width: 1280px; width: 98vw; flex: 1;
       display: grid !important;
@@ -505,33 +498,19 @@
       grid-template-rows: auto auto auto auto 1fr auto;
       gap: 6px 12px; align-items: stretch; justify-content: center;
     }
-
-    /* 左翼：大迫力の将棋盤 ＆ カットイン */
     .board-wrapper {
       grid-column: 1; grid-row: 1 / span 5;
       height: 100%; display: flex; align-items: center; justify-content: center;
     }
-    .shogi-board-frame {
-      max-width: min(84vh, 50vw) !important; width: min(84vh, 50vw) !important;
-      padding: 4px 4px 6px 4px;
-    }
-    .cutin-slot {
-      grid-column: 1; grid-row: 6; height: 30px; min-height: 30px;
-    }
-
-    /* 右翼：軍師司令室（敵将・戦況・伝令・自将・棋譜・コマンドバー） */
+    .shogi-board-frame { max-width: min(84vh, 50vw) !important; width: min(84vh, 50vw) !important; padding: 4px 4px 6px 4px; }
+    .cutin-slot { grid-column: 1; grid-row: 6; height: 30px; min-height: 30px; }
     .warlord-panel:nth-of-type(1) { grid-column: 2; grid-row: 1; height: 60px; }
     .situation-banner { grid-column: 2; grid-row: 2; min-height: 32px; }
     .order-message-banner { grid-column: 2; grid-row: 3; height: 46px; }
     .order-message-text { font-size: 15px; }
     .warlord-panel:nth-of-type(2) { grid-column: 2; grid-row: 4; height: 60px; }
     .kifu-bottom-banner { grid-column: 2; grid-row: 5; height: 100%; min-height: 65px; }
-
-    .bottom-command-bar {
-      grid-column: 2; grid-row: 6;
-      max-width: none !important; width: 100% !important; height: 38px;
-    }
-
+    .bottom-command-bar { grid-column: 2; grid-row: 6; max-width: none !important; width: 100% !important; height: 38px; }
     .piece { font-size: clamp(13px, 2.4vh, 19px); }
     .hand-piece { width: 33px; height: 39px; font-size: 12px; }
     .cmd-btn { font-size: 12px; }
@@ -555,7 +534,7 @@
   .furigoma-piece-box { width: 38px; height: 46px; perspective: 600px; }
   .furigoma-card {
     width: 100%; height: 100%; position: relative;
-    transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
   .furigoma-card.flipped { transform: rotateY(180deg); }
   .furigoma-face {
@@ -585,6 +564,22 @@
     font-family: var(--kaisho-font); font-size: 12px; font-weight: 900;
     padding: 5px 18px; border-radius: 4px; border: 1.5px solid #d4af37;
     background: linear-gradient(180deg, #3d2111 0%, #170a04 100%); color: #ffe58f; cursor: pointer;
+  }
+
+  /* 官兵衛・覚醒／言上専用モーダル */
+  .kanbei-modal-box {
+    width: 90vw !important; max-width: 440px !important;
+    background: radial-gradient(circle at center, #2e0805 0%, #0d0202 100%) !important;
+    border: 2.2px solid #ffd700 !important;
+    box-shadow: 0 0 35px rgba(255, 60, 60, 0.6), inset 0 0 15px rgba(255, 215, 0, 0.3) !important;
+    padding: 16px 14px !important;
+  }
+  .kanbei-modal-title {
+    font-size: 16.5px; font-weight: 900; color: #ffd700;
+    text-shadow: 0 0 8px #ff4444; border-bottom: 1px solid #8e3131 !important; margin-bottom: 10px;
+  }
+  .kanbei-modal-body {
+    font-size: 12.5px; line-height: 1.65; color: #fff1d6; margin-bottom: 12px;
   }
 
   /* レベル選択モーダル */
@@ -653,7 +648,6 @@
     border-radius: 2px; padding: 0 4px; line-height: 1.2;
   }
 
-  /* 十将定石テーブル */
   .warlord-book-table {
     width: 100%; border-collapse: collapse; font-size: 10.5px; margin-top: 4px;
   }
@@ -668,7 +662,7 @@
   .warlord-td-style { color: #f2dec0; font-weight: 700; }
   .warlord-td-tactic { color: #80d8ff; font-weight: 900; }
 
-  /* 棋譜・形勢グラフモーダル */
+  /* 棋譜モーダル */
   .modal-kifu-panorama {
     width: 96vw !important; max-width: 580px !important; height: 82vh !important;
     display: flex; flex-direction: column; justify-content: space-between;
@@ -766,7 +760,7 @@
     </div>
   </div>
 
-  <!-- 開始・合戦伝令メッセージ帯（一回り拡大 ＆ 手番時ブレス点滅） -->
+  <!-- 開始・合戦伝令メッセージ帯（じわじわ幽玄ブレス点滅） -->
   <div class="order-message-banner" id="order-message-banner">
     <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
     <div class="order-message-text" id="order-message-text">「対局開始」を押し、天運の振り駒を執り行われよ。<br>真田赤備隊、天下統一の初陣に候！</div>
@@ -822,7 +816,7 @@
   <button class="cmd-btn btn-undo" onclick="undoMove()">🪭 待った</button>
   <button class="cmd-btn btn-surrender" onclick="surrenderGame()">🏳 投了</button>
   <button class="cmd-btn btn-start" id="furigoma-btn" onclick="openFurigomaModal()">⚜ 対局開始</button>
-  <button class="cmd-btn btn-hint" onclick="showMasterHint()">💡 軍師進言</button>
+  <button class="cmd-btn btn-hint" id="btn-master-hint" onclick="showMasterHint()">💡 軍師進言</button>
   <button class="cmd-btn btn-book" onclick="openGuideModal('tactics')">📜 定石</button>
 </div>
 
@@ -865,6 +859,17 @@
         <input type="checkbox" id="chk-never-show-guide" onchange="toggleNeverShowGuide(this.checked)"> 今後は対局開始時に表示しない
       </label>
       <button onclick="closeGuideModal()">兵法を胸に出陣</button>
+    </div>
+  </div>
+</div>
+
+<!-- 官兵衛・覚醒／言上専用モーダル -->
+<div id="kanbei-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-content kanbei-modal-box">
+    <h3 class="kanbei-modal-title" id="kanbei-modal-title">【軍師・黒田官兵衛】</h3>
+    <div class="kanbei-modal-body" id="kanbei-modal-body"></div>
+    <div class="modal-buttons" style="justify-content: flex-end;">
+      <button onclick="closeKanbeiModal()">承知仕った</button>
     </div>
   </div>
 </div>
@@ -1198,13 +1203,23 @@ const LEVEL_CFG = {
 };
 
 self.onmessage = function(e) {
-  const { board: bD, hands: hD, level = 1, isHintRequest = false } = e.data;
+  const { board: bD, hands: hD, level = 1, isHintRequest = false, isAwakened = false } = e.data;
   board = bD; hands = hD;
   searchStartTime = Date.now(); isSearchTimeout = false; nodeCount = 0; TT.clear();
   const searchOwner = isHintRequest ? 'PLAYER' : 'AI', enemyOwner = isHintRequest ? 'AI' : 'PLAYER';
   currentHash = computeFullZobrist(searchOwner);
   const curEval = evaluatePosition();
-  const cfg = isHintRequest ? LEVEL_CFG[9] : (LEVEL_CFG[level] || LEVEL_CFG[1]);
+
+  let cfg;
+  if (isHintRequest) {
+    if (isAwakened) {
+      cfg = { depth: 6, blunderRate: 0.00, time: 5000 };
+    } else {
+      cfg = { depth: 5, blunderRate: 0.00, time: 3000 };
+    }
+  } else {
+    cfg = LEVEL_CFG[level] || LEVEL_CFG[1];
+  }
   searchTimeLimit = cfg.time;
 
   const legals = genLegalMoves(searchOwner, false);
@@ -1234,7 +1249,7 @@ self.onmessage = function(e) {
     }
     if (isSearchTimeout || Date.now() - searchStartTime >= searchTimeLimit) break;
   }
-  self.postMessage({ type: isHintRequest ? 'hintDone' : 'done', bestMove, evalScore: maxScore });
+  self.postMessage({ type: isHintRequest ? 'hintDone' : 'done', bestMove, evalScore: maxScore, isAwakened });
 };
 </script>
 
@@ -1320,7 +1335,7 @@ function triggerCutin(text, isVictory = false) {
   setTimeout(() => { slot.classList.remove('cutin-active'); }, isVictory ? 3500 : 1800);
 }
 
-/* ================= 祝勝：金粉吹雪 ＆ 花火パーティクルシステム ================= */
+/* ================= 祝勝：金粉吹雪 ＆ 花火パーティクル ================= */
 const canvasCelebration = document.getElementById('celebration-canvas');
 const ctxCelebration = canvasCelebration.getContext('2d');
 let celebrationAnimationId = null, celebrationParticles = [];
@@ -1505,6 +1520,24 @@ const WARLORDS_DATA = {
 
 let maxClearedLevel = 0, currentAiLevel = 1, evalScoresHistory = [0];
 
+/* ================= 官兵衛・覚醒システム変数 ================= */
+let isKanbeiAwakened = false;
+let isHintThinking = false; // ヒント思考中の連打・盤面操作ガード用フラグ
+let hintUsageCountInCurrentGame = 0;
+let firstHintPlayerMorale = 50;
+
+function updateKanbeiButtonUI() {
+  const btn = document.getElementById('btn-master-hint');
+  if (!btn) return;
+  if (isKanbeiAwakened) {
+    btn.innerHTML = '🔥 神軍師進言';
+    btn.classList.add('awakened');
+  } else {
+    btn.innerHTML = '💡 軍師進言';
+    btn.classList.remove('awakened');
+  }
+}
+
 function updateWarlordQuote(situationType) {
   const data = WARLORDS_DATA[currentAiLevel];
   if (data?.quotes) document.getElementById('ai-quote-disp').textContent = data.quotes[situationType] || data.quotes.default;
@@ -1515,14 +1548,27 @@ function loadProgress() {
     const s = localStorage.getItem('shogi_max_cleared_level');
     if (s !== null) maxClearedLevel = parseInt(s, 10);
     currentAiLevel = Math.min(10, maxClearedLevel + 1);
-  } catch (e) { maxClearedLevel = 0; currentAiLevel = 1; }
+
+    const awk = localStorage.getItem('shogi_kanbei_awakened');
+    isKanbeiAwakened = (awk === 'true');
+  } catch (e) { maxClearedLevel = 0; currentAiLevel = 1; isKanbeiAwakened = false; }
+  updateKanbeiButtonUI();
 }
+
 function saveProgress(clearedLvl) {
   try {
     if (clearedLvl > maxClearedLevel) {
       maxClearedLevel = clearedLvl;
       localStorage.setItem('shogi_max_cleared_level', maxClearedLevel.toString());
     }
+  } catch (e) {}
+}
+
+function saveKanbeiAwakened(awakened) {
+  try {
+    isKanbeiAwakened = awakened;
+    localStorage.setItem('shogi_kanbei_awakened', awakened ? 'true' : 'false');
+    updateKanbeiButtonUI();
   } catch (e) {}
 }
 
@@ -1565,7 +1611,6 @@ function openLevelSelectModal() {
 }
 function closeLevelModal() { playPieceSound(); document.getElementById('level-modal').style.display = 'none'; }
 
-/* ================= 兵法指南所 ＆ 定石モーダルシステム ================= */
 function openGuideModal(defaultTab = 'tutorial') {
   playPieceSound();
   switchGuideTab(defaultTab);
@@ -1606,10 +1651,10 @@ function switchGuideTab(tab) {
       </div>
 
       <div class="guide-section-box">
-        <h4><span class="guide-step-tag">参</span> 軍師の補佐と伝令機能</h4>
+        <h4><span class="guide-step-tag">参</span> 軍師の補佐と覚醒進化</h4>
         ・<b>「🪭 待った」</b>：悪手を指してしまっても局面を一手巻き戻せます。<br>
-        ・<b>「💡 軍師進言」</b>：名軍師・黒田官兵衛が電脳深層探索で最善の一手を指し示します。<br>
-        ・<b>「士気ゲージ」</b>：盤上の駒の損得や本陣の安全度を数値化。ゲージ満ちる刻、勝機あり！
+        ・<b>「💡 軍師進言」</b>：名軍師・黒田官兵衛が最善の一手を伝令帯に直接指し示します。<br>
+        ・<b>「🔥 神軍師覚醒」</b>：天下三傑（信長・秀吉・家康）との死闘において敗れた時、官兵衛は己の未熟を恥じて猛勉強し、家康をも凌駕する<b>【神算鬼謀（深さ6）】</b>へと覚醒いたします！
       </div>
     `;
   } else if (tab === 'principles') {
@@ -1703,6 +1748,13 @@ function highlightStartButton() {
   setTimeout(() => { btn.classList.remove('urgent-glow'); }, 2000);
 }
 
+function getCurrentPlayerMorale() {
+  const lastScoreAI = evalScoresHistory[evalScoresHistory.length - 1] || 0;
+  const scorePlayer = -lastScoreAI;
+  let playerPercent = Math.round(100 / (1 + Math.exp(-scorePlayer / 700)));
+  return Math.max(5, Math.min(95, playerPercent));
+}
+
 function updateMoraleAndSituation(scoreAI = 0) {
   const scorePlayer = -scoreAI;
   let playerPercent = Math.round(100 / (1 + Math.exp(-scorePlayer / 700)));
@@ -1749,23 +1801,49 @@ function createNewWorker() {
   if (aiWorker) aiWorker.terminate();
   aiWorker = new Worker(workerUrl);
   aiWorker.onmessage = handleWorkerMessage;
-  aiWorker.onerror = () => { createNewWorker(); isAiThinking = false; };
+  aiWorker.onerror = () => { createNewWorker(); isAiThinking = false; isHintThinking = false; };
+}
+
+/* 官兵衛言上モーダル（alert代替） */
+function openKanbeiModal(title, messageHtml) {
+  playPieceSound();
+  document.getElementById('kanbei-modal-title').textContent = title;
+  document.getElementById('kanbei-modal-body').innerHTML = messageHtml;
+  document.getElementById('kanbei-modal').style.display = 'flex';
+}
+function closeKanbeiModal() {
+  playPieceSound();
+  document.getElementById('kanbei-modal').style.display = 'none';
 }
 
 function handleWorkerMessage(e) {
   const data = e.data;
+
+  // ① ヒント計算完了時：メッセージ帯に直接優美に進言を表示！
   if (data.type === 'hintDone') {
+    isHintThinking = false; // 思考中ガード解除
     const bm = data.bestMove;
-    if (!bm) { alert('軍師・官兵衛「局面が極まっており、これ以上の進言は叶いませぬ。」'); return; }
+    if (!bm) {
+      setOrderMessage('【軍師言上】官兵衛「局面が極まっており、これ以上の進言は叶いませぬ。」', true);
+      return;
+    }
     const toC = 9 - bm.to.c, toR = KANJI_NUMS[bm.to.r];
-    const pieceName = bm.type === 'drop' ? PIECES[bm.code] : PIECES[board[bm.from.r][bm.from.c].code];
-    let advice = `【軍師・黒田官兵衛の進言】\n\n「▲${toC}${toR}${pieceName}${bm.type === 'drop' ? '打' : ''}${bm.promote ? '成' : ''}」が最善手に候！`;
-    alert(advice);
+    const pieceCode = bm.type === 'drop' ? bm.code : (board[bm.from.r][bm.from.c]?.code || 'FU');
+    const pieceName = PIECES[pieceCode];
+    const moveText = `▲${toC}${toR}${pieceName}${bm.type === 'drop' ? '打' : ''}${bm.promote ? '成' : ''}`;
+
+    if (data.isAwakened) {
+      setOrderMessage(`【神算鬼謀】覚醒官兵衛「<b>${moveText}</b>！ 敵将の裏を掻く神の一手に候！ 盤上の光る陣へ進軍されよ」`, true);
+    } else {
+      setOrderMessage(`【軍師進言】黒田官兵衛「<b>${moveText}</b> が好手に候！ 盤上の光る陣へ進軍されよ」`, true);
+    }
+
     hintSourceCell = bm.type === 'move' ? { r: bm.from.r, c: bm.from.c } : null;
     hintTargetCell = { r: bm.to.r, c: bm.to.c };
     renderBoard();
     return;
   }
+
   if (!isAiThinking) return;
 
   if (data.type === 'progress') {
@@ -1796,13 +1874,17 @@ function handleWorkerMessage(e) {
 }
 createNewWorker();
 
+/* 振り駒モーダル（初速高速化・即時表示） */
 function openFurigomaModal() {
   initAudio(); playPieceSound();
-  if (isAiThinking) createNewWorker();
+  if (isAiThinking || isHintThinking) createNewWorker();
+  isAiThinking = false;
+  isHintThinking = false;
 
   const modal = document.getElementById('furigoma-modal');
   const container = document.getElementById('furigoma-pieces-row');
   const resultText = document.getElementById('furigoma-result-text');
+
   modal.style.display = 'flex';
   container.innerHTML = '';
   resultText.textContent = '天運を見届けております…';
@@ -1810,6 +1892,8 @@ function openFurigomaModal() {
 
   const results = [];
   let toCount = 0;
+
+  // モーダル表示と同時に5枚の駒を即座にパッと並べる！
   for(let i=0; i<5; i++) {
     const isTo = (Math.random() < 0.5);
     results.push(isTo); if (isTo) toCount++;
@@ -1824,11 +1908,12 @@ function openFurigomaModal() {
     container.appendChild(pBox);
   }
 
+  // 150ms後から小気味よくパタパタッとめくる
   results.forEach((isTo, i) => {
     setTimeout(() => {
       playPieceSound();
       if(isTo) document.getElementById(`fg-card-${i}`).classList.add('flipped');
-    }, 380 + i * 260);
+    }, 150 + i * 180);
   });
 
   setTimeout(() => {
@@ -1843,12 +1928,15 @@ function openFurigomaModal() {
       resultText.innerHTML = `と金が <span style="color:#ff5252;font-size:18px;">${toCount}</span> 枚！ <span style="color:#ffd700;">${currentEnemyName}の先手！</span>`;
     }
     playVictorySound();
-    setTimeout(() => { modal.style.display = 'none'; startBattleAfterFurigoma(); }, 2000);
-  }, 380 + 5 * 260 + 350);
+    setTimeout(() => { modal.style.display = 'none'; startBattleAfterFurigoma(); }, 1200);
+  }, 150 + 5 * 180 + 250);
 }
 
 function startBattleAfterFurigoma() {
   isGameOver = false; gameStartTime = new Date();
+  hintUsageCountInCurrentGame = 0;
+  firstHintPlayerMorale = 50;
+  isHintThinking = false;
   initBoardState();
   triggerCutin('合戦開始！ いざ推して参る！');
   renderBoard();
@@ -1875,7 +1963,7 @@ function initBoardState() {
   hands = { PLAYER: {}, AI: {} };
   moveObjectsHistory = []; lastMoveTo = null; historyStates = [];
   evalScoresHistory = [0]; reviewingIndex = -1;
-  isBookOut = false; isAiThinking = false;
+  isBookOut = false; isAiThinking = false; isHintThinking = false;
   hintTargetCell = null; hintSourceCell = null;
   updateMoraleAndSituation(0);
 
@@ -1893,6 +1981,56 @@ function initBoardState() {
   });
 }
 
+/* 敗戦時・官兵衛覚醒イベント（専用モーダル表示） */
+function processKanbeiDefeatEvent() {
+  const foughtEnemyName = WARLORDS_DATA[currentAiLevel].name;
+
+  if (isKanbeiAwakened) {
+    if (hintUsageCountInCurrentGame > 0) {
+      openKanbeiModal(
+        '【神軍師・黒田官兵衛】',
+        `「幸村公、無念…！ 敵将・<b>${foughtEnemyName}</b>もさる者、死力を尽くした盤外の奇襲にやられ申した…！<br>しかし我が神算鬼謀、次は必ずや裏を掻いてみせますぞ！ 再起の陣を！」`
+      );
+    }
+    return;
+  }
+
+  // 天下三傑（Lv.8 信長、Lv.9 秀吉、Lv.10 家康）での敗北時
+  if (currentAiLevel >= 8) {
+    if (hintUsageCountInCurrentGame > 0) {
+      if (firstHintPlayerMorale >= 25) {
+        // パターン1：勝負形で相談したのに競り負けた ⇒【即座に覚醒！】
+        saveKanbeiAwakened(true);
+        triggerCutin('黒田官兵衛、神算鬼謀へ覚醒！');
+        openKanbeiModal(
+          '【軍師・黒田官兵衛の痛恨と覚醒】',
+          `「幸村公、誠に申し訳ございませぬ…！<br>
+          我が助言のすべてを授けながら、天下人・<b>${foughtEnemyName}</b>公の深謀に一歩及ばず、不甲斐なきばかりに敗戦の憂き目を見せてしまいました…無念極まりなし！<br><br>
+          某も己の未熟を恥じ、古今東西の兵法書を紐解き、猛勉強してまいります！<br><br>
+          <span style="color:#ffd700;font-size:14px;font-weight:900;">――黒田官兵衛、これより【神算鬼謀・覚醒の境地】へ至れり！</span><br>
+          次なる合戦、天下の覇王とて必ずや打ち破ってみせましょうぞ！」`
+        );
+      } else {
+        // パターン2：手遅れ駆け込み ⇒ 覚醒保留
+        openKanbeiModal(
+          '【軍師・黒田官兵衛】',
+          `「幸村公、本陣がここまで乱れてしまっては某の知謀も間に合いませなんだ…！<br>
+          ですが殿、次は開戦の初陣より某を頼って下され！ 必ずや天下人・<b>${foughtEnemyName}</b>公の隙を突く好機を創り出してみせましょうぞ！」`
+        );
+      }
+    }
+  } else {
+    // Lv.1〜Lv.7での敗戦時 ⇒ 覚醒保留
+    if (hintUsageCountInCurrentGame > 0) {
+      openKanbeiModal(
+        '【軍師・黒田官兵衛】',
+        `「幸村公、序盤の綻びが悔やまれますな…！<br>
+        某の知恵はまだまだこんなものではございませぬ。次は初陣より某の進言に耳を傾けてみて下され！」`
+      );
+    }
+  }
+}
+
 function surrenderGame() {
   if (isGameOver) return;
   playPieceSound();
@@ -1901,14 +2039,33 @@ function surrenderGame() {
     triggerCutin('無念… ここまでか…');
     document.getElementById('situation-text').textContent = '【降伏】真田軍は全軍退却を決断。天下統一の夢、ここに散り候。';
     setOrderMessage('【投了】真田軍、降伏いたしました。<br>「対局開始」にて再起の陣を敷かれよ。', false);
+    processKanbeiDefeatEvent();
   }
 }
 
+/* ヒント要求処理（連打・誤操作ガード付き） */
 function showMasterHint() {
-  if (isGameOver || turn !== 'PLAYER') { alert('対局中、自軍の手番のみ軍師のヒントを乞うことができます。'); return; }
+  if (isGameOver || turn !== 'PLAYER') {
+    setOrderMessage('【伝令】対局中、自軍の手番のみ軍師のヒントを乞うことができます。', true);
+    return;
+  }
+  if (isHintThinking) return; // 思考中の連打防止
+
   playPieceSound();
-  setOrderMessage('【軍師思案】黒田官兵衛、最善の勝ち筋を計算中…<br>しばしお待ち下され。', false);
-  aiWorker.postMessage({ board, hands, isHintRequest: true });
+  isHintThinking = true;
+
+  if (hintUsageCountInCurrentGame === 0) {
+    firstHintPlayerMorale = getCurrentPlayerMorale();
+  }
+  hintUsageCountInCurrentGame++;
+
+  if (isKanbeiAwakened) {
+    setOrderMessage('【神算鬼謀・極限思案中】覚醒せし黒田官兵衛、超深層探索中…！<br>天下の覇王をも凌駕する一手をお待ち下され。', false);
+  } else {
+    setOrderMessage('【軍師思案中】黒田官兵衛、最善の勝ち筋を計算中…<br>しばしお待ち下され。', false);
+  }
+
+  aiWorker.postMessage({ board, hands, isHintRequest: true, isAwakened: isKanbeiAwakened });
 }
 
 function openKifuModal() {
@@ -1959,8 +2116,12 @@ function renderBoard() {
       if(selectedPos?.r === r && selectedPos?.c === c) cell.classList.add('selected');
       else if(currentValidMoves.some(m => m.r === r && m.c === c)) cell.classList.add('target-move');
       if(lastMoveTo?.r === r && lastMoveTo?.c === c) cell.classList.add('last-move');
-      if (hintSourceCell?.r === r && hintSourceCell?.c === c) cell.classList.add('hint-source');
-      if (hintTargetCell?.r === r && hintTargetCell?.c === c) cell.classList.add('hint-target');
+
+      // 駒選択時・移動候補マス表示中はヒント枠を優先させない
+      if (!selectedPos && !currentValidMoves.length) {
+        if (hintSourceCell?.r === r && hintSourceCell?.c === c) cell.classList.add('hint-source');
+        if (hintTargetCell?.r === r && hintTargetCell?.c === c) cell.classList.add('hint-target');
+      }
 
       const item = board[r][c];
       if(item) {
@@ -2076,10 +2237,11 @@ function downloadKifu() {
   document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
-/* 持ち駒クリック処理 */
 function handleHandClick(code) {
   if (reviewingIndex !== -1) jumpToKifuStep(historyStates.length - 1);
-  initAudio(); hintTargetCell = null; hintSourceCell = null;
+  if (isHintThinking) return; // ヒント思考中の操作ガード
+  initAudio();
+  hintTargetCell = null; hintSourceCell = null;
 
   if (isGameOver) {
     playPieceSound();
@@ -2104,10 +2266,14 @@ function handleHandClick(code) {
   renderBoard();
 }
 
-/* 盤上セルクリック処理（親切誘導 ＆ 確実な判定） */
 function handleCellClick(e) {
   if (reviewingIndex !== -1) jumpToKifuStep(historyStates.length - 1);
-  initAudio(); hintTargetCell = null; hintSourceCell = null;
+  if (isHintThinking) return; // ヒント思考中の操作ガード
+  initAudio();
+
+  // 駒タップ時はヒント表示を即時解除し、駒の選択色（黄色）と移動可能マス（緑色）を最優先！
+  hintTargetCell = null;
+  hintSourceCell = null;
 
   if (isGameOver) {
     playPieceSound();
@@ -2124,13 +2290,11 @@ function handleCellClick(e) {
   const r = parseInt(e.currentTarget.dataset.row), c = parseInt(e.currentTarget.dataset.col);
   const target = board[r][c];
 
-  /* 持ち駒を打つ処理 */
   if(selectedPos?.handCode && currentValidMoves.some(m => m.r === r && m.c === c)) {
     executeMove({ type: 'drop', code: selectedPos.handCode, to: {r, c}, owner: 'PLAYER' });
     selectedPos = null; currentValidMoves = []; finishPlayerTurn(); return;
   }
 
-  /* 盤上の駒を移動する処理 */
   if(selectedPos?.r !== undefined && currentValidMoves.some(m => m.r === r && m.c === c)) {
     const sr = selectedPos.r, sc = selectedPos.c, piece = board[sr][sc];
     const canP = PROMOTE_MAP[piece.code] && (sr <= 2 || r <= 2);
@@ -2145,7 +2309,6 @@ function handleCellClick(e) {
     }
   }
 
-  /* プレイヤーの駒を選択 */
   if(target?.owner === 'PLAYER') {
     selectedPos = {r, c};
     currentValidMoves = getLegalMoves('PLAYER').filter(m => m.type === 'move' && m.from.r === r && m.from.c === c).map(m => m.to);
@@ -2228,7 +2391,7 @@ function executeMove(move) {
 function undoMove() {
   if (isGameOver || historyStates.length <= 1) { playPieceSound(); alert('これ以上「待った」はできませぬ。'); return; }
   playPieceSound();
-  if (isAiThinking) { createNewWorker(); isAiThinking = false; }
+  if (isAiThinking || isHintThinking) { createNewWorker(); isAiThinking = false; isHintThinking = false; }
 
   const steps = (turn === 'AI' || historyStates.length === 2) ? 1 : 2;
   for (let s = 0; s < steps; s++) {
@@ -2242,6 +2405,7 @@ function undoMove() {
   lastMoveTo = target.lastMoveTo ? {...target.lastMoveTo} : null;
   moveObjectsHistory = JSON.parse(JSON.stringify(target.moveObjectsHistory));
   selectedPos = null; currentValidMoves = []; pendingMove = null; reviewingIndex = -1;
+  hintTargetCell = null; hintSourceCell = null;
   document.getElementById('promote-modal').style.display = 'none';
 
   setOrderMessage('【待った行使】局面を戻し候。<br>幸村公、起死回生の妙手を再考下され。', true);
@@ -2296,6 +2460,7 @@ function isCheckState(owner) {
   return false;
 }
 
+/* 合法手生成（監査済：未定義変数の完全解消） */
 function getLegalMoves(owner) {
   const pseudo = [];
   const dir = owner === 'AI' ? 1 : -1;
@@ -2434,6 +2599,7 @@ function checkGameOver(nextTurnOwner) {
       triggerCutin('無念… ここまでか…');
       document.getElementById('situation-text').textContent = `【敗北…】真田本陣が討ち取られ候。無念の敗戦、天下の行方は${foughtEnemyName}の手に…`;
       setOrderMessage(`【本陣陥落】${foughtEnemyName}に敗れ候。<br>「対局開始」を押し、雪辱を果たすべく再起されよ！`, false);
+      processKanbeiDefeatEvent();
     }
     return true;
   }
@@ -2449,10 +2615,7 @@ initBoardState();
 renderBoard();
 renderKifu();
 
-/* 初回プレイ判定案内自動起動 */
 checkFirstVisitGuide();
 </script>
 </body>
 </html>
-
-
