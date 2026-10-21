@@ -3,145 +3,161 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>将棋王 〜 天下統一・戦国決戦 〜</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>将棋王 2026 〜 天下統一・戦国決戦 〜</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Klee+One:wght@600;900&family=Shippori+Mincho:wght@600;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Klee+One:wght@600;900&family=Shippori+Mincho:wght@700;900&display=swap');
 
   :root {
     --gold-bright: #ffe57f;
-    --gold-shine: linear-gradient(135deg, #fff7c2 0%, #d4af37 35%, #8c671a 70%, #ffd700 100%);
-    --gold-foil: linear-gradient(180deg, #ffe89e 0%, #caa03c 45%, #886214 75%, #d8b24a 100%);
-    --board-wood: linear-gradient(135deg, #f7dfa5 0%, #e8c281 40%, #eed599 70%, #daa961 100%);
-    --grid-line: #301704;
-    --piece-bg: linear-gradient(180deg, #fffcf0 0%, #fae5b6 60%, #e2c07a 100%);
+    --gold-rich: linear-gradient(135deg, #fffbe0 0%, #ffd700 25%, #e6a100 50%, #8c5a00 75%, #ffe680 100%);
+    --gold-foil: linear-gradient(180deg, #fff3b3 0%, #d4af37 40%, #8c671a 75%, #dfb743 100%);
+    --board-wood: linear-gradient(135deg, #fcedc5 0%, #e5be7a 40%, #eed69c 70%, #d6a152 100%);
+    --grid-line: #2b1403;
+    --piece-bg: linear-gradient(180deg, #fffcf2 0%, #fae6bc 60%, #e2bf75 100%);
     --player-color: #120903;
-    --ai-color: #0b1536;
-    --promoted-crimson: #ab0808;
-    --border-frame-wood: linear-gradient(135deg, #2a1408 0%, #110702 100%);
-    --urushi-black: radial-gradient(circle at 50% 30%, #1f1109 0%, #0c0603 60%, #000000 100%);
-    --kaisho-font: 'Klee One', 'Shippori Mincho', serif;
+    --ai-color: #0c183a;
+    --promoted-crimson: #a60000;
+    --border-frame: linear-gradient(135deg, #3d1c08 0%, #160802 50%, #2a1104 100%);
+    --kaisho-font: 'Shippori Mincho', 'Klee One', serif;
   }
 
   * { box-sizing: border-box; }
 
   html, body {
     margin: 0; padding: 0; width: 100%; height: 100%;
-    overflow: hidden;
-    background: #060301;
+    overflow: hidden; background: #070301;
     font-family: var(--kaisho-font);
     color: #f7eed8; user-select: none;
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* 漆黒梨地塗（金粉微粒子）背景 */
+  /* 漆黒梨地塗（金粉散らし背景） */
   body {
     display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-    padding: 2px 4px;
-    background-color: #080402;
+    padding: 3px 2px 2px 2px;
+    background-color: #070301;
     background-image:
-      radial-gradient(1.5px 1.5px at 20px 25px, rgba(255, 225, 100, 0.45), rgba(0,0,0,0)),
-      radial-gradient(1.2px 1.2px at 75px 85px, rgba(230, 180, 104, 0.35), rgba(0,0,0,0)),
-      radial-gradient(2px 2px at 130px 40px, rgba(255, 215, 0, 0.3), rgba(0,0,0,0)),
-      radial-gradient(1.5px 1.5px at 170px 110px, rgba(255, 240, 150, 0.25), rgba(0,0,0,0));
-    background-size: 150px 150px;
+      radial-gradient(1.5px 1.5px at 15px 20px, rgba(255, 230, 110, 0.45), rgba(0,0,0,0)),
+      radial-gradient(1.2px 1.2px at 80px 75px, rgba(235, 185, 95, 0.35), rgba(0,0,0,0)),
+      radial-gradient(2px 2px at 145px 35px, rgba(255, 215, 0, 0.3), rgba(0,0,0,0)),
+      radial-gradient(1.5px 1.5px at 185px 115px, rgba(255, 245, 160, 0.25), rgba(0,0,0,0));
+    background-size: 140px 140px;
   }
 
-  /* 最上部：金覆輪ヘッダー */
+  /* 勝利演出用全画面エフェクトCanvas */
+  #celebration-canvas {
+    position: fixed; inset: 0; pointer-events: none; z-index: 2800;
+  }
+
+  /* 最上部：金覆輪・彫金大名ヘッダー */
   .top-header {
-    width: 100%; max-width: 480px; height: 26px;
+    width: 100%; max-width: 500px; height: 38px;
     display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1.5px solid #b38827;
-    background: linear-gradient(180deg, rgba(28, 14, 7, 0.95) 0%, rgba(10, 5, 2, 0.95) 100%);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.9), inset 0 -1px 0 rgba(255, 215, 0, 0.3);
-    padding: 0 6px; flex-shrink: 0;
+    border: 2px solid #e0b034; border-radius: 5px;
+    background: linear-gradient(180deg, #2b1307 0%, #120601 50%, #220d04 100%);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255, 240, 160, 0.5), inset 0 0 8px rgba(255,215,0,0.25);
+    padding: 2px 5px; flex-shrink: 0; position: relative; gap: 4px;
   }
-  .app-title {
-    font-family: var(--kaisho-font); font-size: 13.5px; letter-spacing: 2px;
-    background: var(--gold-shine); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.95)); margin: 0; line-height: 1; font-weight: 900;
+  .app-title-group {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    flex: 1; min-width: 0; padding: 0 2px;
   }
-  .header-actions { display: flex; gap: 5px; }
+  .app-title-main {
+    font-size: 15.5px; letter-spacing: 2.5px; font-weight: 900;
+    margin: 0; line-height: 1.05;
+    background: var(--gold-rich);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.95)) drop-shadow(0 0 10px rgba(255,215,0,0.6));
+    -webkit-text-stroke: 0.4px #4a2800;
+  }
+  .app-title-sub {
+    font-size: 9px; letter-spacing: 1px; font-weight: 900;
+    color: #f7e2a8; text-shadow: 0 1px 3px #000, 0 0 6px #ffb300; margin: 0; line-height: 1.1;
+  }
+
+  .header-actions { display: flex; gap: 3px; flex-shrink: 0; }
   .header-btn {
     font-family: var(--kaisho-font); font-size: 9.5px; font-weight: 900;
-    padding: 2px 7px; border-radius: 3px;
-    border: 1px solid #d4af37;
-    background: linear-gradient(180deg, #331d10 0%, #150904 100%);
-    color: #ffe58f; cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,230,120,0.3);
+    padding: 3px 6px; border-radius: 4px; border: 1.2px solid #e5b338;
+    color: #fff3c4; cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,245,180,0.4);
+    text-shadow: 0 1px 2px #000; white-space: nowrap;
   }
   .header-btn:active { transform: translateY(1px); }
+  .btn-lvl { background: linear-gradient(180deg, #593112 0%, #261204 100%); }
+  .btn-guide { background: linear-gradient(180deg, #664311 0%, #301f05 100%); border-color: #ffd700; color: #ffefa8; }
+  .btn-kifu { background: linear-gradient(180deg, #1b3a57 0%, #0c1a29 100%); border-color: #5ea8e6; color: #d8eeff; }
+  .btn-snd { background: linear-gradient(180deg, #442a4f 0%, #1f1124 100%); border-color: #b97de6; color: #f2e1ff; }
 
+  /* メイン骨格（スマホ時は縦積み中央揃えを100%保持） */
   .main-wrapper {
     display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-    width: 100%; max-width: 480px; flex: 1; min-height: 0; gap: 2px;
+    width: 100%; max-width: 500px; flex: 1; min-height: 0; gap: 2px;
   }
 
   /* 武将金蒔絵パネル */
   .warlord-panel {
-    width: 100%; height: clamp(56px, 8vh, 66px);
-    background: linear-gradient(180deg, rgba(35, 18, 9, 0.98) 0%, rgba(14, 7, 3, 0.98) 100%);
-    border: 1.5px solid #b88a32; border-radius: 4px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.95), inset 0 0 10px rgba(255,215,0,0.1), inset 0 1px 0 rgba(255,235,140,0.35);
+    width: 100%; height: clamp(52px, 7.5vh, 62px);
+    background: linear-gradient(180deg, rgba(38, 19, 8, 0.98) 0%, rgba(14, 6, 2, 0.98) 100%);
+    border: 1.5px solid #c99832; border-radius: 4px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,235,150,0.4);
     display: flex; align-items: center; padding: 2px 6px; gap: 6px; flex-shrink: 0;
-    position: relative;
-  }
-  .warlord-panel::after {
-    content: ''; position: absolute; inset: 1px; border: 0.5px solid rgba(255, 215, 0, 0.25);
-    pointer-events: none; border-radius: 3px;
   }
 
-  /* 家紋アバター（金象嵌彫刻） */
+  /* 家紋アバター */
   .warlord-avatar {
-    width: clamp(42px, 6vh, 50px); height: clamp(42px, 6vh, 50px);
+    width: clamp(38px, 5.5vh, 46px); height: clamp(38px, 5.5vh, 46px);
     border-radius: 50%; border: 2px solid #ffd700;
-    background: radial-gradient(circle at 35% 35%, #2d180c 0%, #050201 100%);
+    background: radial-gradient(circle at 35% 35%, #30170a 0%, #060201 100%);
     overflow: hidden; position: relative; flex-shrink: 0;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.45), inset 0 0 8px rgba(0,0,0,0.9);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5), inset 0 0 8px rgba(0,0,0,0.9);
     display: flex; align-items: center; justify-content: center;
   }
-  .warlord-avatar svg { width: 88%; height: 88%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.85)); }
-
-  .warlord-info {
-    flex: 1; display: flex; flex-direction: column; justify-content: center;
-    min-width: 0; text-align: left;
+  .warlord-avatar.sanada-avatar {
+    background: radial-gradient(circle at 35% 35%, #6a0b0b 0%, #180202 100%);
+    box-shadow: 0 0 12px rgba(230, 25, 25, 0.6), inset 0 0 8px rgba(0,0,0,0.9);
   }
+  .warlord-avatar svg { width: 90%; height: 90%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.85)); }
+
+  .warlord-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; text-align: left; }
   .warlord-name-row { display: flex; align-items: center; gap: 4px; }
   .crest-icon-mini { width: 14px; height: 14px; fill: #ffd700; flex-shrink: 0; }
-  .warlord-name { font-family: var(--kaisho-font); font-size: 14px; font-weight: 900; color: #ffe699; letter-spacing: 1px; }
-  .warlord-clan { font-size: 9px; color: #d1b882; line-height: 1.1; font-weight: 600; }
-  .warlord-quote { font-size: 9px; color: #fff1d0; font-family: var(--kaisho-font); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .warlord-name { font-size: 13.5px; font-weight: 900; color: #ffe699; letter-spacing: 1px; }
+  .warlord-clan { font-size: 9px; color: #d6be89; font-weight: 700; line-height: 1.1; }
+  .warlord-quote { font-size: 8.8px; color: #fff4d9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   .gauge-group { display: flex; flex-direction: column; gap: 1px; margin-top: 1px; }
   .gauge-label-row { display: flex; justify-content: space-between; font-size: 8px; color: #f2e3c6; font-weight: 900; }
   .morale-bar-frame { width: 100%; height: 5px; background: #000; border: 0.5px solid #8e6c31; border-radius: 2px; overflow: hidden; }
   .morale-bar-fill { height: 100%; width: 50%; transition: width 0.4s ease-out; }
   .morale-enemy { background: linear-gradient(90deg, #991414, #ff4d4d); }
-  .morale-player { background: linear-gradient(90deg, #104e8b, #448aff); }
+  .morale-player { background: linear-gradient(90deg, #a81c1c, #ff6b6b); }
 
   /* 持ち駒エリア */
   .warlord-hand-area {
     flex: 1.15; height: 90%;
-    background: rgba(12, 6, 3, 0.85); border: 1.2px solid #876228;
-    border-radius: 3px; padding: 2px 4px;
-    display: flex; align-items: center; overflow-x: auto; gap: 5px;
+    background: rgba(10, 5, 2, 0.88); border: 1.2px solid #8f692c;
+    border-radius: 3px; padding: 2px 3px;
+    display: flex; align-items: center; overflow-x: auto; gap: 4px;
     box-shadow: inset 0 2px 6px rgba(0,0,0,0.95);
   }
 
   /* 軍師戦況評定エリア */
   .situation-banner {
-    width: 100%; min-height: 26px; max-height: 32px;
-    background: linear-gradient(90deg, #1b0e06 0%, #3e1e0b 50%, #1b0e06 100%);
-    border: 1.2px solid #a67c33; border-radius: 3px;
-    display: flex; align-items: center; gap: 6px;
+    width: 100%; min-height: 27px; max-height: 35px;
+    background: linear-gradient(90deg, #1f0f06 0%, #44210c 50%, #1f0f06 100%);
+    border: 1.2px solid #b88a32; border-radius: 3px;
+    display: flex; align-items: center; gap: 8px;
     padding: 2px 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.85); flex-shrink: 0;
   }
   .situation-title {
-    font-size: 9.5px; font-weight: 900; color: #ffd700; white-space: nowrap;
-    border-right: 1px solid #73511f; padding-right: 5px; align-self: flex-start; margin-top: 1px;
+    font-size: 14.5px; font-weight: 900; white-space: nowrap;
+    border-right: 1.5px solid #8c671a; padding-right: 7px; line-height: 1; letter-spacing: 1.5px;
+    background: var(--gold-rich); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   .situation-text {
-    font-size: 9.5px; font-weight: 700; color: #fff4d6; line-height: 1.25;
+    font-size: 11px; font-weight: 800; color: #fff8e7; line-height: 1.2;
     flex: 1; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   }
 
@@ -152,11 +168,11 @@
   }
   .shogi-board-frame {
     display: flex; flex-direction: column;
-    background: var(--border-frame-wood);
-    border: 2.8px solid #c5972c; border-radius: 4px;
-    padding: 3px 4px 4px 3px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.98), inset 0 0 12px rgba(0,0,0,0.95);
-    width: calc(100vw - 8px); max-width: min(96vw, 49vh, 420px);
+    background: var(--border-frame);
+    border: 2px solid #cca135; border-radius: 4px;
+    padding: 2px 2px 3px 2px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.98), inset 0 0 10px rgba(0,0,0,0.95);
+    width: 99vw; max-width: min(99vw, 50vh, 440px);
     position: relative;
   }
   .shogi-board-frame::after {
@@ -164,14 +180,13 @@
     border: 1px solid rgba(255, 215, 0, 0.4); pointer-events: none; border-radius: 2px;
   }
 
-  .board-top-row { display: flex; width: 100%; height: 14px; margin-bottom: 2px; }
+  .board-top-row { display: flex; width: 100%; height: 13px; margin-bottom: 1px; }
   .rank-index-container { flex: 1; display: grid; grid-template-columns: repeat(9, 1fr); }
   .rank-cell {
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 900; color: #ffe57f;
-    text-shadow: 0 1px 3px #000;
+    font-size: 11px; font-weight: 900; color: #ffe57f; text-shadow: 0 1px 2px #000;
   }
-  .rank-corner-spacer { width: 18px; flex-shrink: 0; }
+  .rank-corner-spacer { width: 15px; flex-shrink: 0; }
 
   .board-main-row { display: flex; width: 100%; align-items: stretch; }
 
@@ -179,32 +194,29 @@
     flex: 1; aspect-ratio: 1 / 1;
     display: grid; grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(9, 1fr);
     gap: 1px; background-color: var(--grid-line);
-    border: 1.5px solid var(--grid-line);
+    border: 1.2px solid var(--grid-line);
     position: relative; box-shadow: 0 3px 10px rgba(0,0,0,0.8);
   }
 
   .cell {
     background: var(--board-wood);
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer; position: relative;
-    transition: background 0.15s ease;
+    cursor: pointer; position: relative; transition: background 0.15s ease;
   }
-  .cell.selected { background: rgba(255, 215, 0, 0.82) !important; }
-  .cell.last-move { background: rgba(230, 81, 0, 0.6) !important; }
+  .cell.selected { background: rgba(255, 215, 0, 0.88) !important; }
+  .cell.last-move { background: rgba(230, 81, 0, 0.65) !important; }
   .cell.target-move {
-    background: linear-gradient(135deg, rgba(55, 125, 28, 0.85) 0%, rgba(28, 70, 14, 0.95) 100%) !important;
+    background: linear-gradient(135deg, rgba(46, 125, 50, 0.9) 0%, rgba(27, 94, 32, 0.96) 100%) !important;
     box-shadow: inset 0 0 8px #76ff03;
   }
 
-  /* 金粉着手エフェクト */
   @keyframes spark-gold {
     0% { box-shadow: inset 0 0 0px #ffd700, 0 0 0px #fff; opacity: 1; }
     50% { box-shadow: inset 0 0 18px #ffd700, 0 0 14px #ffe57f; opacity: 1; }
     100% { box-shadow: inset 0 0 0px #ffd700, 0 0 0px #fff; opacity: 0; }
   }
   .cell.sparkle::after {
-    content: ''; position: absolute; inset: 0;
-    border: 2px solid #fff; pointer-events: none;
+    content: ''; position: absolute; inset: 0; border: 2px solid #fff; pointer-events: none;
     animation: spark-gold 0.6s ease-out forwards;
   }
 
@@ -216,30 +228,28 @@
   .cell.hint-source, .cell.hint-target { animation: hint-pulse 1.2s infinite ease-in-out; }
 
   .board-star {
-    position: absolute; width: 5px; height: 5px; background: #261103;
-    border-radius: 50%; transform: translate(-50%, -50%);
-    pointer-events: none; z-index: 5;
+    position: absolute; width: 4.5px; height: 4.5px; background: #261103;
+    border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 5;
   }
   #star-1 { top: calc(100% * 3 / 9); left: calc(100% * 3 / 9); }
   #star-2 { top: calc(100% * 3 / 9); left: calc(100% * 6 / 9); }
   #star-3 { top: calc(100% * 6 / 9); left: calc(100% * 3 / 9); }
   #star-4 { top: calc(100% * 6 / 9); left: calc(100% * 6 / 9); }
 
-  .file-index-col { width: 18px; flex-shrink: 0; display: grid; grid-template-rows: repeat(9, 1fr); margin-left: 2px; }
+  .file-index-col { width: 15px; flex-shrink: 0; display: grid; grid-template-rows: repeat(9, 1fr); margin-left: 1px; }
   .file-cell {
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 900; color: #ffe57f;
-    text-shadow: 0 1px 3px #000;
+    font-size: 11px; font-weight: 900; color: #ffe57f; text-shadow: 0 1px 2px #000;
   }
 
   /* 将棋駒 */
   .piece {
-    width: 90%; height: 93%;
+    width: 91%; height: 94%;
     background: var(--piece-bg); border: 1px solid #5a3813;
     clip-path: polygon(50% 0%, 90% 18%, 100% 100%, 0% 100%, 10% 18%);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     font-family: var(--kaisho-font);
-    font-size: clamp(9.5px, 1.7vh, 13px); line-height: 1.02; font-weight: 900;
+    font-size: clamp(10px, 1.8vh, 13.5px); line-height: 1.02; font-weight: 900;
     letter-spacing: -0.5px; pointer-events: none;
     box-shadow: 0 2px 4px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.9);
   }
@@ -249,12 +259,11 @@
 
   /* 持ち駒 */
   .hand-piece {
-    width: 28px; height: 34px;
+    width: 27px; height: 33px;
     background: var(--piece-bg); border: 1px solid #5a3813;
     clip-path: polygon(50% 0%, 90% 20%, 100% 100%, 0% 100%, 10% 20%);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    font-family: var(--kaisho-font);
-    font-size: 10.5px; line-height: 1.02; font-weight: 900;
+    font-family: var(--kaisho-font); font-size: 10px; line-height: 1.02; font-weight: 900;
     cursor: pointer; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.7); flex-shrink: 0;
   }
   .hand-piece.player { color: var(--player-color); }
@@ -267,15 +276,15 @@
     border: 0.5px solid #ffd700; box-shadow: 0 1px 3px rgba(0,0,0,0.8);
   }
 
-  /* カットインスロット（楷書特大） */
+  /* カットインスロット */
   .cutin-slot {
-    width: 100%; height: 30px; min-height: 30px;
+    width: 100%; height: 28px; min-height: 28px;
     display: flex; align-items: center; justify-content: center;
     position: relative; flex-shrink: 0; pointer-events: none;
   }
   .cutin-banner {
-    width: 92%; max-width: 440px; height: 28px;
-    background: linear-gradient(180deg, rgba(30,12,6,0.98) 0%, rgba(140,18,18,0.98) 50%, rgba(30,12,6,0.98) 100%);
+    width: 95%; max-width: 450px; height: 28px;
+    background: linear-gradient(180deg, rgba(30,10,5,0.98) 0%, rgba(150,15,15,0.98) 50%, rgba(30,10,5,0.98) 100%);
     border: 1.8px solid #ffd700; border-radius: 4px;
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.85);
     display: flex; align-items: center; justify-content: center;
@@ -283,40 +292,52 @@
     transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
   .cutin-text {
-    font-family: var(--kaisho-font); font-size: 17.5px; font-weight: 900;
-    color: #fff8e1; text-shadow: 0 0 10px #ffd700, 0 2px 4px #000; letter-spacing: 2px;
+    font-size: 16px; font-weight: 900; color: #fff9e6;
+    text-shadow: 0 0 10px #ffd700, 0 2px 4px #000; letter-spacing: 2px;
     white-space: nowrap; line-height: 1;
   }
   .cutin-active .cutin-banner { opacity: 1 !important; transform: scale(1) !important; }
 
-  /* 開始・合戦伝令メッセージ帯（楷書） */
+  /* 祝勝特大カットイン */
+  .victory-banner-giant {
+    background: linear-gradient(180deg, #590909 0%, #b81414 50%, #400505 100%) !important;
+    border: 2.5px solid #fff099 !important;
+    box-shadow: 0 0 35px rgba(255, 215, 0, 1), inset 0 0 15px #ffd700 !important;
+    height: 32px !important;
+  }
+  .victory-text-giant {
+    font-size: 18px !important; color: #ffffff !important;
+    text-shadow: 0 0 12px #ffe57f, 0 2px 5px #000 !important; font-weight: 900 !important;
+  }
+
+  /* 開始・合戦伝令メッセージ帯 */
   .order-message-banner {
-    width: 100%; height: 30px;
-    background: linear-gradient(90deg, #28150a 0%, #46230f 50%, #28150a 100%);
-    border: 1.5px solid #a67c33; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 0 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.85); flex-shrink: 0;
+    width: 100%; height: clamp(38px, 5.2vh, 44px);
+    background: linear-gradient(90deg, #281409 0%, #4a2410 50%, #281409 100%);
+    border: 1.5px solid #b88a32; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 2px 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.85); flex-shrink: 0;
     transition: all 0.3s ease;
   }
-  .order-crest-icon { width: 15px; height: 15px; fill: #ffd700; flex-shrink: 0; }
+  .order-crest-icon { width: 16px; height: 16px; fill: #ffd700; flex-shrink: 0; }
   .order-message-text {
-    font-family: var(--kaisho-font);
-    font-size: 13.5px; font-weight: 900; color: #ffe699; letter-spacing: 1px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1;
+    font-size: 12px; font-weight: 800; color: #ffe699; letter-spacing: 0.8px;
+    line-height: 1.25; text-align: center; flex: 1;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   }
 
   @keyframes pulse-gold-banner {
     0% { border-color: #ffd700; box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
-    50% { border-color: #fff1a8; box-shadow: 0 0 18px rgba(255, 215, 0, 0.95); }
+    50% { border-color: #fff6bd; box-shadow: 0 0 18px rgba(255, 215, 0, 0.95); }
     100% { border-color: #ffd700; box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
   }
   .order-message-banner.my-turn { animation: pulse-gold-banner 1.8s infinite ease-in-out; }
   .order-message-banner.my-turn .order-message-text { color: #ffffff; text-shadow: 0 0 6px #ffd700; }
 
-  /* 戦歴棋譜（高さを66pxに拡張しスクロールバーが出ても3行完全表示） */
+  /* 戦歴棋譜 */
   .kifu-bottom-banner {
-    width: 100%; height: clamp(64px, 8.8vh, 72px);
-    background: linear-gradient(180deg, rgba(25, 12, 6, 0.98) 0%, rgba(10, 5, 2, 0.98) 100%);
+    width: 100%; height: clamp(60px, 8.2vh, 68px);
+    background: linear-gradient(180deg, rgba(25, 12, 5, 0.98) 0%, rgba(10, 5, 2, 0.98) 100%);
     border: 1.5px solid #a67c33; border-radius: 4px;
     display: flex; align-items: stretch; padding: 2px 4px; gap: 4px;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.95); flex-shrink: 0;
@@ -325,9 +346,7 @@
     display: flex; flex-direction: column; justify-content: space-between;
     width: 38px; border-right: 1px solid #73511f; padding-right: 3px; flex-shrink: 0;
   }
-  .kifu-banner-title {
-    font-size: 9px; font-weight: 900; color: #ffd700; text-align: center; line-height: 1.1;
-  }
+  .kifu-banner-title { font-size: 9px; font-weight: 900; color: #ffd700; text-align: center; line-height: 1.1; }
   .kifu-step-btn-group { display: flex; gap: 2px; }
   .kifu-step-btn {
     flex: 1; font-size: 9px; padding: 1px 0; border: 0.5px solid #a67c33;
@@ -338,61 +357,161 @@
     display: grid; grid-template-rows: repeat(3, 17px); grid-auto-flow: column;
     gap: 1px 12px; overflow-x: auto; overflow-y: hidden;
     flex-grow: 1; font-size: 10px; color: #fcedcb; text-align: left;
-    white-space: nowrap; align-items: center; font-family: var(--kaisho-font);
-    padding-bottom: 2px;
+    white-space: nowrap; align-items: center; padding-bottom: 2px;
   }
-
-  /* 金泥極細スクロールバー */
   .kifu-stream-box::-webkit-scrollbar { height: 5px; }
   .kifu-stream-box::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); border-radius: 2px; }
   .kifu-stream-box::-webkit-scrollbar-thumb {
-    background: linear-gradient(90deg, #b38827, #ffd700, #b38827);
-    border-radius: 2px;
+    background: linear-gradient(90deg, #b38827, #ffd700, #b38827); border-radius: 2px;
   }
 
-  .kifu-item-cell {
-    display: flex; align-items: center; white-space: nowrap; cursor: pointer;
-    line-height: 17px;
-  }
+  .kifu-item-cell { display: flex; align-items: center; white-space: nowrap; cursor: pointer; line-height: 17px; }
   .kifu-item-cell:hover { color: #ffd700; text-decoration: underline; }
   .kifu-item-cell.active-review { color: #ffeb3b; font-weight: 900; text-shadow: 0 0 5px #ffd700; }
 
-  /* 最下部コマンドバー（重厚漆・金箔押し） */
+  /* 最下部コマンドバー */
   .bottom-command-bar {
-    width: 100%; max-width: 480px; height: 35px;
-    display: grid; grid-template-columns: 1fr 1fr 1.6fr 1fr 1fr;
-    gap: 5px; padding: 1px 1px; flex-shrink: 0;
+    width: 100%; max-width: 500px; height: 36px;
+    display: grid; grid-template-columns: 1fr 1fr 1.6fr 1.1fr 1fr;
+    gap: 4px; padding: 1px; flex-shrink: 0;
   }
   .cmd-btn {
-    font-family: var(--kaisho-font); font-size: clamp(9px, 1.35vh, 11px); font-weight: 900;
-    border-radius: 4px; border: 1.5px solid #b88a32;
-    background: linear-gradient(180deg, #381f10 0%, #150904 100%);
-    color: #ffe699; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 2px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,235,140,0.3);
-    white-space: nowrap; padding: 0 2px;
+    font-family: var(--kaisho-font); font-size: clamp(9.5px, 1.4vh, 11px); font-weight: 900;
+    border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 2px;
+    white-space: nowrap; padding: 0 2px; text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+    position: relative; overflow: hidden;
+    transition: transform 0.1s ease, filter 0.15s ease;
   }
-  .cmd-btn:active { transform: translateY(1px); }
-  .cmd-btn-main {
-    background: linear-gradient(180deg, #a6121f 0%, #54060c 100%) !important;
-    border-color: #ffd700 !important; color: #ffffff !important; font-weight: 900;
-    box-shadow: 0 0 12px rgba(255, 0, 0, 0.5), inset 0 1px 0 rgba(255,230,120,0.6) !important;
+  .cmd-btn:active { transform: translateY(1.5px); }
+
+  /* 待った：古代紫漆 */
+  .btn-undo {
+    background: linear-gradient(180deg, #4d1844 0%, #20081d 100%);
+    border: 1.5px solid #d48ceb; color: #fce8ff;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,215,255,0.4);
+  }
+  /* 投了：鉄紺漆 */
+  .btn-surrender {
+    background: linear-gradient(180deg, #182838 0%, #08111a 100%);
+    border: 1.5px solid #6fa8dc; color: #e1f0ff;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.85), inset 0 1px 0 rgba(200,230,255,0.35);
+  }
+  /* 対局開始：真田赤備え朱漆×黄金象嵌 */
+  .btn-start {
+    background: linear-gradient(180deg, #b81414 0%, #520505 100%) !important;
+    border: 1.8px solid #ffd700 !important; color: #ffffff !important; font-weight: 900;
+    box-shadow: 0 0 14px rgba(255, 30, 30, 0.65), inset 0 1px 0 rgba(255,245,180,0.8) !important;
+    animation: pulse-gold-banner 2.2s infinite ease-in-out;
+  }
+  /* 軍師進言：織部碧緑漆 */
+  .btn-hint {
+    background: linear-gradient(180deg, #184422 0%, #081d0d 100%);
+    border: 1.5px solid #5cb874; color: #e5ffe9;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.85), inset 0 1px 0 rgba(200,255,215,0.4);
+  }
+  /* 定石・兵法：金茶琥珀 */
+  .btn-book {
+    background: linear-gradient(180deg, #593c12 0%, #261804 100%);
+    border: 1.5px solid #e0a348; color: #fff2d6;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,235,170,0.4);
+  }
+
+  /* ========================================================
+     タブレット最適化レスポンシブスタイル（16:10 等）
+     ※スマホ（幅600px未満）では上記ルールがそのまま100%維持されます
+     ======================================================== */
+
+  /* ① タブレット縦持ち時（幅600px以上 かつ 縦画面） */
+  @media screen and (min-width: 600px) and (orientation: portrait) {
+    .top-header, .main-wrapper, .bottom-command-bar {
+      max-width: min(92vw, 750px);
+    }
+    .top-header { height: 44px; padding: 2px 10px; }
+    .app-title-main { font-size: 19px; letter-spacing: 3.5px; }
+    .app-title-sub { font-size: 11px; }
+    .header-btn { font-size: 11.5px; padding: 4px 10px; }
+
+    .shogi-board-frame {
+      max-width: min(90vw, 54vh, 580px);
+      padding: 4px 4px 5px 4px;
+    }
+    .piece { font-size: clamp(13px, 2.3vh, 18px); }
+    .hand-piece { width: 34px; height: 40px; font-size: 12px; }
+    .warlord-panel { height: 68px; padding: 3px 10px; gap: 10px; }
+    .warlord-avatar { width: 52px; height: 52px; }
+    .warlord-name { font-size: 16px; }
+    .warlord-clan { font-size: 11px; }
+    .situation-banner { min-height: 34px; font-size: 13px; }
+    .situation-title { font-size: 16px; }
+    .situation-text { font-size: 12.5px; }
+    .order-message-banner { height: 46px; }
+    .order-message-text { font-size: 14px; }
+    .bottom-command-bar { height: 44px; gap: 6px; }
+    .cmd-btn { font-size: 13px; }
+  }
+
+  /* ② タブレット横持ち時（16:10 等のワイド画面・横向き） */
+  @media screen and (min-width: 768px) and (orientation: landscape) {
+    body {
+      padding: 4px 8px; justify-content: center; gap: 4px;
+    }
+    .top-header {
+      max-width: 1280px; width: 98vw; height: 38px;
+    }
+    .app-title-main { font-size: 17px; }
+
+    /* メインエリアを左右分割2翼配置に変更 */
+    .main-wrapper {
+      max-width: 1280px; width: 98vw; flex: 1;
+      display: grid !important;
+      grid-template-columns: min(90vh, 52vw) 1fr;
+      grid-template-rows: auto auto auto auto 1fr auto;
+      gap: 6px 12px; align-items: stretch; justify-content: center;
+    }
+
+    /* 左翼：大迫力の将棋盤 ＆ カットイン */
+    .board-wrapper {
+      grid-column: 1; grid-row: 1 / span 5;
+      height: 100%; display: flex; align-items: center; justify-content: center;
+    }
+    .shogi-board-frame {
+      max-width: min(84vh, 50vw) !important; width: min(84vh, 50vw) !important;
+      padding: 4px 4px 6px 4px;
+    }
+    .cutin-slot {
+      grid-column: 1; grid-row: 6; height: 30px; min-height: 30px;
+    }
+
+    /* 右翼：軍師司令室（敵将・戦況・自将・伝令・棋譜・コマンドバー） */
+    .warlord-panel:nth-of-type(1) { grid-column: 2; grid-row: 1; height: 60px; }
+    .situation-banner { grid-column: 2; grid-row: 2; min-height: 32px; }
+    .order-message-banner { grid-column: 2; grid-row: 3; height: 40px; }
+    .warlord-panel:nth-of-type(2) { grid-column: 2; grid-row: 4; height: 60px; }
+    .kifu-bottom-banner { grid-column: 2; grid-row: 5; height: 100%; min-height: 65px; }
+
+    .bottom-command-bar {
+      grid-column: 2; grid-row: 6;
+      max-width: none !important; width: 100% !important; height: 38px;
+    }
+
+    .piece { font-size: clamp(13px, 2.4vh, 19px); }
+    .hand-piece { width: 33px; height: 39px; font-size: 12px; }
+    .cmd-btn { font-size: 12px; }
   }
 
   /* 振り駒モーダル */
   .furigoma-modal {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.9); z-index: 3000;
+    background: rgba(0, 0, 0, 0.92); z-index: 3000;
     display: none; align-items: center; justify-content: center;
   }
   .furigoma-board {
     width: 90vw; max-width: 360px;
-    background: radial-gradient(circle at center, #351b0f 0%, #0e0502 100%);
+    background: radial-gradient(circle at center, #381c0f 0%, #0e0502 100%);
     border: 2.5px solid #ffd700; border-radius: 8px; padding: 16px 12px;
-    text-align: center; box-shadow: 0 0 35px rgba(255, 215, 0, 0.55);
+    text-align: center; box-shadow: 0 0 35px rgba(255, 215, 0, 0.6);
   }
-  .furigoma-title {
-    font-family: var(--kaisho-font); font-size: 21px; color: #ffd700; margin-bottom: 6px; letter-spacing: 2px; font-weight: 900;
-  }
+  .furigoma-title { font-size: 21px; color: #ffd700; margin-bottom: 6px; letter-spacing: 2px; font-weight: 900; }
   .furigoma-sub { font-size: 11px; color: #ebdcb9; margin-bottom: 14px; }
   .furigoma-pieces-row { display: flex; justify-content: center; gap: 8px; margin: 15px 0; min-height: 48px; }
   .furigoma-piece-box { width: 38px; height: 46px; perspective: 600px; }
@@ -406,14 +525,11 @@
     background: var(--piece-bg); border: 1.5px solid #5a3813;
     clip-path: polygon(50% 0%, 90% 20%, 100% 100%, 0% 100%, 10% 20%);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    font-family: var(--kaisho-font); font-size: 13.5px; font-weight: 900; line-height: 1;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+    font-size: 13.5px; font-weight: 900; line-height: 1; box-shadow: 0 4px 8px rgba(0,0,0,0.6);
   }
   .furigoma-front { color: #1a0c02; }
   .furigoma-back { transform: rotateY(180deg); color: #ab0808; }
-  .furigoma-result-text {
-    font-family: var(--kaisho-font); font-size: 15.5px; font-weight: 900; color: #ffe699; min-height: 24px; margin-top: 10px; letter-spacing: 1px;
-  }
+  .furigoma-result-text { font-size: 15px; font-weight: 900; color: #ffe699; min-height: 24px; margin-top: 10px; letter-spacing: 1px; }
 
   /* モーダル汎用 */
   .modal-overlay {
@@ -422,38 +538,101 @@
   }
   .modal-content {
     background: radial-gradient(circle at center, #351a0c 0%, #120803 100%);
-    border: 2px solid #ffd700; padding: 14px 16px; border-radius: 6px;
+    border: 2px solid #ffd700; padding: 12px 14px; border-radius: 6px;
     color: #f7eed8; box-shadow: 0 10px 35px rgba(0,0,0,0.95); text-align: left;
   }
   .modal-content h3 { margin-top: 0; color: #ffd700; font-size: 15px; border-bottom: 1px solid #8e6c31; padding-bottom: 4px; margin-bottom: 6px; }
   .modal-buttons { margin-top: 10px; display: flex; gap: 8px; justify-content: center; }
   .modal-buttons button {
     font-family: var(--kaisho-font); font-size: 12px; font-weight: 900;
-    padding: 4px 16px; border-radius: 3px; border: 1.5px solid #d4af37;
-    background: #331d10; color: #ffe58f; cursor: pointer;
+    padding: 5px 18px; border-radius: 4px; border: 1.5px solid #d4af37;
+    background: linear-gradient(180deg, #3d2111 0%, #170a04 100%); color: #ffe58f; cursor: pointer;
   }
 
   /* レベル選択モーダル */
-  .level-modal-box { width: 95vw !important; max-width: 480px !important; max-height: 84vh !important; display: flex; flex-direction: column; justify-content: space-between; }
-  .level-select-list-single { display: flex; flex-direction: column; gap: 3px; margin: 4px 0; width: 100%; }
+  .level-modal-box {
+    width: 96vw !important; max-width: 520px !important; height: 86vh !important;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .level-select-list-single {
+    display: flex; flex-direction: column; gap: 6px; margin: 4px 0;
+    width: 100%; overflow-y: auto; flex: 1; padding-right: 3px;
+  }
   .level-item-row {
-    display: flex; align-items: center; justify-content: flex-start;
-    background: rgba(22, 11, 5, 0.88); border: 1px solid #73511f; border-radius: 3px;
-    padding: 3px 6px; cursor: pointer; color: #f7eed8; gap: 8px; transition: all 0.15s ease;
+    display: flex; flex-direction: column;
+    background: rgba(26, 13, 6, 0.94); border: 1.2px solid #7a5620; border-radius: 4px;
+    padding: 6px 8px; cursor: pointer; color: #f7eed8; gap: 4px; transition: all 0.15s ease;
   }
   .level-item-row:hover, .level-item-row.active {
-    background: linear-gradient(90deg, #4d2912 0%, #7e421c 100%);
-    border-color: #ffd700; box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+    background: linear-gradient(90deg, #522b13 0%, #85451c 100%);
+    border-color: #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.45);
   }
-  .level-badge-col { display: flex; align-items: center; gap: 4px; flex-shrink: 0; width: 64px; }
-  .level-num-badge { font-size: 9px; font-weight: 900; color: #ffd700; border: 1px solid #ffd700; border-radius: 2px; padding: 0 3px; line-height: 1.2; }
-  .level-clear-seal { font-size: 8px; font-weight: 900; color: #fff; background: #960d0d; border-radius: 2px; padding: 0 2px; border: 0.5px solid #ffd700; line-height: 1.2; }
-  .level-warlord-title { font-size: 12.5px; font-weight: 900; color: #ffffff; flex-shrink: 0; width: 80px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--kaisho-font); }
-  .level-desc-box { font-size: 9px; color: #d6be8c; line-height: 1.1; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; }
+  .level-item-header {
+    display: flex; align-items: center; justify-content: space-between; gap: 6px;
+    border-bottom: 0.5px solid rgba(255, 215, 0, 0.25); padding-bottom: 3px;
+  }
+  .level-badge-col { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+  .level-num-badge { font-size: 10px; font-weight: 900; color: #ffd700; border: 1px solid #ffd700; border-radius: 2px; padding: 1px 4px; line-height: 1.1; }
+  .level-clear-seal { font-size: 9px; font-weight: 900; color: #fff; background: #960d0d; border-radius: 2px; padding: 1px 3px; border: 0.5px solid #ffd700; line-height: 1.1; }
+  .level-warlord-title { font-size: 13.5px; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; }
+  .level-rank-badge { font-size: 10px; color: #ffeb99; font-weight: 700; }
+  .level-desc-box { font-size: 10.5px; color: #f2dec0; line-height: 1.35; text-align: left; }
 
-  /* 棋譜＆形勢グラフモーダル */
+  /* 兵法指南・定石モーダル */
+  .guide-modal-box {
+    width: 96vw !important; max-width: 580px !important; height: 88vh !important;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .guide-tab-nav {
+    display: flex; gap: 3px; border-bottom: 1.5px solid #a67c33; padding-bottom: 4px; margin-bottom: 6px; flex-shrink: 0;
+  }
+  .guide-tab-btn {
+    flex: 1; font-family: var(--kaisho-font); font-size: 11px; font-weight: 900;
+    padding: 6px 2px; border: 1px solid #73511f; background: #261307; color: #fcedcb;
+    border-radius: 3px; cursor: pointer; text-align: center;
+  }
+  .guide-tab-btn.active {
+    background: linear-gradient(180deg, #961b1b 0%, #4a0808 100%);
+    border-color: #ffd700; color: #fff; box-shadow: 0 0 6px rgba(255,215,0,0.5);
+  }
+  .guide-tab-content-container {
+    flex: 1; overflow-y: auto; padding-right: 4px; font-size: 11.5px; line-height: 1.55; color: #f7eed8;
+  }
+  .guide-tab-content-container::-webkit-scrollbar { width: 5px; }
+  .guide-tab-content-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); border-radius: 2px; }
+  .guide-tab-content-container::-webkit-scrollbar-thumb { background: #b88a32; border-radius: 2px; }
+
+  .guide-section-box {
+    background: rgba(20, 10, 4, 0.85); border: 1px solid #7a5620; border-radius: 4px;
+    padding: 8px 10px; margin-bottom: 8px;
+  }
+  .guide-section-box h4 {
+    margin: 0 0 5px 0; color: #ffd700; font-size: 13px; font-weight: 900;
+    display: flex; align-items: center; gap: 5px; border-left: 3px solid #ff4444; padding-left: 6px;
+  }
+  .guide-step-tag {
+    background: #ffd700; color: #220d04; font-size: 9.5px; font-weight: 900;
+    border-radius: 2px; padding: 0 4px; line-height: 1.2;
+  }
+
+  /* 十将定石テーブル */
+  .warlord-book-table {
+    width: 100%; border-collapse: collapse; font-size: 10.5px; margin-top: 4px;
+  }
+  .warlord-book-table th {
+    background: #3b1d0b; color: #ffd700; border: 1px solid #7a5620; padding: 4px; text-align: center; font-weight: 900;
+  }
+  .warlord-book-table td {
+    border: 1px solid #5a3813; padding: 4px 6px; background: rgba(15, 8, 3, 0.7);
+  }
+  .warlord-book-table tr:nth-child(even) td { background: rgba(28, 14, 6, 0.7); }
+  .warlord-td-name { font-weight: 900; color: #ffeb99; white-space: nowrap; }
+  .warlord-td-style { color: #f2dec0; font-weight: 700; }
+  .warlord-td-tactic { color: #80d8ff; font-weight: 900; }
+
+  /* 棋譜・形勢グラフモーダル */
   .modal-kifu-panorama {
-    width: 95vw !important; max-width: 500px !important; height: 80vh !important;
+    width: 96vw !important; max-width: 580px !important; height: 82vh !important;
     display: flex; flex-direction: column; justify-content: space-between;
   }
   .chart-container {
@@ -464,21 +643,28 @@
   .modal-kifu-content {
     flex: 1; overflow-y: auto; font-size: 13px; line-height: 1.7;
     background: rgba(0,0,0,0.7); padding: 8px 12px; border-radius: 4px; border: 1px solid #8e6c31;
-    color: #ffe699; font-family: var(--kaisho-font); text-align: left; margin: 4px 0;
+    color: #ffe699; text-align: left; margin: 4px 0;
   }
 </style>
 </head>
 <body>
 
+<canvas id="celebration-canvas"></canvas>
+<audio id="bgm-audio" src="nobunaga_song.mp3" loop preload="auto"></audio>
+
 <!-- 最上部：金覆輪ヘッダー -->
 <div class="top-header">
   <div class="header-actions">
-    <button class="header-btn" onclick="openLevelSelectModal()" id="btn-header-level">⚙ 天下統一 Lv.1</button>
+    <button class="header-btn btn-guide" onclick="openGuideModal('tutorial')">📜 指南</button>
+    <button class="header-btn btn-lvl" onclick="openLevelSelectModal()" id="btn-header-level">⚙ 天下統一 Lv.1</button>
   </div>
-  <h1 class="app-title">将棋王 〜 天下統一・戦国決戦 〜</h1>
+  <div class="app-title-group">
+    <h1 class="app-title-main">将棋王 2026</h1>
+    <div class="app-title-sub">〜 天下統一・戦国決戦 〜</div>
+  </div>
   <div class="header-actions">
-    <button class="header-btn" onclick="openKifuModal()">📖 棋譜・合戦絵巻</button>
-    <button class="header-btn" id="sound-toggle" onclick="toggleSound()">♪ 音ON</button>
+    <button class="header-btn btn-kifu" onclick="openKifuModal()">📖 棋譜</button>
+    <button class="header-btn btn-snd" id="sound-toggle" onclick="toggleSound()">♪ 音ON</button>
   </div>
 </div>
 
@@ -503,7 +689,7 @@
 
   <!-- 軍師戦況評定エリア -->
   <div class="situation-banner">
-    <div class="situation-title">【戦況】</div>
+    <div class="situation-title">戦況</div>
     <div class="situation-text" id="situation-text">互角の戦い。両軍ともに布陣を整え、緊迫の機を伺っております。一手一手が天下を動かす刻に候。</div>
   </div>
 
@@ -535,50 +721,50 @@
     </div>
   </div>
 
-  <!-- カットイン専用スロット（楷書） -->
+  <!-- カットイン専用スロット -->
   <div class="cutin-slot" id="cutin-slot">
-    <div class="cutin-banner">
+    <div class="cutin-banner" id="cutin-banner">
       <div id="cutin-text" class="cutin-text">合戦開始！ いざ推して参る！</div>
     </div>
   </div>
 
-  <!-- 開始・合戦伝令メッセージ帯（楷書） -->
+  <!-- 開始・合戦伝令メッセージ帯 -->
   <div class="order-message-banner" id="order-message-banner">
     <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
-    <div class="order-message-text" id="order-message-text">「対局開始」を押し、天運の振り駒を執り行われよ。</div>
+    <div class="order-message-text" id="order-message-text">「対局開始」を押し、天運の振り駒を執り行われよ。<br>真田赤備隊、天下統一の初陣に候！</div>
   </div>
 
-  <!-- 自将エリア：徳川家康 -->
+  <!-- 自将エリア：真田幸村 -->
   <div class="warlord-panel">
-    <div class="warlord-avatar">
+    <div class="warlord-avatar sanada-avatar">
       <svg viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="46" fill="#070c18" stroke="#ffd700" stroke-width="2.5"/>
-        <circle cx="50" cy="50" r="41" fill="none" stroke="#122a61" stroke-width="1.5"/>
-        <g fill="#ffd700" stroke="#8a5a00" stroke-width="0.8">
-          <circle cx="50" cy="50" r="39" fill="none" stroke="#ffd700" stroke-width="3"/>
-          <path d="M50 48 C44 32, 36 24, 50 18 C64 24, 56 32, 50 48 Z"/>
-          <path d="M49 52 C33 50, 24 60, 26 74 C38 74, 46 64, 49 52 Z"/>
-          <path d="M51 52 C67 50, 76 60, 74 74 C62 74, 54 64, 51 52 Z"/>
-          <circle cx="50" cy="50" r="4" fill="#ffffff"/>
+        <circle cx="50" cy="50" r="46" fill="#630a0a" stroke="#ffd700" stroke-width="2.5"/>
+        <g fill="#ffd700" stroke="#3d0000" stroke-width="1.2">
+          <circle cx="30" cy="35" r="9"/><circle cx="50" cy="35" r="9"/><circle cx="70" cy="35" r="9"/>
+          <circle cx="30" cy="65" r="9"/><circle cx="50" cy="65" r="9"/><circle cx="70" cy="65" r="9"/>
+        </g>
+        <g fill="#630a0a">
+          <rect x="27.5" y="32.5" width="5" height="5"/><rect x="47.5" y="32.5" width="5" height="5"/><rect x="67.5" y="32.5" width="5" height="5"/>
+          <rect x="27.5" y="62.5" width="5" height="5"/><rect x="47.5" y="62.5" width="5" height="5"/><rect x="67.5" y="62.5" width="5" height="5"/>
         </g>
       </svg>
     </div>
     <div class="warlord-info">
       <div class="warlord-name-row">
-        <svg class="crest-icon-mini" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#ffd700" stroke-width="7"/><circle cx="50" cy="34" r="11" fill="#ffd700"/><circle cx="36" cy="60" r="11" fill="#ffd700"/><circle cx="64" cy="60" r="11" fill="#ffd700"/></svg>
-        <span class="warlord-name">徳川家康</span>
+        <svg class="crest-icon-mini" viewBox="0 0 100 100"><circle cx="30" cy="35" r="8" fill="#ffd700"/><circle cx="50" cy="35" r="8" fill="#ffd700"/><circle cx="70" cy="35" r="8" fill="#ffd700"/><circle cx="30" cy="65" r="8" fill="#ffd700"/><circle cx="50" cy="65" r="8" fill="#ffd700"/><circle cx="70" cy="65" r="8" fill="#ffd700"/></svg>
+        <span class="warlord-name">真田幸村</span>
       </div>
-      <div class="warlord-clan">徳川軍｜天下の覇権</div>
-      <div class="warlord-quote" id="player-quote-disp">「堅く、静かに、天下を取る」</div>
+      <div class="warlord-clan">真田赤備隊 ｜ 日本一の兵</div>
+      <div class="warlord-quote" id="player-quote-disp">「不惜身命！ この一手に命を懸ける！」</div>
       <div class="gauge-group">
-        <div class="gauge-label-row"><span>戦力 9200</span><span id="player-morale-val">士気 50</span></div>
+        <div class="gauge-label-row"><span>戦力 9500</span><span id="player-morale-val">士気 50</span></div>
         <div class="morale-bar-frame"><div id="player-morale-bar" class="morale-bar-fill morale-player" style="width: 50%;"></div></div>
       </div>
     </div>
     <div class="warlord-hand-area" id="player-hand"></div>
   </div>
 
-  <!-- 戦歴棋譜（高さを66pxに拡張し、3行完全表示＆検討送り戻し対応） -->
+  <!-- 戦歴棋譜 -->
   <div class="kifu-bottom-banner">
     <div class="kifu-nav-col">
       <div class="kifu-banner-title">合戦<br>記録</div>
@@ -595,11 +781,11 @@
 
 <!-- 最下部コマンドバー -->
 <div class="bottom-command-bar">
-  <button class="cmd-btn" onclick="undoMove()">🪭 待った</button>
-  <button class="cmd-btn" onclick="surrenderGame()">🏳 投了</button>
-  <button class="cmd-btn cmd-btn-main" id="furigoma-btn" onclick="openFurigomaModal()">⚜ 対局開始</button>
-  <button class="cmd-btn" onclick="showMasterHint()">💡 軍師進言</button>
-  <button class="cmd-btn" onclick="openExplainModal('book')">📜 定石</button>
+  <button class="cmd-btn btn-undo" onclick="undoMove()">🪭 待った</button>
+  <button class="cmd-btn btn-surrender" onclick="surrenderGame()">🏳 投了</button>
+  <button class="cmd-btn btn-start" id="furigoma-btn" onclick="openFurigomaModal()">⚜ 対局開始</button>
+  <button class="cmd-btn btn-hint" onclick="showMasterHint()">💡 軍師進言</button>
+  <button class="cmd-btn btn-book" onclick="openGuideModal('tactics')">📜 定石</button>
 </div>
 
 <!-- 振り駒モーダル -->
@@ -623,29 +809,40 @@
   </div>
 </div>
 
+<!-- 兵法指南・定石伝授モーダル -->
+<div id="guide-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-content guide-modal-box">
+    <h3 id="guide-modal-title">📜 天下布武・兵法指南書</h3>
+    
+    <div class="guide-tab-nav">
+      <button class="guide-tab-btn active" id="tab-btn-tutorial" onclick="switchGuideTab('tutorial')">天下統一の手引</button>
+      <button class="guide-tab-btn" id="tab-btn-principles" onclick="switchGuideTab('principles')">合戦の三原則</button>
+      <button class="guide-tab-btn" id="tab-btn-tactics" onclick="switchGuideTab('tactics')">十雄の戦法録</button>
+    </div>
+
+    <div class="guide-tab-content-container" id="guide-tab-content"></div>
+
+    <div class="modal-buttons" style="justify-content: space-between; align-items: center;">
+      <label style="font-size: 10.5px; color: #ffd700; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+        <input type="checkbox" id="chk-never-show-guide" onchange="toggleNeverShowGuide(this.checked)"> 今後は対局開始時に表示しない
+      </label>
+      <button onclick="closeGuideModal()">兵法を胸に出陣</button>
+    </div>
+  </div>
+</div>
+
 <!-- 成りモーダル -->
 <div id="promote-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content" style="text-align: center; width: auto;">
-    <p style="margin-top: 0; font-weight: 900; font-size: 16px; color: #ffd700; font-family: var(--kaisho-font);">敵陣突破！ 駒を成りますか？</p>
+    <p style="margin-top: 0; font-weight: 900; font-size: 16px; color: #ffd700;">敵陣突破！ 駒を成りますか？</p>
     <div class="modal-buttons">
-      <button id="btn-promote-yes" style="background: linear-gradient(180deg, #a6121f 0%, #54060c 100%); color: #fff;">成る</button>
+      <button id="btn-promote-yes" style="background: linear-gradient(180deg, #b81414 0%, #520505 100%); color: #fff;">成る</button>
       <button id="btn-promote-no">成らない</button>
     </div>
   </div>
 </div>
 
-<!-- 解説モーダル -->
-<div id="explain-modal" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
-    <h3 id="explain-title">解説</h3>
-    <div id="explain-body"></div>
-    <div class="modal-buttons">
-      <button onclick="closeExplainModal()">閉じる</button>
-    </div>
-  </div>
-</div>
-
-<!-- 棋譜・合戦絵巻（形勢グラフ搭載）モーダル -->
+<!-- 棋譜・合戦絵巻モーダル -->
 <div id="kifu-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content modal-kifu-panorama">
     <h3>合戦絵巻（全棋譜 ＆ 形勢推移）</h3>
@@ -654,7 +851,7 @@
     </div>
     <div id="kifu-list" class="modal-kifu-content"></div>
     <div class="modal-buttons">
-      <button onclick="downloadKifu()" style="background: linear-gradient(180deg, #a6121f 0%, #54060c 100%); color: #fff;">KIF保存</button>
+      <button onclick="downloadKifu()" style="background: linear-gradient(180deg, #b81414 0%, #520505 100%); color: #fff;">KIF保存</button>
       <button onclick="closeKifuModal()">閉じる</button>
     </div>
   </div>
@@ -662,108 +859,94 @@
 
 <!-- ================= AI WORKER SCRIPT ================= -->
 <script id="worker-code" type="text/template">
-const PIECES = {
-  OU: '王将', HI: '飛車', KA: '角行', KI: '金将', GI: '銀将', KE: '桂馬', KY: '香車', FU: '歩兵',
-  RY: '竜王', UM: '竜馬', NG: '成銀', NK: '成桂', NY: '成香', TO: 'と金'
-};
+const PIECE_CODES = ['OU','HI','KA','KI','GI','KE','KY','FU','RY','UM','NG','NK','NY','TO'];
 const VALUES = { OU: 20000, HI: 1050, KA: 880, KI: 580, GI: 480, KE: 380, KY: 280, FU: 100, RY: 1400, UM: 1200, NG: 560, NK: 480, NY: 420, TO: 420 };
 const UNPROMOTE_MAP = { RY: 'HI', UM: 'KA', NG: 'GI', NK: 'KE', NY: 'KY', TO: 'FU', HI: 'HI', KA: 'KA', KI: 'KI', GI: 'GI', KE: 'KE', KY: 'KY', FU: 'FU', OU: 'OU' };
 const PROMOTE_MAP = { HI: 'RY', KA: 'UM', GI: 'NG', KE: 'NK', KY: 'NY', FU: 'TO' };
 const MATE_SCORE = 100000;
 
 let board = [], hands = { PLAYER: {}, AI: {} };
-let searchStartTime = 0;
-let searchTimeLimit = 6500;
-let isSearchTimeout = false;
-let nodeCount = 0;
+let searchStartTime = 0, searchTimeLimit = 4000, isSearchTimeout = false, nodeCount = 0;
+let zBoard = [], zHands = { PLAYER: {}, AI: {} }, zTurnAI = 0, currentHash = 0;
+
+function xorShift32(seed) {
+  let x = seed;
+  return function() { x ^= x << 13; x ^= x >>> 17; x ^= x << 5; return x >>> 0; };
+}
+
+function initZobrist() {
+  const rng = xorShift32(88888888);
+  zBoard = Array.from({length: 9}, () => Array.from({length: 9}, () => {
+    const o = {}; PIECE_CODES.forEach(c => { o[c] = { PLAYER: rng(), AI: rng() }; }); return o;
+  }));
+  ['PLAYER', 'AI'].forEach(ow => {
+    zHands[ow] = {};
+    ['HI','KA','KI','GI','KE','KY','FU'].forEach(c => {
+      zHands[ow][c] = Array.from({length: 19}, () => rng());
+    });
+  });
+  zTurnAI = rng();
+}
+initZobrist();
+
+function computeFullZobrist(turnOwner) {
+  let h = 0;
+  for (let r = 0; r < 9; r++) for (let c = 0; c < 9; c++) {
+    const p = board[r][c]; if (p) h ^= zBoard[r][c][p.code][p.owner];
+  }
+  for (const ow of ['PLAYER', 'AI']) for (const code in hands[ow]) {
+    const cnt = hands[ow][code] || 0; if (cnt > 0) h ^= zHands[ow][code][cnt];
+  }
+  if (turnOwner === 'AI') h ^= zTurnAI;
+  return h >>> 0;
+}
 
 const TT = new Map();
-const TT_EXACT = 0, TT_ALPHA = 1, TT_BETA = 2;
 
-function getBoardHash(owner) {
-  let s = owner + '|';
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      const p = board[r][c];
-      s += p ? (p.owner[0] + p.code) : '.';
-    }
-  }
-  for (const k in hands.PLAYER) if (hands.PLAYER[k]) s += 'P' + k + hands.PLAYER[k];
-  for (const k in hands.AI) if (hands.AI[k]) s += 'A' + k + hands.AI[k];
-  return s;
-}
-
-const PST_FU = [
-  [0,0,0,0,0,0,0,0,0], [30,30,30,35,35,35,30,30,30], [20,20,25,30,30,30,25,20,20],
-  [15,15,20,25,25,25,20,15,15], [10,10,15,20,20,20,15,10,10], [5,5,10,10,10,10,10,5,5],
-  [0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0]
-];
-const PST_KI = [
-  [0,0,0,0,0,0,0,0,0], [10,15,20,20,20,20,20,15,10], [10,20,25,30,30,30,25,20,10],
-  [10,20,25,30,30,30,25,20,10], [5,15,20,25,25,25,20,15,5], [0,10,15,15,15,15,15,10,0],
-  [-5,0,5,5,5,5,5,0,-5], [-10,-5,0,0,0,0,0,-5,-10], [-20,-10,-5,-5,-5,-5,-5,-10,-20]
-];
-const PST_OU = [
-  [-30,-40,-50,-60,-70,-60,-50,-40,-30], [-20,-30,-40,-50,-60,-50,-40,-30,-20],
-  [-10,-20,-30,-40,-50,-40,-30,-20,-10], [0,-10,-20,-30,-40,-30,-20,-10,0],
-  [10,0,-10,-20,-30,-20,-10,0,10], [20,10,0,-10,-20,-10,0,10,20],
-  [30,20,10,0,-10,0,10,20,30], [40,30,20,10,0,10,20,30,40], [30,40,40,20,10,20,40,40,30]
-];
-const PST_DEFAULT = [
-  [0,0,0,0,0,0,0,0,0], [5,5,5,5,5,5,5,5,5], [5,10,10,10,10,10,10,10,5],
-  [5,10,15,15,15,15,15,10,5], [5,10,15,20,20,20,15,10,5], [5,10,15,15,15,15,15,10,5],
-  [5,10,10,10,10,10,10,10,5], [5,5,5,5,5,5,5,5,5], [0,0,0,0,0,0,0,0,0]
-];
-
-function getPSTValue(code, r, c, owner) {
-  const actualR = (owner === 'AI') ? r : (8 - r);
-  switch(code) {
-    case 'FU': case 'TO': return PST_FU[actualR][c];
-    case 'KI': case 'GI': case 'NG': case 'NY': case 'NK': return PST_KI[actualR][c];
-    case 'OU': return PST_OU[actualR][c];
-    default: return PST_DEFAULT[actualR][c];
-  }
-}
-
-function getForwardDir(owner) { return owner === 'AI' ? 1 : -1; }
-function isInEnemyCamp(r, owner) { return owner === 'AI' ? (r >= 6) : (r <= 2); }
-function checkMustPromote(pieceCode, owner, toR) {
-  if (owner === 'AI') return (pieceCode === 'FU' || pieceCode === 'KY') && toR === 8 || (pieceCode === 'KE' && toR >= 7);
-  else return (pieceCode === 'FU' || pieceCode === 'KY') && toR === 0 || (pieceCode === 'KE' && toR <= 1);
+function checkMustPromote(code, owner, toR) {
+  return owner === 'AI' ? ((code === 'FU' || code === 'KY') && toR === 8 || (code === 'KE' && toR >= 7))
+                        : ((code === 'FU' || code === 'KY') && toR === 0 || (code === 'KE' && toR <= 1));
 }
 
 function makeMove(move) {
-  const undo = { move };
+  const undo = { move, prevHash: currentHash };
   const owner = move.owner;
-
   if (move.type === 'drop') {
+    const oldC = hands[owner][move.code] || 0;
+    currentHash ^= zHands[owner][move.code][oldC];
     hands[owner][move.code]--;
+    const newC = hands[owner][move.code] || 0;
+    if (newC > 0) currentHash ^= zHands[owner][move.code][newC];
     board[move.to.r][move.to.c] = { code: move.code, owner };
+    currentHash ^= zBoard[move.to.r][move.to.c][move.code][owner];
   } else {
-    const item = board[move.from.r][move.from.c];
-    const target = board[move.to.r][move.to.c];
+    const item = board[move.from.r][move.from.c], target = board[move.to.r][move.to.c];
     undo.fromCode = item.code;
-
+    currentHash ^= zBoard[move.from.r][move.from.c][item.code][owner];
     if (target) {
       undo.capturedCode = target.code;
+      currentHash ^= zBoard[move.to.r][move.to.c][target.code][target.owner];
       if (target.code !== 'OU') {
-        const rawCode = UNPROMOTE_MAP[target.code];
-        undo.capturedRaw = rawCode;
-        hands[owner][rawCode] = (hands[owner][rawCode] || 0) + 1;
+        const raw = UNPROMOTE_MAP[target.code];
+        undo.capturedRaw = raw;
+        const oldH = hands[owner][raw] || 0;
+        if (oldH > 0) currentHash ^= zHands[owner][raw][oldH];
+        hands[owner][raw] = oldH + 1;
+        currentHash ^= zHands[owner][raw][oldH + 1];
       }
     }
-
     if (move.promote) item.code = PROMOTE_MAP[item.code];
     board[move.to.r][move.to.c] = item;
     board[move.from.r][move.from.c] = null;
+    currentHash ^= zBoard[move.to.r][move.to.c][item.code][owner];
   }
+  currentHash ^= zTurnAI;
   return undo;
 }
 
 function unmakeMove(undo) {
-  const move = undo.move;
-  const owner = move.owner;
-
+  const move = undo.move, owner = move.owner;
+  currentHash = undo.prevHash;
   if (move.type === 'drop') {
     hands[owner][move.code]++;
     board[move.to.r][move.to.c] = null;
@@ -771,684 +954,531 @@ function unmakeMove(undo) {
     const item = board[move.to.r][move.to.c];
     item.code = undo.fromCode;
     board[move.from.r][move.from.c] = item;
-
     if (undo.capturedCode) {
-      const enemyOwner = owner === 'AI' ? 'PLAYER' : 'AI';
-      board[move.to.r][move.to.c] = { code: undo.capturedCode, owner: enemyOwner };
+      board[move.to.r][move.to.c] = { code: undo.capturedCode, owner: owner === 'AI' ? 'PLAYER' : 'AI' };
       if (undo.capturedRaw) hands[owner][undo.capturedRaw]--;
-    } else {
-      board[move.to.r][move.to.c] = null;
-    }
+    } else board[move.to.r][move.to.c] = null;
   }
 }
 
-function getValidBoardMoves(r, c, owner, isChecking = false) {
-  const item = board[r][c];
-  if(!item) return [];
-  const dir = getForwardDir(owner);
-  const moves = [];
-
-  const canTarget = (nr, nc) => {
-    if(!board[nr][nc]) return true;
-    if(board[nr][nc].owner !== owner) {
-      if(!isChecking && board[nr][nc].code === 'OU') return false;
-      return true;
-    }
-    return false;
-  };
-
-  const addRay = (dirs) => {
-    for(let [dr, dc] of dirs) {
-      let nr = r + dr, nc = c + dc;
-      while(nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
-        if(!board[nr][nc]) moves.push({r: nr, c: nc});
-        else {
-          if(canTarget(nr, nc)) moves.push({r: nr, c: nc});
-          break;
-        }
-        nr += dr; nc += dc;
-      }
-    }
-  };
-
-  const addStep = (offsets) => {
-    for(let [dr, dc] of offsets) {
-      let nr = r + dr, nc = c + dc;
-      if(nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
-        if(canTarget(nr, nc)) moves.push({r: nr, c: nc});
-      }
-    }
-  };
-
-  const gold = [[dir, -1], [dir, 0], [dir, 1], [0, -1], [0, 1], [-dir, 0]];
-  switch(item.code) {
-    case 'FU': addStep([[dir, 0]]); break;
-    case 'KY': addRay([[dir, 0]]); break;
-    case 'KE': addStep([[dir * 2, -1], [dir * 2, 1]]); break;
-    case 'GI': addStep([[dir, -1], [dir, 0], [dir, 1], [-dir, -1], [-dir, 1]]); break;
-    case 'KI': case 'TO': case 'NY': case 'NK': case 'NG': addStep(gold); break;
-    case 'OU': addStep([[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]); break;
-    case 'HI': addRay([[-1,0],[1,0],[0,-1],[0,1]]); break;
-    case 'KA': addRay([[-1,-1],[-1,1],[1,-1],[1,1]]); break;
-    case 'RY': addRay([[-1,0],[1,0],[0,-1],[0,1]]); addStep([[-1,-1],[-1,1],[1,-1],[1,1]]); break;
-    case 'UM': addRay([[-1,-1],[-1,1],[1,-1],[1,1]]); addStep([[-1,0],[1,0],[0,-1],[0,1]]); break;
-  }
-  return moves;
-}
-
-function findKingPos(owner) {
-  for(let r=0; r<9; r++) {
-    for(let c=0; c<9; c++) {
-      if(board[r][c] && board[r][c].owner === owner && board[r][c].code === 'OU') return {r, c};
-    }
-  }
+function findKing(owner) {
+  for (let r=0; r<9; r++) for (let c=0; c<9; c++) if (board[r][c]?.owner === owner && board[r][c]?.code === 'OU') return {r, c};
   return null;
 }
 
 function isCheckState(owner) {
-  const kingPos = findKingPos(owner);
-  if(!kingPos) return true;
+  const kp = findKing(owner);
+  if (!kp) return true;
+  const kr = kp.r, kc = kp.c, enemy = (owner === 'PLAYER') ? 'AI' : 'PLAYER', fwd = (owner === 'PLAYER') ? -1 : 1;
 
-  const enemy = owner === 'PLAYER' ? 'AI' : 'PLAYER';
-  for(let r=0; r<9; r++) {
-    for(let c=0; c<9; c++) {
-      if(board[r][c] && board[r][c].owner === enemy) {
-        if(getValidBoardMoves(r, c, enemy, true).some(m => m.r === kingPos.r && m.c === kingPos.c)) return true;
+  const pFr = kr + fwd;
+  if (pFr >= 0 && pFr < 9) {
+    const occ = board[pFr][kc];
+    if (occ?.owner === enemy && (occ.code === 'FU' || occ.code === 'TO')) return true;
+  }
+  const keR = kr + fwd * 2;
+  if (keR >= 0 && keR < 9) {
+    for (const dc of [-1, 1]) {
+      const occ = board[keR][kc + dc];
+      if (occ?.owner === enemy && occ.code === 'KE') return true;
+    }
+  }
+  const offsets = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+  for (const [dr, dc] of offsets) {
+    const nr = kr + dr, nc = kc + dc;
+    if (nr < 0 || nr >= 9 || nc < 0 || nc >= 9) continue;
+    const occ = board[nr][nc];
+    if (!occ || occ.owner !== enemy) continue;
+    const c = occ.code;
+    if (c === 'OU') return true;
+    const efwd = (enemy === 'AI') ? 1 : -1;
+    if (['KI', 'TO', 'NY', 'NK', 'NG'].includes(c) && ((dr === -efwd) || (dr === 0 && Math.abs(dc) === 1) || (dr === efwd && dc === 0))) return true;
+    if (c === 'GI' && ((dr === -efwd) || (Math.abs(dr) === 1 && Math.abs(dc) === 1))) return true;
+    if (c === 'RY' && Math.abs(dr) === 1 && Math.abs(dc) === 1) return true;
+    if (c === 'UM' && (dr === 0 || dc === 0)) return true;
+  }
+  for (const [dr, dc] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+    let nr = kr + dr, nc = kc + dc;
+    while (nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
+      const occ = board[nr][nc];
+      if (occ) {
+        if (occ.owner === enemy && (occ.code === 'HI' || occ.code === 'RY' || (occ.code === 'KY' && dr === -(enemy === 'AI' ? 1 : -1) && dc === 0))) return true;
+        break;
       }
+      nr += dr; nc += dc;
+    }
+  }
+  for (const [dr, dc] of [[-1,-1],[-1,1],[1,-1],[1,1]]) {
+    let nr = kr + dr, nc = kc + dc;
+    while (nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
+      const occ = board[nr][nc];
+      if (occ) {
+        if (occ.owner === enemy && (occ.code === 'KA' || occ.code === 'UM')) return true;
+        break;
+      }
+      nr += dr; nc += dc;
     }
   }
   return false;
 }
 
-function getValidDropMoves(code, owner) {
-  const moves = [];
-  for(let r=0; r<9; r++) {
-    if((code === 'FU' || code === 'KY') && ((owner === 'AI' && r === 8) || (owner === 'PLAYER' && r === 0))) continue;
-    if(code === 'KE' && ((owner === 'AI' && r >= 7) || (owner === 'PLAYER' && r <= 1))) continue;
-    for(let c=0; c<9; c++) {
-      if(board[r][c] === null) {
-        if(code === 'FU') {
-          let hasFu = false;
-          for(let kr=0; kr<9; kr++) {
-            if(board[kr][c] && board[kr][c].owner === owner && board[kr][c].code === 'FU') { hasFu = true; break; }
-          }
-          if(hasFu) continue;
-        }
-        moves.push({r, c});
-      }
+function getValidBoardMoves(r, c, owner) {
+  const item = board[r][c]; if (!item) return [];
+  const dir = owner === 'AI' ? 1 : -1, moves = [];
+  const canT = (nr, nc) => !board[nr][nc] || board[nr][nc].owner !== owner;
+  const ray = dirs => dirs.forEach(([dr, dc]) => {
+    let nr = r + dr, nc = c + dc;
+    while (nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
+      if (!board[nr][nc]) moves.push({r: nr, c: nc});
+      else { if (canT(nr, nc)) moves.push({r: nr, c: nc}); break; }
+      nr += dr; nc += dc;
     }
+  });
+  const step = offs => offs.forEach(([dr, dc]) => {
+    const nr = r + dr, nc = c + dc;
+    if (nr >= 0 && nr < 9 && nc >= 0 && nc < 9 && canT(nr, nc)) moves.push({r: nr, c: nc});
+  });
+  const gold = [[dir, -1], [dir, 0], [dir, 1], [0, -1], [0, 1], [-dir, 0]];
+  switch(item.code) {
+    case 'FU': step([[dir, 0]]); break;
+    case 'KY': ray([[dir, 0]]); break;
+    case 'KE': step([[dir * 2, -1], [dir * 2, 1]]); break;
+    case 'GI': step([[dir, -1], [dir, 0], [dir, 1], [-dir, -1], [-dir, 1]]); break;
+    case 'KI': case 'TO': case 'NY': case 'NK': case 'NG': step(gold); break;
+    case 'OU': step([[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]); break;
+    case 'HI': ray([[-1,0],[1,0],[0,-1],[0,1]]); break;
+    case 'KA': ray([[-1,-1],[-1,1],[1,-1],[1,1]]); break;
+    case 'RY': ray([[-1,0],[1,0],[0,-1],[0,1]]); step([[-1,-1],[-1,1],[1,-1],[1,1]]); break;
+    case 'UM': ray([[-1,-1],[-1,1],[1,-1],[1,1]]); step([[-1,0],[1,0],[0,-1],[0,1]]); break;
   }
   return moves;
 }
 
-function isPawnDropMate(move, owner) {
-  if (move.type !== 'drop' || move.code !== 'FU') return false;
-  const undo = makeMove(move);
-  const enemyOwner = owner === 'AI' ? 'PLAYER' : 'AI';
-  const inCheck = isCheckState(enemyOwner);
-  let isMate = false;
-  if (inCheck) {
-    const enemyMoves = genLegalMovesForSearch(enemyOwner, false);
-    if (enemyMoves.length === 0) isMate = true;
-  }
-  unmakeMove(undo);
-  return isMate;
-}
-
 function evaluatePosition() {
-  let materialAI = 0, materialPlayer = 0;
-  let positionalAI = 0, positionalPlayer = 0;
-  let aiKingPos = null, playerKingPos = null;
-
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      const p = board[r][c];
-      if (!p) continue;
-      const val = VALUES[p.code] || 0;
-      const pst = getPSTValue(p.code, r, c, p.owner);
-
-      if (p.owner === 'AI') {
-        materialAI += val;
-        positionalAI += pst;
-        if (p.code === 'OU') aiKingPos = {r, c};
-      } else {
-        materialPlayer += val;
-        positionalPlayer += pst;
-        if (p.code === 'OU') playerKingPos = {r, c};
-      }
-    }
-  }
-
-  for (const code in hands.AI) materialAI += (hands.AI[code] || 0) * (VALUES[code] || 0) * 1.15;
-  for (const code in hands.PLAYER) materialPlayer += (hands.PLAYER[code] || 0) * (VALUES[code] || 0) * 1.15;
-
-  let kingSafetyAI = 0, kingSafetyPlayer = 0;
-  const kingOffsets = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
-
-  if (aiKingPos) {
-    kingOffsets.forEach(([dr, dc]) => {
-      const nr = aiKingPos.r + dr, nc = aiKingPos.c + dc;
-      if (nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
-        const occ = board[nr][nc];
-        if (occ && occ.owner === 'AI' && ['KI', 'GI', 'NG', 'TO'].includes(occ.code)) kingSafetyAI += 15;
-      }
-    });
-  }
-
-  if (playerKingPos) {
-    kingOffsets.forEach(([dr, dc]) => {
-      const nr = playerKingPos.r + dr, nc = playerKingPos.c + dc;
-      if (nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
-        const occ = board[nr][nc];
-        if (occ && occ.owner === 'PLAYER' && ['KI', 'GI', 'NG', 'TO'].includes(occ.code)) kingSafetyPlayer += 15;
-      }
-    });
-  }
-
-  const totalScoreAI = materialAI + positionalAI + kingSafetyAI;
-  const totalScorePlayer = materialPlayer + positionalPlayer + kingSafetyPlayer;
-  return totalScoreAI - totalScorePlayer;
-}
-
-function getMovePriorityScore(m) {
   let score = 0;
-  if (m.isMate) score += 50000;
-  if (m.isCheck) score += 8000;
-  if (m.isCapture) score += 3000 + (VALUES[m.capturedCode] || 0) * 2;
-  if (m.promote) score += 1200;
-  if (m.type === 'drop') score += 100;
+  for (let r=0; r<9; r++) for (let c=0; c<9; c++) {
+    const p = board[r][c]; if (!p) continue;
+    const val = VALUES[p.code] || 0;
+    const sign = p.owner === 'AI' ? 1 : -1;
+    score += sign * val;
+  }
+  for (const c in hands.AI) score += (hands.AI[c] || 0) * (VALUES[c] || 0) * 1.15;
+  for (const c in hands.PLAYER) score -= (hands.PLAYER[c] || 0) * (VALUES[c] || 0) * 1.15;
   return score;
 }
 
-function orderMoves(moves) {
-  moves.sort((a, b) => getMovePriorityScore(b) - getMovePriorityScore(a));
-}
-
-function quiescence(alpha, beta, owner, qDepth, maxQ) {
-  nodeCount++;
-  if ((nodeCount & 1023) === 0 && Date.now() - searchStartTime > searchTimeLimit) {
-    isSearchTimeout = true;
-    return alpha;
-  }
-
-  const standPat = (owner === 'AI') ? evaluatePosition() : -evaluatePosition();
-  if (qDepth >= maxQ) return standPat;
-  if (standPat >= beta) return beta;
-  if (alpha < standPat) alpha = standPat;
-
-  const loudMoves = genLegalMovesForSearch(owner, true);
-  orderMoves(loudMoves);
-
-  const nextOwner = owner === 'AI' ? 'PLAYER' : 'AI';
-  for (let i = 0; i < loudMoves.length; i++) {
-    const m = loudMoves[i];
-    const undo = makeMove(m);
-    const score = -quiescence(-beta, -alpha, nextOwner, qDepth + 1, maxQ);
-    unmakeMove(undo);
-
-    if (isSearchTimeout) return alpha;
-    if (score >= beta) return beta;
-    if (score > alpha) alpha = score;
-  }
-  return alpha;
-}
-
-function negamax(depth, alpha, beta, owner, maxQ) {
-  nodeCount++;
-  if ((nodeCount & 1023) === 0 && Date.now() - searchStartTime > searchTimeLimit) {
-    isSearchTimeout = true;
-    return alpha;
-  }
-
-  const origAlpha = alpha;
-  const hashKey = getBoardHash(owner);
-  const ttEntry = TT.get(hashKey);
-  if (ttEntry && ttEntry.depth >= depth) {
-    if (ttEntry.flag === TT_EXACT) return ttEntry.value;
-    else if (ttEntry.flag === TT_ALPHA) alpha = Math.max(alpha, ttEntry.value);
-    else if (ttEntry.flag === TT_BETA) beta = Math.min(beta, ttEntry.value);
-    if (alpha >= beta) return ttEntry.value;
-  }
-
-  const inCheck = isCheckState(owner);
-  if (depth <= 0) {
-    if (inCheck) depth = 1;
-    else if (maxQ > 0) return quiescence(alpha, beta, owner, 0, maxQ);
-    else return (owner === 'AI') ? evaluatePosition() : -evaluatePosition();
-  }
-
-  const moves = genLegalMovesForSearch(owner, false);
-  if (moves.length === 0) return (-MATE_SCORE + (10 - depth));
-
-  orderMoves(moves);
-  const nextOwner = owner === 'AI' ? 'PLAYER' : 'AI';
-  let bestVal = -Infinity;
-
-  for (let i = 0; i < moves.length; i++) {
-    const m = moves[i];
-    const undo = makeMove(m);
-    const score = -negamax(depth - 1, -beta, -alpha, nextOwner, maxQ);
-    unmakeMove(undo);
-
-    if (isSearchTimeout) return bestVal;
-    if (score > bestVal) bestVal = score;
-    if (score > alpha) alpha = score;
-    if (alpha >= beta) break;
-  }
-
-  let ttFlag = TT_EXACT;
-  if (bestVal <= origAlpha) ttFlag = TT_BETA;
-  else if (bestVal >= beta) ttFlag = TT_ALPHA;
-  if (!isSearchTimeout && TT.size < 60000) {
-    TT.set(hashKey, { depth, value: bestVal, flag: ttFlag });
-  }
-
-  return bestVal;
-}
-
-function genLegalMovesForSearch(owner, capturesOnly = false) {
+function genLegalMoves(owner, capturesOnly = false) {
   const pseudo = [];
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      if (board[r][c] && board[r][c].owner === owner) {
-        const item = board[r][c];
-        const baseMoves = getValidBoardMoves(r, c, owner);
-        baseMoves.forEach(m => {
-          const target = board[m.r][m.c];
-          const isCapture = (target && target.owner !== owner);
-          const canP = PROMOTE_MAP[item.code] && (isInEnemyCamp(r, owner) || isInEnemyCamp(m.r, owner)) && !checkMustPromote(item.code, owner, m.r);
-          const mustP = checkMustPromote(item.code, owner, m.r);
+  for (let r=0; r<9; r++) for (let c=0; c<9; c++) {
+    if (board[r][c]?.owner === owner) {
+      const item = board[r][c];
+      getValidBoardMoves(r, c, owner).forEach(m => {
+        const target = board[m.r][m.c], isCap = (target && target.owner !== owner);
+        const inCamp = (owner === 'AI' ? (r >= 6 || m.r >= 6) : (r <= 2 || m.r <= 2));
+        const canP = PROMOTE_MAP[item.code] && inCamp;
+        const mustP = checkMustPromote(item.code, owner, m.r);
+        if (capturesOnly && !isCap && !canP && !mustP) return;
 
-          if (capturesOnly && !isCapture && !canP && !mustP) return;
-
-          if (mustP) {
-            pseudo.push({ type: 'move', from: { r, c }, to: m, owner, promote: true, capturedCode: target ? target.code : null });
-          } else if (canP) {
-            pseudo.push({ type: 'move', from: { r, c }, to: m, owner, promote: true, capturedCode: target ? target.code : null });
-            if (!capturesOnly) pseudo.push({ type: 'move', from: { r, c }, to: m, owner, promote: false, capturedCode: target ? target.code : null });
-          } else {
-            pseudo.push({ type: 'move', from: { r, c }, to: m, owner, promote: false, capturedCode: target ? target.code : null });
-          }
-        });
-      }
+        if (mustP) pseudo.push({ type: 'move', from: {r, c}, to: m, owner, promote: true });
+        else if (canP) {
+          pseudo.push({ type: 'move', from: {r, c}, to: m, owner, promote: true });
+          if (!capturesOnly) pseudo.push({ type: 'move', from: {r, c}, to: m, owner, promote: false });
+        } else pseudo.push({ type: 'move', from: {r, c}, to: m, owner, promote: false });
+      });
     }
   }
-
   if (!capturesOnly) {
-    for (const code in hands[owner]) {
-      if (hands[owner][code] > 0) {
-        getValidDropMoves(code, owner).forEach(d => {
-          const dropMove = { type: 'drop', code, to: d, owner, capturedCode: null };
-          if (!(code === 'FU' && isPawnDropMate(dropMove, owner))) pseudo.push(dropMove);
-        });
+    for (const code in hands[owner]) if (hands[owner][code] > 0) {
+      for (let r=0; r<9; r++) {
+        if ((code === 'FU' || code === 'KY') && ((owner === 'AI' && r === 8) || (owner === 'PLAYER' && r === 0))) continue;
+        if (code === 'KE' && ((owner === 'AI' && r >= 7) || (owner === 'PLAYER' && r <= 1))) continue;
+        for (let c=0; c<9; c++) {
+          if (!board[r][c]) {
+            if (code === 'FU') {
+              let nifu = false;
+              for (let kr=0; kr<9; kr++) if (board[kr][c]?.owner === owner && board[kr][c]?.code === 'FU') { nifu = true; break; }
+              if (nifu) continue;
+            }
+            pseudo.push({ type: 'drop', code, to: {r, c}, owner });
+          }
+        }
       }
     }
   }
-
-  const legal = [];
-  for (const m of pseudo) {
+  return pseudo.filter(m => {
     const undo = makeMove(m);
     const safe = !isCheckState(owner);
     if (safe) {
       m.isCheck = isCheckState(owner === 'AI' ? 'PLAYER' : 'AI');
       m.isCapture = (m.type === 'move' && undo.capturedCode);
-      legal.push(m);
     }
     unmakeMove(undo);
-  }
-  return legal;
+    return safe;
+  }).sort((a, b) => {
+    const sa = (a.isCapture ? 3000 : 0) + (a.promote ? 1000 : 0) + (a.isCheck ? 500 : 0);
+    const sb = (b.isCapture ? 3000 : 0) + (b.promote ? 1000 : 0) + (b.isCheck ? 500 : 0);
+    return sb - sa;
+  });
 }
 
-const LEVEL_CONFIGS = {
-  1:  { depth: 1, maxQ: 0, blunderRate: 0.40, timeLimit: 300 },
-  2:  { depth: 1, maxQ: 0, blunderRate: 0.22, timeLimit: 450 },
-  3:  { depth: 2, maxQ: 0, blunderRate: 0.10, timeLimit: 750 },
-  4:  { depth: 2, maxQ: 1, blunderRate: 0.04, timeLimit: 1200 },
-  5:  { depth: 3, maxQ: 2, blunderRate: 0.00, timeLimit: 1800 },
-  6:  { depth: 3, maxQ: 3, blunderRate: 0.00, timeLimit: 2600 },
-  7:  { depth: 4, maxQ: 3, blunderRate: 0.00, timeLimit: 4200 },
-  8:  { depth: 5, maxQ: 3, blunderRate: 0.00, timeLimit: 6000 },
-  9:  { depth: 5, maxQ: 4, blunderRate: 0.00, timeLimit: 7500 },
-  10: { depth: 6, maxQ: 4, blunderRate: 0.00, timeLimit: 9000 }
+function negamax(depth, alpha, beta, owner) {
+  nodeCount++;
+  if ((nodeCount & 511) === 0 && Date.now() - searchStartTime > searchTimeLimit) {
+    isSearchTimeout = true; return alpha;
+  }
+  const inCheck = isCheckState(owner);
+  if (depth <= 0 && !inCheck) return owner === 'AI' ? evaluatePosition() : -evaluatePosition();
+
+  const moves = genLegalMoves(owner, false);
+  if (moves.length === 0) return inCheck ? (-MATE_SCORE + (10 - depth)) : 0;
+
+  let bestVal = -Infinity;
+  const nextOwner = owner === 'AI' ? 'PLAYER' : 'AI';
+  for (let i = 0; i < moves.length; i++) {
+    const undo = makeMove(moves[i]);
+    const score = -negamax(depth - 1, -beta, -alpha, nextOwner);
+    unmakeMove(undo);
+    if (isSearchTimeout) return bestVal;
+    if (score > bestVal) bestVal = score;
+    if (score > alpha) alpha = score;
+    if (alpha >= beta) break;
+  }
+  return bestVal;
+}
+
+const LEVEL_CFG = {
+  1:  { depth: 1, blunderRate: 0.40, time: 300 },
+  2:  { depth: 1, blunderRate: 0.25, time: 400 },
+  3:  { depth: 2, blunderRate: 0.12, time: 600 },
+  4:  { depth: 2, blunderRate: 0.05, time: 900 },
+  5:  { depth: 3, blunderRate: 0.00, time: 1300 },
+  6:  { depth: 3, blunderRate: 0.00, time: 1800 },
+  7:  { depth: 4, blunderRate: 0.00, time: 2400 },
+  8:  { depth: 4, blunderRate: 0.00, time: 3000 },
+  9:  { depth: 5, blunderRate: 0.00, time: 3600 },
+  10: { depth: 5, blunderRate: 0.00, time: 4200 }
 };
 
 self.onmessage = function(e) {
-  const { board: bData, hands: hData, level = 1, isHintRequest = false } = e.data;
-  board = bData; hands = hData;
-  searchStartTime = Date.now();
-  isSearchTimeout = false; nodeCount = 0;
-  TT.clear();
+  const { board: bD, hands: hD, level = 1, isHintRequest = false } = e.data;
+  board = bD; hands = hD;
+  searchStartTime = Date.now(); isSearchTimeout = false; nodeCount = 0; TT.clear();
+  const searchOwner = isHintRequest ? 'PLAYER' : 'AI', enemyOwner = isHintRequest ? 'AI' : 'PLAYER';
+  currentHash = computeFullZobrist(searchOwner);
+  const curEval = evaluatePosition();
+  const cfg = isHintRequest ? LEVEL_CFG[9] : (LEVEL_CFG[level] || LEVEL_CFG[1]);
+  searchTimeLimit = cfg.time;
 
-  const currentEval = evaluatePosition();
-  const searchOwner = isHintRequest ? 'PLAYER' : 'AI';
-  const enemyOwner = isHintRequest ? 'AI' : 'PLAYER';
-
-  const cfg = isHintRequest ? LEVEL_CONFIGS[8] : (LEVEL_CONFIGS[level] || LEVEL_CONFIGS[1]);
-  searchTimeLimit = cfg.timeLimit;
-
-  const legalMoves = genLegalMovesForSearch(searchOwner, false);
-  if (legalMoves.length === 0) {
-    self.postMessage({ type: isHintRequest ? 'hintDone' : 'done', bestMove: null, evalScore: currentEval });
+  const legals = genLegalMoves(searchOwner, false);
+  if (legals.length === 0) {
+    self.postMessage({ type: isHintRequest ? 'hintDone' : 'done', bestMove: null, evalScore: curEval });
+    return;
+  }
+  if (!isHintRequest && Math.random() < cfg.blunderRate && legals.length > 2) {
+    const blunderIdx = Math.min(legals.length - 1, 2 + Math.floor(Math.random() * 3));
+    self.postMessage({ type: 'done', bestMove: legals[blunderIdx], evalScore: curEval });
     return;
   }
 
-  if (!isHintRequest && Math.random() < cfg.blunderRate && legalMoves.length > 1) {
-    const randomPick = legalMoves[Math.floor(Math.random() * legalMoves.length)];
-    self.postMessage({ type: 'done', bestMove: randomPick, evalScore: currentEval });
-    return;
-  }
-
-  orderMoves(legalMoves);
-  let bestMoveOverall = legalMoves[0];
-  let finalScore = currentEval;
-  const targetDepth = cfg.depth;
-
-  for (let currentDepth = 1; currentDepth <= targetDepth; currentDepth++) {
-    let currentBestMove = null;
-    let bestScoreAtDepth = -Infinity;
-
-    for (let i = 0; i < legalMoves.length; i++) {
-      const m = legalMoves[i];
-      const undo = makeMove(m);
-      const score = -negamax(currentDepth - 1, -Infinity, Infinity, enemyOwner, cfg.maxQ);
+  let bestMove = legals[0], maxScore = -Infinity;
+  for (let d = 1; d <= cfg.depth; d++) {
+    let curBest = null, alpha = -Infinity, beta = Infinity;
+    for (let i = 0; i < legals.length; i++) {
+      const m = legals[i], undo = makeMove(m);
+      const score = -negamax(d - 1, -beta, -alpha, enemyOwner);
       unmakeMove(undo);
-
       if (isSearchTimeout) break;
-
-      if (score > bestScoreAtDepth) {
-        bestScoreAtDepth = score;
-        currentBestMove = m;
-      }
+      if (score > alpha) { alpha = score; curBest = m; }
     }
-
-    if (!isSearchTimeout && currentBestMove) {
-      bestMoveOverall = currentBestMove;
-      finalScore = bestScoreAtDepth;
-      if (!isHintRequest) {
-        self.postMessage({ type: 'progress', depth: currentDepth, maxDepth: targetDepth, evalScore: finalScore });
-      }
+    if (!isSearchTimeout && curBest) {
+      bestMove = curBest; maxScore = alpha;
+      if (!isHintRequest) self.postMessage({ type: 'progress', depth: d, evalScore: maxScore });
     }
-
     if (isSearchTimeout || Date.now() - searchStartTime >= searchTimeLimit) break;
   }
-
-  self.postMessage({ type: isHintRequest ? 'hintDone' : 'done', bestMove: bestMoveOverall, evalScore: finalScore });
+  self.postMessage({ type: isHintRequest ? 'hintDone' : 'done', bestMove, evalScore: maxScore });
 };
 </script>
 
 <!-- ================= MAIN APP SCRIPT ================= -->
 <script>
-let audioCtx = null;
-let soundEnabled = true;
+let audioCtx = null, soundEnabled = true, isBgmPlaying = false;
+const bgmAudio = document.getElementById('bgm-audio');
+if (bgmAudio) bgmAudio.volume = 0.35;
 
 function initAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   if (audioCtx.state === 'suspended') audioCtx.resume();
+  startBgm();
 }
+function startBgm() {
+  if (!soundEnabled || !bgmAudio) return;
+  bgmAudio.play().then(() => { isBgmPlaying = true; }).catch(() => {});
+}
+function pauseBgm() { if (bgmAudio) { bgmAudio.pause(); isBgmPlaying = false; } }
 
 function toggleSound() {
   soundEnabled = !soundEnabled;
   document.getElementById('sound-toggle').textContent = `♪ ${soundEnabled ? '音ON' : '音OFF'}`;
+  if (soundEnabled) { initAudio(); startBgm(); }
+  else { pauseBgm(); if (audioCtx && audioCtx.state === 'running') audioCtx.suspend(); }
 }
 
-/* 本格本榧（ほんかや）駒音合成 */
-function playPieceSound() {
-  if (!soundEnabled) return;
-  initAudio();
-  const now = audioCtx.currentTime;
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { pauseBgm(); if (audioCtx?.state === 'running') audioCtx.suspend(); }
+  else if (soundEnabled) { if (audioCtx?.state === 'suspended') audioCtx.resume(); startBgm(); }
+});
+window.addEventListener('blur', () => { pauseBgm(); if (audioCtx?.state === 'running') audioCtx.suspend(); });
+window.addEventListener('focus', () => { if (soundEnabled && !document.hidden) { if (audioCtx?.state === 'suspended') audioCtx.resume(); startBgm(); } });
 
-  // 1. アタック（乾いた木質打撃音）
-  const bufSize = audioCtx.sampleRate * 0.025;
-  const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
-  const data = buf.getChannelData(0);
-  for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufSize * 0.2));
-  const snap = audioCtx.createBufferSource();
-  snap.buffer = buf;
-  const snapFilter = audioCtx.createBiquadFilter();
-  snapFilter.type = 'bandpass';
-  snapFilter.frequency.setValueAtTime(2400, now);
-  snapFilter.Q.setValueAtTime(3.5, now);
-  const snapGain = audioCtx.createGain();
-  snapGain.gain.setValueAtTime(1.0, now);
-  snapGain.gain.exponentialRampToValueAtTime(0.01, now + 0.025);
-  snap.connect(snapFilter); snapFilter.connect(snapGain); snapGain.connect(audioCtx.destination);
+function playPieceSound() {
+  if (!soundEnabled) return; initAudio();
+  const now = audioCtx.currentTime;
+  const bSize = audioCtx.sampleRate * 0.025, buf = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate), d = buf.getChannelData(0);
+  for (let i=0; i<bSize; i++) d[i] = (Math.random()*2 - 1) * Math.exp(-i / (bSize * 0.2));
+  const snap = audioCtx.createBufferSource(); snap.buffer = buf;
+  const snapF = audioCtx.createBiquadFilter(); snapF.type = 'bandpass'; snapF.frequency.setValueAtTime(2400, now); snapF.Q.setValueAtTime(3.5, now);
+  const snapG = audioCtx.createGain(); snapG.gain.setValueAtTime(1.0, now); snapG.gain.exponentialRampToValueAtTime(0.01, now + 0.025);
+  snap.connect(snapF); snapF.connect(snapG); snapG.connect(audioCtx.destination);
   snap.start(now); snap.stop(now + 0.025);
 
-  // 2. 本榧盤の重厚な共鳴ボディ音（胴鳴り）
-  const osc = audioCtx.createOscillator();
-  const bodyGain = audioCtx.createGain();
-  osc.type = 'triangle';
-  osc.frequency.setValueAtTime(380, now);
-  osc.frequency.exponentialRampToValueAtTime(120, now + 0.07);
-  bodyGain.gain.setValueAtTime(0.65, now);
-  bodyGain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
-  osc.connect(bodyGain); bodyGain.connect(audioCtx.destination);
+  const osc = audioCtx.createOscillator(), bg = audioCtx.createGain();
+  osc.type = 'triangle'; osc.frequency.setValueAtTime(380, now); osc.frequency.exponentialRampToValueAtTime(120, now + 0.07);
+  bg.gain.setValueAtTime(0.65, now); bg.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+  osc.connect(bg); bg.connect(audioCtx.destination);
   osc.start(now); osc.stop(now + 0.07);
 }
 
-/* 陣太鼓（王手） */
 function playCheckSound() {
-  if (!soundEnabled) return;
-  initAudio();
-  const now = audioCtx.currentTime;
-
-  // ドォン！と腹に響く地響き陣太鼓
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(110, now);
-  osc.frequency.exponentialRampToValueAtTime(38, now + 0.5);
-  gain.gain.setValueAtTime(0.7, now);
-  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
-  osc.connect(gain); gain.connect(audioCtx.destination);
+  if (!soundEnabled) return; initAudio();
+  const now = audioCtx.currentTime, osc = audioCtx.createOscillator(), g = audioCtx.createGain();
+  osc.type = 'sine'; osc.frequency.setValueAtTime(110, now); osc.frequency.exponentialRampToValueAtTime(38, now + 0.5);
+  g.gain.setValueAtTime(0.7, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+  osc.connect(g); g.connect(audioCtx.destination);
   osc.start(now); osc.stop(now + 0.55);
-
-  // 太鼓の皮のアタック音
-  const bSize = audioCtx.sampleRate * 0.06;
-  const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
-  const d = b.getChannelData(0);
-  for(let i=0; i<bSize; i++) d[i] = (Math.random()*2 - 1) * Math.exp(-i / (bSize * 0.3));
-  const noise = audioCtx.createBufferSource();
-  noise.buffer = b;
-  const f = audioCtx.createBiquadFilter();
-  f.frequency.setValueAtTime(260, now);
-  const nGain = audioCtx.createGain();
-  nGain.gain.setValueAtTime(0.5, now);
-  nGain.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
-  noise.connect(f); f.connect(nGain); nGain.connect(audioCtx.destination);
-  noise.start(now); noise.stop(now + 0.06);
 }
 
-/* 勝鬨（鬨の声・和風祝勝旋律） */
 function playVictorySound() {
-  if (!soundEnabled) return;
-  initAudio();
+  if (!soundEnabled) return; initAudio();
   const now = audioCtx.currentTime;
-  // 和風ペンタトニック祝勝ファンファーレ
-  const melody = [
-    { f: 220, t: 0.00, d: 0.18 },
-    { f: 261, t: 0.16, d: 0.18 },
-    { f: 293, t: 0.32, d: 0.22 },
-    { f: 392, t: 0.52, d: 0.30 },
-    { f: 440, t: 0.78, d: 0.70 }
-  ];
+  const melody = [{f:220,t:0.0,d:0.18},{f:261,t:0.16,d:0.18},{f:293,t:0.32,d:0.22},{f:392,t:0.52,d:0.30},{f:440,t:0.78,d:0.75}];
   melody.forEach(m => {
-    const osc = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(m.f, now + m.t);
-    g.gain.setValueAtTime(0.0, now + m.t);
-    g.gain.linearRampToValueAtTime(0.25, now + m.t + 0.03);
+    const osc = audioCtx.createOscillator(), g = audioCtx.createGain();
+    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(m.f, now + m.t);
+    g.gain.setValueAtTime(0.0, now + m.t); g.gain.linearRampToValueAtTime(0.25, now + m.t + 0.03);
     g.gain.exponentialRampToValueAtTime(0.001, now + m.t + m.d);
     osc.connect(g); g.connect(audioCtx.destination);
     osc.start(now + m.t); osc.stop(now + m.t + m.d);
   });
 }
 
-function playCutinSound() {
-  if (!soundEnabled) return;
-  initAudio();
-  const now = audioCtx.currentTime;
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = 'sawtooth';
-  osc.frequency.setValueAtTime(140, now);
-  osc.frequency.linearRampToValueAtTime(190, now + 0.3);
-  osc.frequency.linearRampToValueAtTime(130, now + 0.7);
-  gain.gain.setValueAtTime(0.0, now);
-  gain.gain.linearRampToValueAtTime(0.3, now + 0.15);
-  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
-  osc.connect(gain); gain.connect(audioCtx.destination);
-  osc.start(now); osc.stop(now + 0.75);
-}
-
-function triggerCutin(text) {
-  playCutinSound();
-  const slot = document.getElementById('cutin-slot');
-  const textEl = document.getElementById('cutin-text');
+function triggerCutin(text, isVictory = false) {
+  playPieceSound();
+  const slot = document.getElementById('cutin-slot'), banner = document.getElementById('cutin-banner'), textEl = document.getElementById('cutin-text');
   textEl.textContent = text;
-  slot.classList.remove('cutin-active');
-  void slot.offsetWidth;
-  slot.classList.add('cutin-active');
-  setTimeout(() => { slot.classList.remove('cutin-active'); }, 1800);
+  if (isVictory) { banner.classList.add('victory-banner-giant'); textEl.classList.add('victory-text-giant'); }
+  else { banner.classList.remove('victory-banner-giant'); textEl.classList.remove('victory-text-giant'); }
+  slot.classList.remove('cutin-active'); void slot.offsetWidth; slot.classList.add('cutin-active');
+  setTimeout(() => { slot.classList.remove('cutin-active'); }, isVictory ? 3500 : 1800);
 }
 
-/* 10武将データ＆状況連動セリフ辞書 */
+/* ================= 祝勝：金粉吹雪 ＆ 花火パーティクルシステム ================= */
+const canvasCelebration = document.getElementById('celebration-canvas');
+const ctxCelebration = canvasCelebration.getContext('2d');
+let celebrationAnimationId = null, celebrationParticles = [];
+
+function resizeCelebrationCanvas() {
+  canvasCelebration.width = window.innerWidth;
+  canvasCelebration.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCelebrationCanvas);
+resizeCelebrationCanvas();
+
+class GoldFlake {
+  constructor(w, h) {
+    this.x = Math.random() * w;
+    this.y = Math.random() * -h * 0.5;
+    this.size = Math.random() * 8 + 4;
+    this.speedY = Math.random() * 2.2 + 1.2;
+    this.speedX = Math.sin(Math.random() * Math.PI) * 1.5;
+    this.angle = Math.random() * Math.PI * 2;
+    this.spinSpeed = Math.random() * 0.08 - 0.04;
+    this.tilt = Math.random() * Math.PI;
+    this.tiltSpeed = Math.random() * 0.06 + 0.02;
+    this.color = Math.random() > 0.3 ? '#ffd700' : (Math.random() > 0.5 ? '#ffe899' : '#e6a100');
+  }
+  update(w, h) {
+    this.y += this.speedY;
+    this.x += Math.sin(this.tilt) * 1.2;
+    this.angle += this.spinSpeed;
+    this.tilt += this.tiltSpeed;
+    if (this.y > h + 20) { this.y = -20; this.x = Math.random() * w; }
+  }
+  draw(ctx) {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.angle);
+    ctx.scale(Math.cos(this.tilt), 1);
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = '#ffd700';
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    ctx.rect(-this.size/2, -this.size/2, this.size, this.size * 0.85);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+class FireworkSpark {
+  constructor(x, y, color) {
+    this.x = x; this.y = y; this.color = color;
+    const ang = Math.random() * Math.PI * 2, spd = Math.random() * 5 + 1.5;
+    this.vx = Math.cos(ang) * spd;
+    this.vy = Math.sin(ang) * spd;
+    this.alpha = 1; this.decay = Math.random() * 0.02 + 0.015;
+    this.size = Math.random() * 2.5 + 1.5;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy; this.vy += 0.08;
+    this.alpha -= this.decay;
+  }
+  draw(ctx) {
+    if (this.alpha <= 0) return;
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color;
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function launchFireworksCelebration() {
+  resizeCelebrationCanvas();
+  celebrationParticles = [];
+  const w = canvasCelebration.width, h = canvasCelebration.height;
+
+  for (let i = 0; i < 90; i++) celebrationParticles.push(new GoldFlake(w, h));
+
+  let fwTimer = 0;
+  const colors = ['#ffd700', '#ff3b30', '#ff9500', '#ffffff', '#ff2d55', '#4cd964'];
+
+  const spawnFirework = () => {
+    const fx = Math.random() * (w * 0.7) + w * 0.15;
+    const fy = Math.random() * (h * 0.45) + h * 0.1;
+    const col = colors[Math.floor(Math.random() * colors.length)];
+    for (let i = 0; i < 65; i++) celebrationParticles.push(new FireworkSpark(fx, fy, col));
+  };
+
+  spawnFirework();
+  const interval = setInterval(() => {
+    fwTimer++;
+    spawnFirework();
+    if (fwTimer >= 6) clearInterval(interval);
+  }, 450);
+
+  let startTime = Date.now();
+  if (celebrationAnimationId) cancelAnimationFrame(celebrationAnimationId);
+
+  function loop() {
+    ctxCelebration.clearRect(0, 0, canvasCelebration.width, canvasCelebration.height);
+    for (let i = celebrationParticles.length - 1; i >= 0; i--) {
+      const p = celebrationParticles[i];
+      p.update(canvasCelebration.width, canvasCelebration.height);
+      p.draw(ctxCelebration);
+      if (p.alpha !== undefined && p.alpha <= 0) celebrationParticles.splice(i, 1);
+    }
+    if (Date.now() - startTime < 8000) {
+      celebrationAnimationId = requestAnimationFrame(loop);
+    } else {
+      ctxCelebration.clearRect(0, 0, canvasCelebration.width, canvasCelebration.height);
+      celebrationParticles = [];
+    }
+  }
+  loop();
+}
+
+/* ================= 10武将データ ＆ セリフ辞書 ================= */
 const WARLORDS_DATA = {
   1: {
-    name: '木下藤吉郎', clan: '織田足軽隊｜後の天下人 (Lv.1)', power: '戦力 3200', rankDesc: '入門・初心者級',
+    name: '木下藤吉郎', clan: '織田足軽隊｜後の天下人 (Lv.1)', power: '戦力 3200', rankDesc: '入門・初学者級',
+    tactic: '直進速攻（居飛車）', charDesc: '織田家の足軽から身を起こした若き日の秀吉。<br>駒の動かし方を覚えたての初学者であり、勢いは良いものの時折見落としをする入門者向け。',
     crestSvg: `<circle cx="50" cy="50" r="46" fill="#140d06" stroke="#ffd700" stroke-width="2.5"/><path d="M50 20 Q56 28 50 36 Q44 28 50 20 Z M50 36 Q62 50 50 68 Q38 50 50 36 Z M50 68 Q68 85 50 94 Q32 85 50 68 Z" fill="#ffd700"/>`,
-    quotes: {
-      default: '「猿と呼ばれても、負けはしませぬ！」',
-      check: '「御屋形様、ここが勝負どころでござる！」',
-      checked: '「ひえぇ！ お許しくだされ〜！」',
-      capture: '「ありがたく頂戴仕る！」',
-      pinch: '「まだまだ！ わしの出世はここからよ！」'
-    }
+    quotes: { default: '「猿と呼ばれても、負けはしませぬ！」', check: '「御屋形様、ここが勝負どころでござる！」', checked: '「ひえぇ！ お許しくだされ〜！」', capture: '「ありがたく頂戴仕る！」', pinch: '「まだまだ！ わしの出世はここからよ！」' }
   },
   2: {
     name: '前田利家', clan: '織田軍｜槍の又左 (Lv.2)', power: '戦力 4500', rankDesc: '15〜12級',
+    tactic: '原始棒銀・槍衾の陣', charDesc: '「槍の又左」と恐れられた織田軍屈指の豪傑。<br>銀を一直線に突き出す棒銀を多用。荒々しい攻め将棋だが大局観が浅く反撃の隙が多い。',
     crestSvg: `<circle cx="50" cy="50" r="46" fill="#180707" stroke="#ffd700" stroke-width="2.5"/><circle cx="50" cy="50" r="10" fill="#ffd700"/><circle cx="50" cy="24" r="8" fill="#ffd700"/><circle cx="75" cy="42" r="8" fill="#ffd700"/><circle cx="65" cy="74" r="8" fill="#ffd700"/><circle cx="35" cy="74" r="8" fill="#ffd700"/><circle cx="25" cy="42" r="8" fill="#ffd700"/>`,
-    quotes: {
-      default: '「槍の又左、一騎当千の覚悟！」',
-      check: '「我が槍衾、受けてみよ！」',
-      checked: '「ぐっ、見事な突進よ…！」',
-      capture: '「敵将の武具、討ち取ったり！」',
-      pinch: '「又左、ここからが正念場ぞ！」'
-    }
+    quotes: { default: '「槍の又左、一騎当千の覚悟！」', check: '「我が槍衾、受けてみよ！」', checked: '「ぐっ、見事な突進よ…！」', capture: '「敵将の武具、討ち取ったり！」', pinch: '「又左、ここからが正念場ぞ！」' }
   },
   3: {
     name: '柴田勝家', clan: '織田軍筆頭｜鬼柴田 (Lv.3)', power: '戦力 5600', rankDesc: '11〜9級',
+    tactic: '力戦原始中飛車', charDesc: '織田家筆頭家老として陣頭に立つ歴戦の重臣。<br>飛車を中央に据えて力任せに中央突破を図る力戦派。細やかな受けや奇襲に脆い一面あり。',
     crestSvg: `<circle cx="50" cy="50" r="46" fill="#150a04" stroke="#ffd700" stroke-width="2.5"/><path d="M30 40 Q50 25 70 40 Q50 48 30 40 Z M30 65 Q50 50 70 65 Q50 73 30 65 Z" fill="#ffd700"/>`,
-    quotes: {
-      default: '「鬼柴田の剛腕、いざ受けてみよ！」',
-      check: '「かかれ！ 瓶割り柴田の進撃じゃ！」',
-      checked: '「ぬぅ…！ 徳川の小僧、やりおる！」',
-      capture: '「粉砕してくれるわ！」',
-      pinch: '「我が本陣はビクともせぬわ！」'
-    }
+    quotes: { default: '「鬼柴田の剛腕、いざ受けてみよ！」', check: '「かかれ！ 瓶割り柴田の進撃じゃ！」', checked: '「ぬぅ…！ 真田の若造、やりおる！」', capture: '「粉砕してくれるわ！」', pinch: '「我が本陣はビクともせぬわ！」' }
   },
   4: {
     name: '伊達政宗', clan: '伊達軍｜独眼竜 (Lv.4)', power: '戦力 6800', rankDesc: '8〜6級',
+    tactic: '右四間飛車・雀刺し', charDesc: '奥州より天下を狙う若き独眼竜。<br>端攻めや鋭利な角筋を絡めた右四間飛車の奇襲筋を好むが、深読みを焦り自陣に綻びが生じやすい。',
     crestSvg: `<circle cx="50" cy="50" r="46" fill="#060c18" stroke="#ffd700" stroke-width="2.5"/><path d="M25 25 Q65 15 75 75 Q40 40 25 25 Z" fill="#ffd700"/>`,
-    quotes: {
-      default: '「天下の隙、この独眼竜が見逃さぬ！」',
-      check: '「竜の爪牙、逃れられまい！」',
-      checked: '「ほう… 面白い刃筋を立ててくる！」',
-      capture: '「派手に行こうぜ！」',
-      pinch: '「フッ… 逆境こそ男の舞台よ！」'
-    }
+    quotes: { default: '「天下の隙、この独眼竜が見逃さぬ！」', check: '「竜の爪牙、逃れられまい！」', checked: '「ほう… 面白い刃筋を立ててくる！」', capture: '「派手に行こうぜ！」', pinch: '「フッ… 逆境こそ男の舞台よ！」' }
   },
   5: {
     name: '明智光秀', clan: '明智軍｜美濃の智将 (Lv.5)', power: '戦力 7600', rankDesc: '5〜4級',
+    tactic: '角換わり・金矢倉', charDesc: '教養深く緻密な軍略に長けた美濃の智将。<br>駒の損得を冷静に計算し、堅実な矢倉囲いと角換わりの定石筋を踏襲してくる中盤の難敵。',
     crestSvg: `<circle cx="50" cy="50" r="46" fill="#09141c" stroke="#ffd700" stroke-width="2.5"/><polygon points="50,18 60,38 82,38 65,52 72,74 50,60 28,74 35,52 18,38 40,38" fill="#ffd700"/>`,
-    quotes: {
-      default: '「時は今、天が下知る五月哉。」',
-      check: '「敵は本能寺、否、家康本陣にあり！」',
-      checked: '「計略が破られたというのか…！」',
-      capture: '「理に適った一手にございます。」',
-      pinch: '「焦るな… 智謀の糸はまだ切れておらぬ。」'
-    }
+    quotes: { default: '「時は今、天が下知る五月哉。」', check: '「敵は真田本陣にあり！」', checked: '「計略が破られたというのか…！」', capture: '「理に適った一手にございます。」', pinch: '「焦るな… 智謀の糸はまだ切れておらぬ。」' }
   },
   6: {
     name: '上杉謙信', clan: '上杉軍｜越後の龍 (Lv.6)', power: '戦力 8400', rankDesc: '3級',
+    tactic: '車懸り（三間飛車・美濃）', charDesc: '義を重んじる越後の軍神。<br>美濃囲いからリズミカルに三間飛車を繰り出し、電撃の如き捌きで玉頭を急襲してくる強豪。',
     crestSvg: `<circle cx="50" cy="50" r="46" fill="#120614" stroke="#ffd700" stroke-width="2.5"/><circle cx="50" cy="50" r="38" fill="none" stroke="#ffd700" stroke-width="3"/><path d="M35 30 L65 30 L50 75 Z" fill="#ffd700"/>`,
-    quotes: {
-      default: '「毘沙門天の御加護、我が軍にあり！」',
-      check: '「車懸りの陣！ 龍の進撃を見よ！」',
-      checked: '「天運、我を試すか…！」',
-      capture: '「義のために討ち払う！」',
-      pinch: '「運は天にあり、鎧は胸にあり！」'
-    }
+    quotes: { default: '「毘沙門天の御加護、我が軍にあり！」', check: '「車懸りの陣！ 龍の進撃を見よ！」', checked: '「天運、我を試すか…！」', capture: '「義のために討ち払う！」', pinch: '「運は天にあり、鎧は胸にあり！」' }
   },
   7: {
     name: '武田信玄', clan: '武田軍｜甲斐の虎 (Lv.7)', power: '戦力 8900', rankDesc: '2級',
+    tactic: '風林火山（総矢倉・重厚流）', charDesc: '「風林火山」を掲げる戦国屈指の巨頭。<br>重厚無比な銀矢倉・総矢倉を築き、盤石の守備から的確に相手の弱点を押し潰してくる本格派。',
     crestSvg: `<circle cx="50" cy="50" r="46" fill="#1a0404" stroke="#ffd700" stroke-width="2.5"/><g fill="#ffd700"><polygon points="50,22 64,36 50,50 36,36"/><polygon points="34,38 48,52 34,66 20,52"/><polygon points="66,38 80,52 66,66 52,52"/><polygon points="50,54 64,68 50,82 36,68"/></g>`,
-    quotes: {
-      default: '「疾きこと風の如く、動かざること山の如し！」',
-      check: '「侵掠すること火の如く！ 攻め落とす！」',
-      checked: '「三方ヶ原を思い出すか、家康！」',
-      capture: '「兵は詭道なり。」',
-      pinch: '「人は城、人は石垣… 崩れはせぬ！」'
-    }
+    quotes: { default: '「疾きこと風の如く、動かざること山の如し！」', check: '「侵掠すること火の如く！ 攻め落とす！」', checked: '「真田の血筋、さすがは見事な太刀筋！」', capture: '「兵は詭道なり。」', pinch: '「人は城、人は石垣… 崩れはせぬ！」' }
   },
   8: {
     name: '織田信長', clan: '織田軍｜第六天魔王 (Lv.8)', power: '戦力 9500', rankDesc: '1級〜初段手前',
-    crestSvg: `<circle cx="50" cy="50" r="46" fill="#140606" stroke="#ffd700" stroke-width="2.5"/><circle cx="50" cy="50" r="41" fill="none" stroke="#7a1212" stroke-width="1.5"/><g fill="#ffd700" stroke="#8a5a00" stroke-width="0.8"><circle cx="50" cy="27" r="14"/><circle cx="72" cy="43" r="14"/><circle cx="64" cy="68" r="14"/><circle cx="36" cy="68" r="14"/><circle cx="28" cy="43" r="14"/><circle cx="50" cy="50" r="15" fill="#9b111e" stroke="#ffd700" stroke-width="2"/><circle cx="50" cy="50" r="5" fill="#ffd700"/></g>`,
-    quotes: {
-      default: '「天下は、我にあり！」',
-      check: '「是非に及ばず！ 打ち破ってみせよ！」',
-      checked: '「ほう… 魔王の首を狙うか！」',
-      capture: '「無駄な足掻きを！」',
-      pinch: '「ふん… 天下はまだ譲れぬわ！」'
-    }
+    tactic: '相振り飛車・超速奇襲', charDesc: '天下布武を掲げる革命児にして第六天魔王。<br>定石の枠を超えた超速攻撃と果敢な大駒切りで相手本陣を強襲する破天荒な覇王。',
+    crestSvg: `<circle cx="50" cy="50" r="46" fill="#140606" stroke="#ffd700" stroke-width="2.5"/><g fill="#ffd700" stroke="#8a5a00" stroke-width="0.8"><circle cx="50" cy="27" r="14"/><circle cx="72" cy="43" r="14"/><circle cx="64" cy="68" r="14"/><circle cx="36" cy="68" r="14"/><circle cx="28" cy="43" r="14"/><circle cx="50" cy="50" r="15" fill="#9b111e" stroke="#ffd700" stroke-width="2"/><circle cx="50" cy="50" r="5" fill="#ffd700"/></g>`,
+    quotes: { default: '「天下は、我にあり！」', check: '「是非に及ばず！ 打ち破ってみせよ！」', checked: '「ほう… 魔王の首を狙うか！」', capture: '「無駄な足掻きを！」', pinch: '「ふん… 天下はまだ譲れぬわ！」' }
   },
   9: {
     name: '豊臣秀吉', clan: '豊臣軍｜天下人・太閤 (Lv.9)', power: '戦力 9800', rankDesc: 'アマ初段',
-    crestSvg: `<circle cx="50" cy="50" r="46" fill="#1c1404" stroke="#ffd700" stroke-width="2.5"/><circle cx="50" cy="50" r="40" fill="none" stroke="#ffd700" stroke-width="2"/><path d="M50 20 L55 35 L45 35 Z M35 30 L40 42 L30 42 Z M65 30 L70 42 L60 42 Z M25 70 Q50 50 75 70 Q50 82 25 70 Z" fill="#ffd700"/>`,
-    quotes: {
-      default: '「露と落ち、露と消えにし我が身かな。」',
-      check: '「黄金の茶室も、盤上の天下も我がものよ！」',
-      checked: '「徳川殿、さすがは古狸よのう…！」',
-      capture: '「大身の器量、見せて進ぜよう！」',
-      pinch: '「太閤の威光、陰りはせぬぞ！」'
-    }
+    tactic: '四間飛車藤井システム', charDesc: '関白・太閤へと昇り詰めた稀代の天下人。<br>手駒を最大限に活かす藤井システムの思想を持ち、変幻自在の捌きと深層読みで圧倒するアマ初段格。',
+    crestSvg: `<circle cx="50" cy="50" r="46" fill="#1c1404" stroke="#ffd700" stroke-width="2.5"/><circle cx="50" cy="40" fill="none" stroke="#ffd700" stroke-width="2"/><path d="M50 20 L55 35 L45 35 Z M35 30 L40 42 L30 42 Z M65 30 L70 42 L60 42 Z M25 70 Q50 50 75 70 Q50 82 25 70 Z" fill="#ffd700"/>`,
+    quotes: { default: '「露と落ち、露と消えにし我が身かな。」', check: '「盤上の天下も我がものよ！」', checked: '「真田殿、見事な知略じゃのう…！」', capture: '「大身の器量、見せて進ぜよう！」', pinch: '「太閤の威光、陰りはせぬぞ！」' }
   },
   10: {
     name: '徳川家康', clan: '徳川軍｜天下の覇者 (Lv.10)', power: '戦力 9999', rankDesc: 'アマ二〜三段（最強覇王）',
-    crestSvg: `<circle cx="50" cy="50" r="46" fill="#070c18" stroke="#ffd700" stroke-width="2.5"/><circle cx="50" cy="50" r="41" fill="none" stroke="#122a61" stroke-width="1.5"/><g fill="#ffd700" stroke="#8a5a00" stroke-width="0.8"><circle cx="50" cy="39" fill="none" stroke="#ffd700" stroke-width="3"/><path d="M50 48 C44 32, 36 24, 50 18 C64 24, 56 32, 50 48 Z"/><path d="M49 52 C33 50, 24 60, 26 74 C38 74, 46 64, 49 52 Z"/><path d="M51 52 C67 50, 76 60, 74 74 C62 74, 54 64, 51 52 Z"/><circle cx="50" cy="50" r="4" fill="#ffffff"/></g>`,
-    quotes: {
-      default: '「人の一生は重荷を負うて遠き道を行くが如し。」',
-      check: '「鳴かぬなら鳴くまで待とう… 今がその刻！」',
-      checked: '「ふむ… 痛烈な一手、耐え忍ぶ刻か。」',
-      capture: '「天下泰平のための礎といたす。」',
-      pinch: '「堪忍の二字、我が胸にあり！」'
-    }
+    tactic: '堅陣穴熊・完全無欠流', charDesc: '天下を平定した江戸幕府の開祖。<br>金銀4枚で玉を固める鉄壁の穴熊を好み、相手の攻めを徹底して受け潰す最深読みモジュールの最終覇王！',
+    crestSvg: `<circle cx="50" cy="50" r="46" fill="#070c18" stroke="#ffd700" stroke-width="2.5"/><g fill="#ffd700" stroke="#8a5a00" stroke-width="0.8"><circle cx="50" cy="39" fill="none" stroke="#ffd700" stroke-width="3"/><path d="M50 48 C44 32, 36 24, 50 18 C64 24, 56 32, 50 48 Z"/><path d="M49 52 C33 50, 24 60, 26 74 C38 74, 46 64, 49 52 Z"/><path d="M51 52 C67 50, 76 60, 74 74 C62 74, 54 64, 51 52 Z"/><circle cx="50" cy="50" r="4" fill="#ffffff"/></g>`,
+    quotes: { default: '「人の一生は重荷を負うて遠き道を行くが如し。」', check: '「鳴かぬなら鳴くまで待とう… 今がその刻！」', checked: '「真田…！ やはり貴様は恐ろしい男よ！」', capture: '「天下泰平のための礎といたす。」', pinch: '「堪忍の二字、我が胸にあり！」' }
   }
 };
 
-let maxClearedLevel = 0;
-let currentAiLevel = 1;
-let evalScoresHistory = [0]; // 形勢グラフ用
+let maxClearedLevel = 0, currentAiLevel = 1, evalScoresHistory = [0];
 
 function updateWarlordQuote(situationType) {
   const data = WARLORDS_DATA[currentAiLevel];
-  if (!data || !data.quotes) return;
-  const quote = data.quotes[situationType] || data.quotes.default;
-  document.getElementById('ai-quote-disp').textContent = quote;
+  if (data?.quotes) document.getElementById('ai-quote-disp').textContent = data.quotes[situationType] || data.quotes.default;
 }
 
 function loadProgress() {
   try {
-    const saved = localStorage.getItem('shogi_max_cleared_level');
-    if (saved !== null) maxClearedLevel = parseInt(saved, 10);
+    const s = localStorage.getItem('shogi_max_cleared_level');
+    if (s !== null) maxClearedLevel = parseInt(s, 10);
     currentAiLevel = Math.min(10, maxClearedLevel + 1);
-  } catch (e) {
-    maxClearedLevel = 0;
-    currentAiLevel = 1;
-  }
+  } catch (e) { maxClearedLevel = 0; currentAiLevel = 1; }
 }
-
 function saveProgress(clearedLvl) {
   try {
     if (clearedLvl > maxClearedLevel) {
@@ -1468,9 +1498,7 @@ function setAiLevel(lvl, notify = true) {
   document.getElementById('ai-avatar-container').innerHTML = `<svg viewBox="0 0 100 100">${data.crestSvg}</svg>`;
   document.getElementById('btn-header-level').textContent = `⚙ 天下統一 Lv.${currentAiLevel}`;
   closeLevelModal();
-  if (notify) {
-    setOrderMessage(`【軍略変更】敵将に「${data.name} (Lv.${currentAiLevel})」が着陣仕候！`, false);
-  }
+  if (notify) setOrderMessage(`【軍略変更】敵将に「${data.name} (Lv.${currentAiLevel})」が着陣仕候！<br>「対局開始」にて振り駒を執り行われよ。`, false);
 }
 
 function openLevelSelectModal() {
@@ -1478,17 +1506,19 @@ function openLevelSelectModal() {
   const listEl = document.getElementById('level-select-list');
   listEl.innerHTML = '';
   for (let l = 1; l <= 10; l++) {
-    const d = WARLORDS_DATA[l];
-    const isCleared = (l <= maxClearedLevel);
+    const d = WARLORDS_DATA[l], isCleared = (l <= maxClearedLevel);
     const row = document.createElement('div');
     row.className = `level-item-row ${l === currentAiLevel ? 'active' : ''}`;
     row.innerHTML = `
-      <div class="level-badge-col">
-        <span class="level-num-badge">Lv.${l}</span>
-        ${isCleared ? '<span class="level-clear-seal">討取</span>' : ''}
+      <div class="level-item-header">
+        <div class="level-badge-col">
+          <span class="level-num-badge">Lv.${l}</span>
+          ${isCleared ? '<span class="level-clear-seal">討取</span>' : ''}
+          <span class="level-warlord-title">${d.name}</span>
+        </div>
+        <div class="level-rank-badge">${d.rankDesc}</div>
       </div>
-      <div class="level-warlord-title">${d.name}</div>
-      <div class="level-desc-box">${d.rankDesc} ｜ ${d.clan.split('｜')[1] || d.clan}</div>
+      <div class="level-desc-box">${d.charDesc}</div>
     `;
     row.onclick = () => setAiLevel(l);
     listEl.appendChild(row);
@@ -1497,12 +1527,124 @@ function openLevelSelectModal() {
 }
 function closeLevelModal() { playPieceSound(); document.getElementById('level-modal').style.display = 'none'; }
 
-function setOrderMessage(text, isMyTurn = false) {
+/* ================= 兵法指南所 ＆ 定石モーダルシステム ================= */
+function openGuideModal(defaultTab = 'tutorial') {
+  playPieceSound();
+  switchGuideTab(defaultTab);
+  const neverShow = localStorage.getItem('shogi_never_show_guide') === 'true';
+  document.getElementById('chk-never-show-guide').checked = neverShow;
+  document.getElementById('guide-modal').style.display = 'flex';
+}
+function closeGuideModal() {
+  playPieceSound();
+  document.getElementById('guide-modal').style.display = 'none';
+}
+function toggleNeverShowGuide(checked) {
+  try { localStorage.setItem('shogi_never_show_guide', checked ? 'true' : 'false'); } catch (e) {}
+}
+
+function switchGuideTab(tab) {
+  playPieceSound();
+  ['tutorial', 'principles', 'tactics'].forEach(t => {
+    const btn = document.getElementById(`tab-btn-${t}`);
+    if (btn) btn.classList.toggle('active', t === tab);
+  });
+
+  const contentBox = document.getElementById('guide-tab-content');
+  if (tab === 'tutorial') {
+    contentBox.innerHTML = `
+      <div class="guide-section-box">
+        <h4><span class="guide-step-tag">壱</span> 天下統一への道（勝ち抜き合戦）</h4>
+        殿は真田赤備隊を率いる名将<b>「真田幸村」</b>にござる！<br>
+        敵将はLv.1の<b>木下藤吉郎</b>から始まり、歴戦の豪傑を討ち取るごとに次なる難敵が解放。最終戦の覇王<b>徳川家康</b>を破り天下統一を成し遂げられよ！
+      </div>
+
+      <div class="guide-section-box">
+        <h4><span class="guide-step-tag">弐</span> 合戦の流れ（振り駒〜進軍）</h4>
+        <b>①【対局開始】</b>を押すと、伝統の<b>「振り駒の儀」</b>が執り行われます。歩が多ければ真田軍が先手、と金が多ければ敵軍が先手となります。<br>
+        <b>②【進軍操作】</b>自軍の駒をタップすると進めるマスが<b>緑色</b>に光ります。マスをタップして進軍！<br>
+        <b>③【成りの儀】</b>敵陣深くに攻め入ると、駒をより強力な「成り駒」へ昇格できます。<br>
+        <b>④【手駒の運用】</b>討ち取った敵駒は、持ち駒エリアから盤上の空きマスに打ち込めます。
+      </div>
+
+      <div class="guide-section-box">
+        <h4><span class="guide-step-tag">参</span> 軍師の補佐と伝令機能</h4>
+        ・<b>「🪭 待った」</b>：悪手を指してしまっても局面を一手巻き戻せます。<br>
+        ・<b>「💡 軍師進言」</b>：名軍師・黒田官兵衛が電脳深層探索で最善の一手を指し示します。<br>
+        ・<b>「士気ゲージ」</b>：盤上の駒の損得や本陣の安全度を数値化。ゲージ満ちる刻、勝機あり！
+      </div>
+    `;
+  } else if (tab === 'principles') {
+    contentBox.innerHTML = `
+      <div class="guide-section-box">
+        <h4><span class="guide-step-tag">序盤</span> 布陣の心得（陣形を整え城を築く）</h4>
+        <p><b>一、玉飛接近すべからず</b><br>大砲である「飛車」と総大将の「玉将」を離し、戦火が直接王様に及ばぬよう配置します。</p>
+        <p><b>二、玉の守りを固める（城造り）</b><br>金銀を玉の周りに集めて「美濃囲い」や「矢倉」といった堅牢な城を築いてから戦端を開くのが兵法の鉄則です。</p>
+        <p><b>三、大駒の道を拓く</b><br>角の前の歩（7六歩）や飛車の前の歩を進め、大駒が敵陣を睨めるように構えましょう。</p>
+      </div>
+
+      <div class="guide-section-box">
+        <h4><span class="guide-step-tag">中盤</span> 攻防の心得（小競り合いから拠点を創る）</h4>
+        <p><b>一、開戦は歩の突き捨てから</b><br>戦いたい筋の歩を敵駒にぶつけて戦端を開き、相手の形を乱します。</p>
+        <p><b>二、敵陣に橋頭堡（拠点）を築く</b><br>成った駒（と金や竜・馬）を敵陣深くに定着させ、そこを足がかりに金銀を打ち込みます。</p>
+        <p><b>三、大駒の活用と駒得</b><br>飛車や角を成り込ませ（竜王・竜馬）、積極的に相手の金銀を奪い手駒を増やします。</p>
+      </div>
+
+      <div class="guide-section-box">
+        <h4><span class="guide-step-tag">終盤</span> 討ち取りの心得（包囲網と寄せの速度）</h4>
+        <p><b>一、玉は包囲して端へ追い詰めよ</b><br>広い中央へ玉を逃がすと捕まりません。金銀や桂香で逃げ道を塞ぎながら端へ追い詰めます。</p>
+        <p><b>二、自陣の小傷より敵玉の首</b><br>終盤は速度勝負！ 相手の一手を防ぐことより、一手早く相手の玉を詰ます手が最善となります。</p>
+      </div>
+    `;
+  } else if (tab === 'tactics') {
+    let rowsHtml = '';
+    for (let l = 1; l <= 10; l++) {
+      const d = WARLORDS_DATA[l];
+      rowsHtml += `
+        <tr>
+          <td class="warlord-td-name">Lv.${l} ${d.name}</td>
+          <td class="warlord-td-style">${d.rankDesc}</td>
+          <td class="warlord-td-tactic">${d.tactic}</td>
+        </tr>
+      `;
+    }
+    contentBox.innerHTML = `
+      <div class="guide-section-box" style="margin-bottom: 6px;">
+        <h4><span class="guide-step-tag">伝授</span> 本格定石と十武将の得意戦型一覧</h4>
+        本作は、序盤の定石布陣（居飛車・四間飛車・棒銀・矢倉等）を自動判定。敵将の性格に応じた戦法を展開してまいります。
+      </div>
+      <table class="warlord-book-table">
+        <thead>
+          <tr>
+            <th>武将名 (難度)</th>
+            <th>棋力目安</th>
+            <th>得意戦法・兵法</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml}
+        </tbody>
+      </table>
+      <div style="font-size: 10px; color: #ffe57f; margin-top: 6px; text-align: right;">
+        ※各将を討ち破ることで、より高次の定石・手筋が求められます。
+      </div>
+    `;
+  }
+}
+
+function checkFirstVisitGuide() {
+  const neverShow = localStorage.getItem('shogi_never_show_guide') === 'true';
+  const hasVisited = localStorage.getItem('shogi_first_visit_done') === 'true';
+  if (!hasVisited && !neverShow) {
+    try { localStorage.setItem('shogi_first_visit_done', 'true'); } catch (e) {}
+    setTimeout(() => { openGuideModal('tutorial'); }, 700);
+  }
+}
+
+function setOrderMessage(htmlText, isMyTurn = false) {
   const banner = document.getElementById('order-message-banner');
-  const textEl = document.getElementById('order-message-text');
-  textEl.textContent = text;
-  if (isMyTurn) banner.classList.add('my-turn');
-  else banner.classList.remove('my-turn');
+  document.getElementById('order-message-text').innerHTML = htmlText;
+  if (isMyTurn) banner.classList.add('my-turn'); else banner.classList.remove('my-turn');
 }
 
 function updateMoraleAndSituation(scoreAI = 0) {
@@ -1518,12 +1660,12 @@ function updateMoraleAndSituation(scoreAI = 0) {
 
   const sitEl = document.getElementById('situation-text');
   if (playerPercent >= 75) {
-    sitEl.textContent = '自軍、圧倒的優勢！ 敵本陣を完全に包囲せり。勝機は今、天下を我が手に掴む刻にござる！';
+    sitEl.textContent = '真田軍、圧倒的優勢！ 敵本陣を包囲せり。勝機は今、天下を掴む刻にござる！';
     updateWarlordQuote('pinch');
   } else if (playerPercent >= 58) {
-    sitEl.textContent = '自軍、やや有利！ 敵陣にわずかな乱れあり。焦らず歩を進め、確実に好機を広げるべし。';
+    sitEl.textContent = '真田軍、やや有利！ 敵陣に乱れあり。焦らず歩を進め、確実に好機を広げるべし。';
   } else if (playerPercent <= 25) {
-    sitEl.textContent = '自軍、重大なる窮地！ 敵の猛攻を受け本陣が動揺。陣形を再構築し起死回生の反撃を待て！';
+    sitEl.textContent = '真田軍、重大なる窮地！ 敵の猛攻を受け本陣が動揺。陣形を再構築せよ！';
   } else if (playerPercent <= 42) {
     sitEl.textContent = '敵軍が攻勢！ 敵の精鋭が前線を圧迫。ここは堅固に耐え忍び、隙を見極めるべし。';
   } else {
@@ -1531,24 +1673,16 @@ function updateMoraleAndSituation(scoreAI = 0) {
   }
 }
 
-const PIECES = {
-  OU: '王将', HI: '飛車', KA: '角行', KI: '金将', GI: '銀将', KE: '桂馬', KY: '香車', FU: '歩兵',
-  RY: '竜王', UM: '竜馬', NG: '成銀', NK: '成桂', NY: '成香', TO: 'と金'
-};
+const PIECES = { OU:'王将', HI:'飛車', KA:'角行', KI:'金将', GI:'銀将', KE:'桂馬', KY:'香車', FU:'歩兵', RY:'竜王', UM:'竜馬', NG:'成銀', NK:'成桂', NY:'成香', TO:'と金' };
 const PROMOTED_PIECES = ['RY', 'UM', 'NG', 'NK', 'NY', 'TO'];
 const KANJI_NUMS = ['一','二','三','四','五','六','七','八','九'];
 const ARABIC_NUMS = ['１','２','３','４','５','６','７','８','９'];
-const UNPROMOTE_MAP = { RY: 'HI', UM: 'KA', NG: 'GI', NK: 'KE', NY: 'KY', TO: 'FU', HI: 'HI', KA: 'KA', KI: 'KI', GI: 'GI', KE: 'KE', KY: 'KY', FU: 'FU', OU: 'OU' };
-const PROMOTE_MAP = { HI: 'RY', KA: 'UM', GI: 'NG', KE: 'NK', KY: 'NY', FU: 'TO' };
+const UNPROMOTE_MAP = { RY:'HI', UM:'KA', NG:'GI', NK:'KE', NY:'KY', TO:'FU', HI:'HI', KA:'KA', KI:'KI', GI:'GI', KE:'KE', KY:'KY', FU:'FU', OU:'OU' };
+const PROMOTE_MAP = { HI:'RY', KA:'UM', GI:'NG', KE:'NK', KY:'NY', FU:'TO' };
 
-let senteRole = 'PLAYER';
-let board = [], hands = { PLAYER: {}, AI: {} }, selectedPos = null, currentValidMoves = [];
+let senteRole = 'PLAYER', board = [], hands = { PLAYER: {}, AI: {} }, selectedPos = null, currentValidMoves = [];
 let turn = null, moveObjectsHistory = [], pendingMove = null, isGameOver = true, lastMoveTo = null;
-let historyStates = [];
-let reviewingIndex = -1; // 棋譜再生検討用
-let isBookOut = false;
-let gameStartTime = null;
-let isAiThinking = false;
+let historyStates = [], reviewingIndex = -1, isBookOut = false, gameStartTime = null, isAiThinking = false;
 let hintTargetCell = null, hintSourceCell = null;
 
 let aiWorker = null;
@@ -1559,44 +1693,29 @@ function createNewWorker() {
   if (aiWorker) aiWorker.terminate();
   aiWorker = new Worker(workerUrl);
   aiWorker.onmessage = handleWorkerMessage;
+  aiWorker.onerror = () => { createNewWorker(); isAiThinking = false; };
 }
 
 function handleWorkerMessage(e) {
   const data = e.data;
-
   if (data.type === 'hintDone') {
     const bm = data.bestMove;
-    if (!bm) {
-      alert('軍師・官兵衛「局面が極まっており、これ以上の進言は叶いませぬ。」');
-      return;
-    }
-    const toC = 9 - bm.to.c;
-    const toR = KANJI_NUMS[bm.to.r];
-    let pieceName = bm.type === 'drop' ? PIECES[bm.code] : PIECES[board[bm.from.r][bm.from.c].code];
-    let advice = `【軍師・黒田官兵衛の進言】\n\n「▲${toC}${toR}${pieceName}`;
-    if (bm.type === 'drop') advice += '打';
-    if (bm.promote) advice += '成';
-    advice += '」と指すのが最善の一手にござる！\n';
-
-    if (bm.isCheck) advice += '（敵本陣へ強烈な王手を仕掛け、敵将を追い詰めます！）';
-    else if (bm.isCapture) advice += '（敵の防衛駒を討ち取り、戦力差を拡大いたします！）';
-    else if (bm.promote) advice += '（敵陣深くに成り込み、強力な拠点を作ります！）';
-    else advice += '（陣形を整え、盤面の要所を制圧いたします！）';
-
+    if (!bm) { alert('軍師・官兵衛「局面が極まっており、これ以上の進言は叶いませぬ。」'); return; }
+    const toC = 9 - bm.to.c, toR = KANJI_NUMS[bm.to.r];
+    const pieceName = bm.type === 'drop' ? PIECES[bm.code] : PIECES[board[bm.from.r][bm.from.c].code];
+    let advice = `【軍師・黒田官兵衛の進言】\n\n「▲${toC}${toR}${pieceName}${bm.type === 'drop' ? '打' : ''}${bm.promote ? '成' : ''}」が最善手に候！`;
     alert(advice);
     hintSourceCell = bm.type === 'move' ? { r: bm.from.r, c: bm.from.c } : null;
     hintTargetCell = { r: bm.to.r, c: bm.to.c };
     renderBoard();
     return;
   }
-
   if (!isAiThinking) return;
 
   if (data.type === 'progress') {
     if (data.evalScore !== undefined) updateMoraleAndSituation(data.evalScore);
     return;
   }
-
   if (data.type === 'done') {
     isAiThinking = false;
     const bestMove = data.bestMove;
@@ -1604,19 +1723,16 @@ function handleWorkerMessage(e) {
       evalScoresHistory.push(data.evalScore);
       updateMoraleAndSituation(data.evalScore);
     }
-
     if (!bestMove) { checkGameOver('AI'); return; }
     executeMove(bestMove);
     renderBoard();
-
-    if(!checkGameOver('PLAYER')) {
+    if (!checkGameOver('PLAYER')) {
       turn = 'PLAYER';
-      setOrderMessage('【自軍手番】御屋形様、次なる一手をお決め下され。', true);
-      const isCheck = isCheckState('PLAYER');
-      if(isCheck) {
+      setOrderMessage('【自軍手番】幸村公、次なる一手をお決め下され。<br>真田赤備隊の気迫を見せつける刻に候！', true);
+      if (isCheckState('PLAYER')) {
         playCheckSound();
-        triggerCutin('敵の奇襲！ 御屋形様、お逃げあれ！');
-        setOrderMessage('【王手回避！】御屋形様、敵の刃が迫っております！ 玉をお逃がしあれ！', true);
+        triggerCutin('敵の奇襲！ 幸村公、お逃げあれ！');
+        setOrderMessage('【王手回避！】幸村公、敵の刃が迫っております！<br>玉をお逃がしあれ！', true);
         updateWarlordQuote('check');
       }
     }
@@ -1624,10 +1740,8 @@ function handleWorkerMessage(e) {
 }
 createNewWorker();
 
-/* 振り駒の儀 */
 function openFurigomaModal() {
-  initAudio();
-  playPieceSound();
+  initAudio(); playPieceSound();
   if (isAiThinking) createNewWorker();
 
   const modal = document.getElementById('furigoma-modal');
@@ -1636,16 +1750,13 @@ function openFurigomaModal() {
   modal.style.display = 'flex';
   container.innerHTML = '';
   resultText.textContent = '天運を見届けております…';
-  setOrderMessage('【天運】振り駒にて先手・後手を定め候…', false);
+  setOrderMessage('【天運】振り駒にて先手・後手を定め候…<br>固唾を呑んで見守られよ。', false);
 
   const results = [];
   let toCount = 0;
-
   for(let i=0; i<5; i++) {
     const isTo = (Math.random() < 0.5);
-    results.push(isTo);
-    if(isTo) toCount++;
-
+    results.push(isTo); if (isTo) toCount++;
     const pBox = document.createElement('div');
     pBox.className = 'furigoma-piece-box';
     pBox.innerHTML = `
@@ -1661,166 +1772,50 @@ function openFurigomaModal() {
     setTimeout(() => {
       playPieceSound();
       if(isTo) document.getElementById(`fg-card-${i}`).classList.add('flipped');
-    }, 400 + i * 280);
+    }, 380 + i * 260);
   });
 
   setTimeout(() => {
-    const fuCount = 5 - toCount;
-    const isPlayerSente = (fuCount >= 3);
+    const fuCount = 5 - toCount, isPlayerSente = (fuCount >= 3);
     senteRole = isPlayerSente ? 'PLAYER' : 'AI';
     turn = senteRole;
-
     const currentEnemyName = WARLORDS_DATA[currentAiLevel].name;
 
     if (isPlayerSente) {
-      resultText.innerHTML = `歩が <span style="color:#ffd700;font-size:18px;">${fuCount}</span> 枚！ <span style="color:#448aff;">徳川軍（貴殿）の先手！</span>`;
+      resultText.innerHTML = `歩が <span style="color:#ffd700;font-size:18px;">${fuCount}</span> 枚！ <span style="color:#ff5252;">真田軍（幸村）の先手！</span>`;
     } else {
-      resultText.innerHTML = `と金が <span style="color:#ff5252;font-size:18px;">${toCount}</span> 枚！ <span style="color:#ff5252;">${currentEnemyName}の先手！</span>`;
+      resultText.innerHTML = `と金が <span style="color:#ff5252;font-size:18px;">${toCount}</span> 枚！ <span style="color:#ffd700;">${currentEnemyName}の先手！</span>`;
     }
     playVictorySound();
-
-    setTimeout(() => {
-      modal.style.display = 'none';
-      startBattleAfterFurigoma();
-    }, 2000);
-  }, 400 + 5 * 280 + 400);
+    setTimeout(() => { modal.style.display = 'none'; startBattleAfterFurigoma(); }, 2000);
+  }, 380 + 5 * 260 + 350);
 }
 
 function startBattleAfterFurigoma() {
-  isGameOver = false;
-  gameStartTime = new Date();
+  isGameOver = false; gameStartTime = new Date();
   initBoardState();
-
   triggerCutin('合戦開始！ いざ推して参る！');
   renderBoard();
-
   const currentEnemyName = WARLORDS_DATA[currentAiLevel].name;
   if(turn === 'PLAYER') {
-    setOrderMessage('【先手・自軍】御屋形様、先鋒としての一手をお繰り出し下され。', true);
+    setOrderMessage('【先手・真田軍】幸村公、先鋒としての一手をお繰り出し下され。<br>敵陣へ攻め入る好機に候！', true);
   } else {
-    setOrderMessage(`【先手・敵軍】${currentEnemyName}が軍略を巡らせております…`, false);
+    setOrderMessage(`【先手・敵軍】${currentEnemyName}公が軍略を巡らせております…<br>布陣を凝視し隙を伺われよ。`, false);
     setTimeout(aiTurn, 700);
   }
 }
 
 const OPENING_BOOK = {};
-function openingMoveKey(move) {
-  if (move.type === 'drop') return `D:${move.code}:${move.to.r},${move.to.c}`;
-  return `M:${move.from.r},${move.from.c}>${move.to.r},${move.to.c}${move.promote ? '+' : ''}`;
-}
-
-function addOpeningBookEntry(tempBoard, tempHands, tempTurn, move, weight = 10, style = '') {
-  let s = tempTurn + ':';
-  for (let r = 0; r < 9; r++) for (let c = 0; c < 9; c++) {
-    const p = tempBoard[r][c]; s += p ? (p.owner + p.code) : '--';
-  }
-  s += '_' + JSON.stringify(tempHands.PLAYER) + '_' + JSON.stringify(tempHands.AI);
-  if (!OPENING_BOOK[s]) OPENING_BOOK[s] = [];
-  const key = openingMoveKey(move);
-  const found = OPENING_BOOK[s].find(x => openingMoveKey(x.move) === key);
-  if (found) {
-    found.weight += weight;
-    if (style && !found.styles.includes(style)) found.styles.push(style);
-  } else {
-    OPENING_BOOK[s].push({ move: {...move}, weight, styles: style ? [style] : [] });
-  }
-}
-
-function cloneOpeningState(src) {
-  return {
-    board: src.board.map(row => row.map(p => p ? {...p} : null)),
-    hands: { PLAYER: {...src.hands.PLAYER}, AI: {...src.hands.AI} }
-  };
-}
-
-function applyOpeningMove(state, move) {
-  const b = state.board, h = state.hands;
-  if (move.type === 'drop') {
-    b[move.to.r][move.to.c] = {code: move.code, owner: move.owner};
-    h[move.owner][move.code] = (h[move.owner][move.code] || 0) - 1;
-    if (h[move.owner][move.code] <= 0) delete h[move.owner][move.code];
-  } else {
-    const item = b[move.from.r][move.from.c];
-    if (!item) return false;
-    const target = b[move.to.r][move.to.c];
-    if (target && target.owner !== move.owner && target.code !== 'OU') {
-      const raw = UNPROMOTE_MAP[target.code];
-      h[move.owner][raw] = (h[move.owner][raw] || 0) + 1;
-    }
-    if (move.promote) item.code = PROMOTE_MAP[item.code];
-    b[move.to.r][move.to.c] = {...item};
-    b[move.from.r][move.from.c] = null;
-  }
-  return true;
-}
-
-function makeInitialOpeningState() {
-  const b = Array(9).fill(null).map(() => Array(9).fill(null));
-  const h = {PLAYER: {}, AI: {}};
-  b[0] = [{code:'KY',owner:'AI'},{code:'KE',owner:'AI'},{code:'GI',owner:'AI'},{code:'KI',owner:'AI'},{code:'OU',owner:'AI'},{code:'KI',owner:'AI'},{code:'GI',owner:'AI'},{code:'KE',owner:'AI'},{code:'KY',owner:'AI'}];
-  b[1][1] = {code:'HI',owner:'AI'}; b[1][7] = {code:'KA',owner:'AI'};
-  for (let c=0;c<9;c++) b[2][c] = {code:'FU',owner:'AI'};
-  for (let c=0;c<9;c++) b[6][c] = {code:'FU',owner:'PLAYER'};
-  b[7][1] = {code:'KA',owner:'PLAYER'}; b[7][7] = {code:'HI',owner:'PLAYER'};
-  b[8] = [{code:'KY',owner:'PLAYER'},{code:'KE',owner:'PLAYER'},{code:'GI',owner:'PLAYER'},{code:'KI',owner:'PLAYER'},{code:'OU',owner:'PLAYER'},{code:'KI',owner:'PLAYER'},{code:'GI',owner:'PLAYER'},{code:'KE',owner:'PLAYER'},{code:'KY',owner:'PLAYER'}];
-  return {board:b, hands:h};
-}
-
 function initOpeningBook() {
-  Object.keys(OPENING_BOOK).forEach(k => delete OPENING_BOOK[k]);
-  const I = makeInitialOpeningState();
-  const M = (owner, fr, fc, tr, tc, promote = false) => ({type:'move',from:{r:fr,c:fc},to:{r:tr,c:tc},owner,promote});
-
-  const aiSenteLines = [
-    {style:'居飛車(▲2六歩)', weight:40, moves:[M('AI',2,7,3,7), M('PLAYER',6,1,5,1), M('AI',2,6,3,6), M('PLAYER',6,2,5,2), M('AI',1,7,2,7)]},
-    {style:'角換わり狙い(▲7六歩)', weight:35, moves:[M('AI',2,2,3,2), M('PLAYER',6,6,5,6), M('AI',2,7,3,7), M('PLAYER',6,2,5,2), M('AI',1,7,2,7)]},
-    {style:'四間飛車', weight:25, moves:[M('AI',2,2,3,2), M('PLAYER',6,6,5,6), M('AI',1,1,1,5), M('PLAYER',6,2,5,2), M('AI',2,5,3,5)]}
-  ];
-
-  const aiGoteLines = [
-    {style:'相掛かり応手', weight:40, moves:[M('PLAYER',6,6,5,6), M('AI',2,2,3,2), M('PLAYER',6,2,5,2), M('AI',2,6,3,6)]},
-    {style:'角道オープン受け', weight:35, moves:[M('PLAYER',6,2,5,2), M('AI',2,6,3,6), M('PLAYER',6,6,5,6), M('AI',2,2,3,2)]},
-    {style:'穏健派(△8四歩)', weight:25, moves:[M('PLAYER',6,6,5,6), M('AI',2,1,3,1), M('PLAYER',7,7,6,7), M('AI',2,2,3,2)]}
-  ];
-
-  const registerLine = (line) => {
-    const state = cloneOpeningState(I);
-    for (let i=0; i<line.moves.length; i++) {
-      const mv = line.moves[i];
-      if (mv.owner === 'AI') addOpeningBookEntry(state.board, state.hands, 'AI', mv, line.weight, line.style);
-      if (!applyOpeningMove(state, mv)) break;
-    }
-  };
-
-  aiSenteLines.forEach(registerLine);
-  aiGoteLines.forEach(registerLine);
+  const M = (owner, fr, fc, tr, tc) => ({type:'move',from:{r:fr,c:fc},to:{r:tr,c:tc},owner,promote:false});
+  OPENING_BOOK['START_AI_SENTE'] = [M('AI',2,7,3,7), M('AI',2,2,3,2)];
 }
 initOpeningBook();
 
-function getBoardLegacyHash(currentTurn) {
-  let s = (currentTurn || turn) + ':';
-  for(let r=0; r<9; r++) for(let c=0; c<9; c++) {
-    const p = board[r][c]; s += p ? (p.owner + p.code) : '--';
-  }
-  s += '_' + JSON.stringify(hands.PLAYER) + '_' + JSON.stringify(hands.AI);
-  return s;
-}
-
-function getBookMoveForAI() {
-  if (isBookOut || currentAiLevel <= 2) return null;
-  const hash = getBoardLegacyHash('AI');
-  const entry = OPENING_BOOK[hash];
-  if (!entry || entry.length === 0) { isBookOut = true; return null; }
-  const chosen = entry[Math.floor(Math.random() * entry.length)];
-  return chosen.move;
-}
-
-function cloneBoardState(b) {
-  return b.map(row => row.map(cell => cell ? {...cell} : null));
-}
+function cloneBoardState(b) { return b.map(row => row.map(cell => cell ? {...cell} : null)); }
 
 function initBoardState() {
-  board = Array(9).fill(null).map(() => Array(9).fill(null));
+  board = Array.from({length: 9}, () => Array(9).fill(null));
   hands = { PLAYER: {}, AI: {} };
   moveObjectsHistory = []; lastMoveTo = null; historyStates = [];
   evalScoresHistory = [0]; reviewingIndex = -1;
@@ -1828,150 +1823,94 @@ function initBoardState() {
   hintTargetCell = null; hintSourceCell = null;
   updateMoraleAndSituation(0);
 
-  board[0] = [{code:'KY', owner:'AI'}, {code:'KE', owner:'AI'}, {code:'GI', owner:'AI'}, {code:'KI', owner:'AI'}, {code:'OU', owner:'AI'}, {code:'KI', owner:'AI'}, {code:'GI', owner:'AI'}, {code:'KE', owner:'AI'}, {code:'KY', owner:'AI'}];
-  board[1][1] = {code:'HI', owner:'AI'}; board[1][7] = {code:'KA', owner:'AI'};
-  for(let c=0; c<9; c++) board[2][c] = {code:'FU', owner:'AI'};
+  board[0] = [{code:'KY',owner:'AI'},{code:'KE',owner:'AI'},{code:'GI',owner:'AI'},{code:'KI',owner:'AI'},{code:'OU',owner:'AI'},{code:'KI',owner:'AI'},{code:'GI',owner:'AI'},{code:'KE',owner:'AI'},{code:'KY',owner:'AI'}];
+  board[1][1] = {code:'HI',owner:'AI'}; board[1][7] = {code:'KA',owner:'AI'};
+  for(let c=0; c<9; c++) board[2][c] = {code:'FU',owner:'AI'};
 
-  for(let c=0; c<9; c++) board[6][c] = {code:'FU', owner:'PLAYER'};
-  board[7][1] = {code:'KA', owner:'PLAYER'}; board[7][7] = {code:'HI', owner:'PLAYER'};
-  board[8] = [{code:'KY', owner:'PLAYER'}, {code:'KE', owner:'PLAYER'}, {code:'GI', owner:'PLAYER'}, {code:'KI', owner:'PLAYER'}, {code:'OU', owner:'PLAYER'}, {code:'KI', owner:'PLAYER'}, {code:'GI', owner:'PLAYER'}, {code:'KE', owner:'PLAYER'}, {code:'KY', owner:'PLAYER'}];
+  for(let c=0; c<9; c++) board[6][c] = {code:'FU',owner:'PLAYER'};
+  board[7][1] = {code:'KA',owner:'PLAYER'}; board[7][7] = {code:'HI',owner:'PLAYER'};
+  board[8] = [{code:'KY',owner:'PLAYER'},{code:'KE',owner:'PLAYER'},{code:'GI',owner:'PLAYER'},{code:'KI',owner:'PLAYER'},{code:'OU',owner:'PLAYER'},{code:'KI',owner:'PLAYER'},{code:'GI',owner:'PLAYER'},{code:'KE',owner:'PLAYER'},{code:'KY',owner:'PLAYER'}];
 
   historyStates.push({
-    board: cloneBoardState(board),
-    hands: JSON.parse(JSON.stringify(hands)),
-    turn: turn,
-    hash: getBoardLegacyHash(turn),
-    isCheck: false,
-    lastMoveTo: null,
-    moveObjectsHistory: []
+    board: cloneBoardState(board), hands: JSON.parse(JSON.stringify(hands)),
+    turn, lastMoveTo: null, moveObjectsHistory: []
   });
 }
 
 function surrenderGame() {
   if (isGameOver) return;
   playPieceSound();
-  if (confirm('軍を退き、敵将に降伏（投了）いたしますか？')) {
+  if (confirm('真田軍を退き、敵将に降伏（投了）いたしますか？')) {
     isGameOver = true;
     triggerCutin('無念… ここまでか…');
-    document.getElementById('situation-text').textContent = '【降伏】徳川軍は軍を退き、敵軍の勝利となりました。天下の夢、ここに潰え候。';
-    setOrderMessage('【投了】徳川軍、降伏いたしました。', false);
+    document.getElementById('situation-text').textContent = '【降伏】真田軍は全軍退却を決断。天下統一の夢、ここに散り候。';
+    setOrderMessage('【投了】真田軍、降伏いたしました。<br>「対局開始」にて再起の陣を敷かれよ。', false);
   }
 }
 
 function showMasterHint() {
-  if (isGameOver || turn !== 'PLAYER') {
-    alert('対局中、自軍の手番のみ軍師のヒントを乞うことができます。');
-    return;
-  }
+  if (isGameOver || turn !== 'PLAYER') { alert('対局中、自軍の手番のみ軍師のヒントを乞うことができます。'); return; }
   playPieceSound();
-  setOrderMessage('【軍師思案】黒田官兵衛、最善の勝ち筋を計算中…', false);
+  setOrderMessage('【軍師思案】黒田官兵衛、最善の勝ち筋を計算中…<br>しばしお待ち下され。', false);
   aiWorker.postMessage({ board, hands, isHintRequest: true });
 }
 
-function openExplainModal(type) {
-  playPieceSound();
-  const titleEl = document.getElementById('explain-title');
-  const bodyEl = document.getElementById('explain-body');
-  if (type === 'book') {
-    titleEl.textContent = '定石・軍略の極意';
-    bodyEl.innerHTML = `
-      <p><b>【定石の布陣】</b><br>居飛車、四間飛車、角換わりなど、戦国天下を制する王道の定石を忠実に踏襲します。</p>
-      <p><b>【定石ハズレ後】</b><br>定石を外れた瞬間、AI軍師の深層読み思考モジュール（置換表探索）が自律作動します。</p>
-    `;
-  }
-  document.getElementById('explain-modal').style.display = 'flex';
-}
-function closeExplainModal() { playPieceSound(); document.getElementById('explain-modal').style.display = 'none'; }
-
 function openKifuModal() {
-  playPieceSound();
-  renderKifu();
-  drawEvalChart();
+  playPieceSound(); renderKifu(); drawEvalChart();
   document.getElementById('kifu-modal').style.display = 'flex';
 }
 function closeKifuModal() { playPieceSound(); document.getElementById('kifu-modal').style.display = 'none'; }
 
-/* 形勢推移チャート描画（HTML5 Canvas） */
 function drawEvalChart() {
-  const canvas = document.getElementById('chart-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const rect = canvas.getBoundingClientRect();
+  const canvas = document.getElementById('chart-canvas'); if (!canvas) return;
+  const ctx = canvas.getContext('2d'), rect = canvas.getBoundingClientRect();
   canvas.width = rect.width * window.devicePixelRatio || 400;
   canvas.height = rect.height * window.devicePixelRatio || 90;
   ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-
   const w = rect.width, h = rect.height;
   ctx.clearRect(0, 0, w, h);
 
-  // 中心線（互角ライン）
-  ctx.strokeStyle = 'rgba(255, 215, 0, 0.4)';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(0, h / 2);
-  ctx.lineTo(w, h / 2);
-  ctx.stroke();
+  ctx.strokeStyle = 'rgba(255, 215, 0, 0.4)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
 
-  // 上下ラベル
-  ctx.fillStyle = '#64b5f6'; ctx.font = '9px Klee One, serif'; ctx.fillText('自軍有利', 4, 12);
-  ctx.fillStyle = '#e57373'; ctx.fillText('敵軍有利', 4, h - 4);
-
+  ctx.fillStyle = '#ff6b6b'; ctx.font = '9px Shippori Mincho, serif'; ctx.fillText('真田軍有利', 4, 12);
+  ctx.fillStyle = '#64b5f6'; ctx.fillText('敵軍有利', 4, h - 4);
   if (evalScoresHistory.length <= 1) return;
 
-  const maxMoves = Math.max(10, evalScoresHistory.length - 1);
-  const stepX = w / maxMoves;
-  const maxScore = 2500;
-
+  const maxMoves = Math.max(10, evalScoresHistory.length - 1), stepX = w / maxMoves, maxScore = 2500;
   ctx.lineWidth = 2;
   const grad = ctx.createLinearGradient(0, 0, 0, h);
-  grad.addColorStop(0, '#448aff');
-  grad.addColorStop(0.5, '#ffd700');
-  grad.addColorStop(1, '#ff5252');
+  grad.addColorStop(0, '#ff4444'); grad.addColorStop(0.5, '#ffd700'); grad.addColorStop(1, '#448aff');
   ctx.strokeStyle = grad;
-
   ctx.beginPath();
   evalScoresHistory.forEach((score, i) => {
-    // スコアはAI視点（正=敵有利、負=プレイヤー有利）
-    // 画面上部を自軍有利（-score）にマッピング
     const clamped = Math.max(-maxScore, Math.min(maxScore, score));
-    const norm = (-clamped / maxScore) * 0.45; // -0.45〜0.45
-    const y = h / 2 - norm * h;
-    const x = i * stepX;
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
+    const y = h/2 - ((-clamped / maxScore) * 0.45) * h, x = i * stepX;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
   });
   ctx.stroke();
 }
 
 function renderBoard() {
   const boardEl = document.getElementById('board');
-  const cells = boardEl.querySelectorAll('.cell');
-  cells.forEach(c => c.remove());
+  boardEl.querySelectorAll('.cell').forEach(c => c.remove());
 
   for(let r=0; r<9; r++) {
     for(let c=0; c<9; c++) {
       const cell = document.createElement('div');
-      cell.className = 'cell';
-      cell.dataset.row = r; cell.dataset.col = c;
+      cell.className = 'cell'; cell.dataset.row = r; cell.dataset.col = c;
 
-      if(selectedPos && selectedPos.r === r && selectedPos.c === c) {
-        cell.classList.add('selected');
-      } else if(currentValidMoves.some(m => m.r === r && m.c === c)) {
-        cell.classList.add('target-move');
-      }
-      if(lastMoveTo && lastMoveTo.r === r && lastMoveTo.c === c) {
-        cell.classList.add('last-move');
-      }
-
-      if (hintSourceCell && hintSourceCell.r === r && hintSourceCell.c === c) cell.classList.add('hint-source');
-      if (hintTargetCell && hintTargetCell.r === r && hintTargetCell.c === c) cell.classList.add('hint-target');
+      if(selectedPos?.r === r && selectedPos?.c === c) cell.classList.add('selected');
+      else if(currentValidMoves.some(m => m.r === r && m.c === c)) cell.classList.add('target-move');
+      if(lastMoveTo?.r === r && lastMoveTo?.c === c) cell.classList.add('last-move');
+      if (hintSourceCell?.r === r && hintSourceCell?.c === c) cell.classList.add('hint-source');
+      if (hintTargetCell?.r === r && hintTargetCell?.c === c) cell.classList.add('hint-target');
 
       const item = board[r][c];
       if(item) {
         const pDiv = document.createElement('div');
         const isPromoted = PROMOTED_PIECES.includes(item.code);
         pDiv.className = `piece ${item.owner === 'PLAYER' ? 'player' : 'ai'} ${isPromoted ? 'promoted' : ''}`;
-        
         let pName = PIECES[item.code];
         if (item.code === 'OU') pName = (item.owner === 'PLAYER') ? '玉将' : '王将';
         pDiv.innerHTML = `<span>${pName[0]}</span><span>${pName[1] || ''}</span>`;
@@ -1993,20 +1932,15 @@ function renderHands() {
       if(count > 0) {
         const pDiv = document.createElement('div');
         pDiv.className = `hand-piece ${owner === 'PLAYER' ? 'player' : 'ai'}`;
-        if(selectedPos && selectedPos.handCode === code && owner === 'PLAYER') pDiv.classList.add('selected');
-        
+        if(selectedPos?.handCode === code && owner === 'PLAYER') pDiv.classList.add('selected');
         let pName = PIECES[code];
         pDiv.innerHTML = `<span>${pName[0]}</span><span>${pName[1] || ''}</span>`;
-
         if(count > 1) {
           const cSpan = document.createElement('span');
-          cSpan.className = 'hand-piece-count';
-          cSpan.textContent = count;
+          cSpan.className = 'hand-piece-count'; cSpan.textContent = count;
           pDiv.appendChild(cSpan);
         }
-        if(owner === 'PLAYER') {
-          pDiv.addEventListener('click', (e) => { e.stopPropagation(); handleHandClick(code); });
-        }
+        if(owner === 'PLAYER') pDiv.addEventListener('click', (e) => { e.stopPropagation(); handleHandClick(code); });
         container.appendChild(pDiv);
       }
     }
@@ -2014,84 +1948,63 @@ function renderHands() {
 }
 
 function renderKifu() {
-  const container = document.getElementById('kifu-list');
-  const streamBox = document.getElementById('kifu-stream');
-  container.innerHTML = '';
-  streamBox.innerHTML = '';
+  const container = document.getElementById('kifu-list'), streamBox = document.getElementById('kifu-stream');
+  container.innerHTML = ''; streamBox.innerHTML = '';
 
   if (moveObjectsHistory.length === 0) {
     container.textContent = '指し手はまだありませぬ。';
     streamBox.innerHTML = '<div class="kifu-item-cell">合戦の記録がここに連なります</div>';
     return;
   }
-
   moveObjectsHistory.forEach((m, idx) => {
-    const row = document.createElement('div');
-    const toC_arabic = ARABIC_NUMS[m.to.c];
-    const toR_kanji = KANJI_NUMS[m.to.r];
-    let desc = (m.type === 'drop') ? `${m.pieceName}打` : `${m.pieceName}(${9 - m.from.c}${m.from.r + 1})`;
-    const moveStr = `${idx + 1}. ${toC_arabic}${toR_kanji}${desc}`;
-    row.textContent = moveStr;
-    container.appendChild(row);
+    const moveStr = `${idx + 1}. ${ARABIC_NUMS[m.to.c]}${KANJI_NUMS[m.to.r]}${m.type === 'drop' ? m.pieceName + '打' : m.pieceName + `(${9 - m.from.c}${m.from.r + 1})`}`;
+    const row = document.createElement('div'); row.textContent = moveStr; container.appendChild(row);
 
     const itemCell = document.createElement('div');
     itemCell.className = `kifu-item-cell ${reviewingIndex === idx + 1 ? 'active-review' : ''}`;
-    itemCell.textContent = moveStr;
-    itemCell.onclick = () => jumpToKifuStep(idx + 1);
+    itemCell.textContent = moveStr; itemCell.onclick = () => jumpToKifuStep(idx + 1);
     streamBox.appendChild(itemCell);
   });
-
   container.scrollTop = container.scrollHeight;
   if (reviewingIndex === -1) streamBox.scrollLeft = streamBox.scrollWidth;
 }
 
-/* 棋譜再生検討機能 */
 function stepReview(delta) {
   if (historyStates.length <= 1) return;
   initAudio(); playPieceSound();
   if (reviewingIndex === -1) reviewingIndex = historyStates.length - 1;
-  let target = reviewingIndex + delta;
-  if (target < 0) target = 0;
-  if (target >= historyStates.length) target = historyStates.length - 1;
+  let target = Math.max(0, Math.min(historyStates.length - 1, reviewingIndex + delta));
   jumpToKifuStep(target);
 }
 
 function jumpToKifuStep(index) {
   if (index < 0 || index >= historyStates.length) return;
   reviewingIndex = index;
-  const targetState = historyStates[index];
-  board = cloneBoardState(targetState.board);
-  hands = JSON.parse(JSON.stringify(targetState.hands));
-  lastMoveTo = targetState.lastMoveTo ? {...targetState.lastMoveTo} : null;
+  const target = historyStates[index];
+  board = cloneBoardState(target.board);
+  hands = JSON.parse(JSON.stringify(target.hands));
+  lastMoveTo = target.lastMoveTo ? {...target.lastMoveTo} : null;
   selectedPos = null; currentValidMoves = [];
-  renderBoard();
-  renderKifu();
+  renderBoard(); renderKifu();
 
   if (index === historyStates.length - 1) {
     reviewingIndex = -1;
-    setOrderMessage('【最新局面】合戦の最新位置に復帰候。', turn === 'PLAYER');
+    setOrderMessage('【最新局面】合戦の最新位置に復帰候。<br>幸村公、次なる一手をお決め下され。', turn === 'PLAYER');
   } else {
-    setOrderMessage(`【合戦検討・${index}手目】過去の局面を閲覧中。（▶で最新へ）`, false);
+    setOrderMessage(`【合戦検討・${index}手目】過去の局面を閲覧中。<br>（▶で最新局面に進みます）`, false);
   }
 }
 
 function generateKifText() {
-  const padZero = (n) => String(n).padStart(2, '0');
+  const pad = (n) => String(n).padStart(2, '0');
   const d = gameStartTime || new Date();
-  const dateStr = `${d.getFullYear()}/${padZero(d.getMonth() + 1)}/${padZero(d.getDate())} ${padZero(d.getHours())}:${padZero(d.getMinutes())}:${padZero(d.getSeconds())}`;
-  const enemyName = WARLORDS_DATA[currentAiLevel].name;
-  let kif = `開始日時：${dateStr}\n手合割：平手\n先手：徳川家康\n後手：${enemyName}\n手数----指手---------消費時間--\n`;
+  const dateStr = `${d.getFullYear()}/${pad(d.getMonth() + 1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  let kif = `開始日時：${dateStr}\n手合割：平手\n先手：真田幸村\n後手：${WARLORDS_DATA[currentAiLevel].name}\n手数----指手---------消費時間--\n`;
   let lastTo = null;
   moveObjectsHistory.forEach((m, idx) => {
-    const moveNum = idx + 1;
-    const toC_arabic = ARABIC_NUMS[m.to.c];
-    const toR_kanji = KANJI_NUMS[m.to.r];
-    let moveStr = (lastTo && lastTo.r === m.to.r && lastTo.c === m.to.c) ? '同 ' : (toC_arabic + toR_kanji);
-    moveStr += m.pieceName;
-    if (m.type === 'drop') moveStr += '打';
-    else moveStr += `(${9 - m.from.c}${m.from.r + 1})`;
-    const numSpaces = moveNum < 10 ? '   ' : (moveNum < 100 ? '  ' : ' ');
-    kif += `${numSpaces}${moveNum} ${moveStr}\n`;
+    let moveStr = (lastTo && lastTo.r === m.to.r && lastTo.c === m.to.c) ? '同 ' : (ARABIC_NUMS[m.to.c] + KANJI_NUMS[m.to.r]);
+    moveStr += m.pieceName + (m.type === 'drop' ? '打' : `(${9 - m.from.c}${m.from.r + 1})`);
+    kif += `${String(idx + 1).padStart(4, ' ')} ${moveStr}\n`;
     lastTo = m.to;
   });
   kif += `まで${moveObjectsHistory.length}手で中断\n`;
@@ -2101,25 +2014,20 @@ function generateKifText() {
 function downloadKifu() {
   playPieceSound();
   if (moveObjectsHistory.length === 0) { alert('保存する棋譜がまだありませぬ。'); return; }
-  const kifuText = generateKifText();
-  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-  const blob = new Blob([kifuText], { type: 'text/plain;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `shogi_kifu_${dateStr}.kif`;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  const blob = new Blob([generateKifText()], { type: 'text/plain;charset=utf-8;' });
+  const url = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = url; a.download = `shogi_sanada_${new Date().toISOString().slice(0, 10)}.kif`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
 function handleHandClick(code) {
   if (isGameOver || turn !== 'PLAYER' || isAiThinking) return;
   if (reviewingIndex !== -1) jumpToKifuStep(historyStates.length - 1);
-  initAudio();
-  hintTargetCell = null; hintSourceCell = null;
+  initAudio(); hintTargetCell = null; hintSourceCell = null;
 
-  if(selectedPos && selectedPos.handCode === code) {
+  if(selectedPos?.handCode === code) {
     selectedPos = null; currentValidMoves = [];
-    setOrderMessage('【自軍手番】御屋形様、次なる一手をお決め下され。', true);
+    setOrderMessage('【自軍手番】幸村公、次なる一手をお決め下され。<br>真田赤備隊の気迫を見せつける刻に候！', true);
   } else {
     selectedPos = { handCode: code };
     currentValidMoves = getLegalMoves('PLAYER').filter(m => m.type === 'drop' && m.code === code).map(m => m.to);
@@ -2128,113 +2036,83 @@ function handleHandClick(code) {
   renderBoard();
 }
 
-function checkCanPromote(pieceCode, owner, fromR, toR) {
-  if (!PROMOTE_MAP[pieceCode]) return false;
-  return (owner === 'AI' ? (fromR >= 6 || toR >= 6) : (fromR <= 2 || toR <= 2));
-}
-
 function handleCellClick(e) {
   if (isGameOver || turn !== 'PLAYER' || isAiThinking) return;
   if (reviewingIndex !== -1) jumpToKifuStep(historyStates.length - 1);
-  initAudio();
-  hintTargetCell = null; hintSourceCell = null;
+  initAudio(); hintTargetCell = null; hintSourceCell = null;
 
-  const r = parseInt(e.currentTarget.dataset.row);
-  const c = parseInt(e.currentTarget.dataset.col);
+  const r = parseInt(e.currentTarget.dataset.row), c = parseInt(e.currentTarget.dataset.col);
   const target = board[r][c];
 
-  if(selectedPos && selectedPos.handCode) {
-    if(currentValidMoves.some(m => m.r === r && m.c === c)) {
-      executeMove({ type: 'drop', code: selectedPos.handCode, to: {r, c}, owner: 'PLAYER' });
-      selectedPos = null; currentValidMoves = [];
-      finishPlayerTurn();
-      return;
+  if(selectedPos?.handCode && currentValidMoves.some(m => m.r === r && m.c === c)) {
+    executeMove({ type: 'drop', code: selectedPos.handCode, to: {r, c}, owner: 'PLAYER' });
+    selectedPos = null; currentValidMoves = []; finishPlayerTurn(); return;
+  }
+
+  if(selectedPos?.r !== undefined && currentValidMoves.some(m => m.r === r && m.c === c)) {
+    const sr = selectedPos.r, sc = selectedPos.c, piece = board[sr][sc];
+    const canP = PROMOTE_MAP[piece.code] && (sr <= 2 || r <= 2);
+    const mustP = (piece.code === 'FU' || piece.code === 'KY') && r === 0 || (piece.code === 'KE' && r <= 1);
+
+    if(canP && !mustP) {
+      pendingMove = { type: 'move', from: {r: sr, c: sc}, to: {r, c}, owner: 'PLAYER' };
+      document.getElementById('promote-modal').style.display = 'flex'; return;
+    } else {
+      executeMove({ type: 'move', from: {r: sr, c: sc}, to: {r, c}, owner: 'PLAYER', promote: canP || mustP });
+      selectedPos = null; currentValidMoves = []; finishPlayerTurn(); return;
     }
   }
 
-  if(selectedPos && selectedPos.r !== undefined) {
-    if(currentValidMoves.some(m => m.r === r && m.c === c)) {
-      const sr = selectedPos.r, sc = selectedPos.c;
-      const piece = board[sr][sc];
-      const canPromote = checkCanPromote(piece.code, 'PLAYER', sr, r);
-      const mustPromote = (piece.code === 'FU' || piece.code === 'KY') && r === 0 || (piece.code === 'KE' && r <= 1);
-
-      if(canPromote && !mustPromote) {
-        pendingMove = { type: 'move', from: {r: sr, c: sc}, to: {r, c}, owner: 'PLAYER' };
-        document.getElementById('promote-modal').style.display = 'flex';
-        return;
-      } else {
-        executeMove({ type: 'move', from: {r: sr, c: sc}, to: {r, c}, owner: 'PLAYER', promote: canPromote || mustPromote });
-        selectedPos = null; currentValidMoves = [];
-        finishPlayerTurn();
-        return;
-      }
-    }
-  }
-
-  if(target && target.owner === 'PLAYER') {
+  if(target?.owner === 'PLAYER') {
     selectedPos = {r, c};
     currentValidMoves = getLegalMoves('PLAYER').filter(m => m.type === 'move' && m.from.r === r && m.from.c === c).map(m => m.to);
     setOrderMessage(`【選択中】${PIECES[target.code]}の進軍先（緑の陣）をお選び下され。`, true);
   } else {
     selectedPos = null; currentValidMoves = [];
-    setOrderMessage('【自軍手番】御屋形様、次なる一手をお決め下され。', true);
+    setOrderMessage('【自軍手番】幸村公、次なる一手をお決め下され。<br>真田赤備隊の気迫を見せつける刻に候！', true);
   }
   renderBoard();
 }
 
 document.getElementById('btn-promote-yes').addEventListener('click', () => {
   if(pendingMove) {
-    executeMove({...pendingMove, promote: true});
-    pendingMove = null; document.getElementById('promote-modal').style.display = 'none';
-    selectedPos = null; currentValidMoves = [];
-    finishPlayerTurn();
+    executeMove({...pendingMove, promote: true}); pendingMove = null;
+    document.getElementById('promote-modal').style.display = 'none';
+    selectedPos = null; currentValidMoves = []; finishPlayerTurn();
   }
 });
 document.getElementById('btn-promote-no').addEventListener('click', () => {
   if(pendingMove) {
-    executeMove({...pendingMove, promote: false});
-    pendingMove = null; document.getElementById('promote-modal').style.display = 'none';
-    selectedPos = null; currentValidMoves = [];
-    finishPlayerTurn();
+    executeMove({...pendingMove, promote: false}); pendingMove = null;
+    document.getElementById('promote-modal').style.display = 'none';
+    selectedPos = null; currentValidMoves = []; finishPlayerTurn();
   }
 });
 
 function finishPlayerTurn() {
-  renderBoard();
-  renderKifu();
-  const isCheckEnemy = isCheckState('AI');
-  if (isCheckEnemy) {
-    playCheckSound();
-    triggerCutin('敵将へ王手！ 覚悟めされよ！');
-    updateWarlordQuote('checked');
+  renderBoard(); renderKifu();
+  if (isCheckState('AI')) {
+    playCheckSound(); triggerCutin('敵将へ王手！ 覚悟めされよ！'); updateWarlordQuote('checked');
   }
-
   if(checkGameOver('AI')) return;
   turn = 'AI';
-  const enemyName = WARLORDS_DATA[currentAiLevel].name;
-  setOrderMessage(`【敵将思案】${enemyName}公、天下の軍略を巡らせ中…`, false);
+  setOrderMessage(`【敵将思案】${WARLORDS_DATA[currentAiLevel].name}公、天下の軍略を巡らせ中…<br>真田の陣営、油断召されるな！`, false);
   setTimeout(aiTurn, 100);
 }
 
 function executeMove(move) {
   const target = board[move.to.r][move.to.c];
   if(target?.code === 'OU') return;
-
   playPieceSound();
 
-  // 金粉着手エフェクトの付与
   setTimeout(() => {
-    const targetCell = document.querySelector(`.cell[data-row="${move.to.r}"][data-col="${move.to.c}"]`);
-    if (targetCell) {
-      targetCell.classList.add('sparkle');
-      setTimeout(() => targetCell.classList.remove('sparkle'), 650);
-    }
+    const tCell = document.querySelector(`.cell[data-row="${move.to.r}"][data-col="${move.to.c}"]`);
+    if (tCell) { tCell.classList.add('sparkle'); setTimeout(() => tCell.classList.remove('sparkle'), 650); }
   }, 10);
 
-  let pieceCodeToUse = move.type === 'drop' ? move.code : board[move.from.r][move.from.c].code;
-  if (move.promote) pieceCodeToUse = PROMOTE_MAP[pieceCodeToUse];
-  let pieceName = PIECES[pieceCodeToUse];
+  let pCode = move.type === 'drop' ? move.code : board[move.from.r][move.from.c].code;
+  if (move.promote) pCode = PROMOTE_MAP[pCode];
+  const pieceName = PIECES[pCode];
 
   if (move.type === 'drop') {
     hands[move.owner][move.code]--;
@@ -2245,8 +2123,7 @@ function executeMove(move) {
       const raw = UNPROMOTE_MAP[target.code];
       hands[move.owner][raw] = (hands[move.owner][raw] || 0) + 1;
       if (['HI', 'KA', 'RY', 'UM'].includes(target.code)) {
-        if (move.owner === 'PLAYER') updateWarlordQuote('checked');
-        else updateWarlordQuote('capture');
+        if (move.owner === 'PLAYER') updateWarlordQuote('checked'); else updateWarlordQuote('capture');
       }
     }
     if (move.promote) item.code = PROMOTE_MAP[item.code];
@@ -2254,363 +2131,244 @@ function executeMove(move) {
     board[move.from.r][move.from.c] = null;
   }
 
-  moveObjectsHistory.push({
-    type: move.type,
-    from: move.from ? {...move.from} : null,
-    to: {...move.to},
-    owner: move.owner,
-    pieceName: pieceName
-  });
-
+  moveObjectsHistory.push({ type: move.type, from: move.from ? {...move.from} : null, to: {...move.to}, owner: move.owner, pieceName });
   lastMoveTo = { r: move.to.r, c: move.to.c };
   const nextTurn = move.owner === 'PLAYER' ? 'AI' : 'PLAYER';
-  const isCheck = isCheckState(nextTurn);
 
   historyStates.push({
-    board: cloneBoardState(board),
-    hands: JSON.parse(JSON.stringify(hands)),
-    turn: nextTurn,
-    hash: getBoardLegacyHash(nextTurn),
-    isCheck: isCheck,
-    lastMoveTo: {...lastMoveTo},
+    board: cloneBoardState(board), hands: JSON.parse(JSON.stringify(hands)),
+    turn: nextTurn, lastMoveTo: {...lastMoveTo},
     moveObjectsHistory: JSON.parse(JSON.stringify(moveObjectsHistory))
   });
 }
 
 function undoMove() {
-  if (isGameOver) { playPieceSound(); alert('勝負が決した後は「待った」できませぬ。'); return; }
-  if (historyStates.length <= 1) { playPieceSound(); alert('初手以前には「待った」できませぬ。'); return; }
-
+  if (isGameOver || historyStates.length <= 1) { playPieceSound(); alert('これ以上「待った」はできませぬ。'); return; }
   playPieceSound();
   if (isAiThinking) { createNewWorker(); isAiThinking = false; }
 
-  let stepsToRewind = (turn === 'AI') ? 1 : ((historyStates.length === 2) ? 1 : 2);
-  for (let s = 0; s < stepsToRewind; s++) {
-    if (historyStates.length > 1) {
-      historyStates.pop();
-      if (evalScoresHistory.length > 1) evalScoresHistory.pop();
-    }
+  const steps = (turn === 'AI' || historyStates.length === 2) ? 1 : 2;
+  for (let s = 0; s < steps; s++) {
+    if (historyStates.length > 1) { historyStates.pop(); if (evalScoresHistory.length > 1) evalScoresHistory.pop(); }
   }
 
-  const targetState = historyStates[historyStates.length - 1];
-  board = cloneBoardState(targetState.board);
-  hands = JSON.parse(JSON.stringify(targetState.hands));
+  const target = historyStates[historyStates.length - 1];
+  board = cloneBoardState(target.board);
+  hands = JSON.parse(JSON.stringify(target.hands));
   turn = 'PLAYER';
-  lastMoveTo = targetState.lastMoveTo ? {...targetState.lastMoveTo} : null;
-  moveObjectsHistory = JSON.parse(JSON.stringify(targetState.moveObjectsHistory));
-
-  selectedPos = null; currentValidMoves = []; pendingMove = null;
-  hintTargetCell = null; hintSourceCell = null; reviewingIndex = -1;
+  lastMoveTo = target.lastMoveTo ? {...target.lastMoveTo} : null;
+  moveObjectsHistory = JSON.parse(JSON.stringify(target.moveObjectsHistory));
+  selectedPos = null; currentValidMoves = []; pendingMove = null; reviewingIndex = -1;
   document.getElementById('promote-modal').style.display = 'none';
 
-  isBookOut = false;
-  setOrderMessage('【待った行使】局面を戻し候。御屋形様、良手を再考下され。', true);
-  renderBoard();
-  renderKifu();
+  setOrderMessage('【待った行使】局面を戻し候。<br>幸村公、起死回生の妙手を再考下され。', true);
+  renderBoard(); renderKifu();
 }
 
-function checkMustPromote(pieceCode, owner, toR) {
-  if (owner === 'AI') return (pieceCode === 'FU' || pieceCode === 'KY') && toR === 8 || (pieceCode === 'KE' && toR >= 7);
-  else return (pieceCode === 'FU' || pieceCode === 'KY') && toR === 0 || (pieceCode === 'KE' && toR <= 1);
-}
+function isCheckState(owner) {
+  let kr = -1, kc = -1;
+  for(let r=0; r<9; r++) for(let c=0; c<9; c++) if(board[r][c]?.owner === owner && board[r][c]?.code === 'OU') { kr = r; kc = c; break; }
+  if(kr === -1) return true;
 
-function isPawnDropMateMain(move, owner) {
-  if (move.type !== 'drop' || move.code !== 'FU') return false;
-  const undo = simulateMakeMove(move);
-  const enemyOwner = owner === 'AI' ? 'PLAYER' : 'AI';
-  const inCheck = isCheckState(enemyOwner);
-  let isMate = false;
-  if (inCheck) {
-    const enemyMoves = getLegalMoves(enemyOwner);
-    if (enemyMoves.length === 0) isMate = true;
+  const enemy = owner === 'PLAYER' ? 'AI' : 'PLAYER', fwd = owner === 'PLAYER' ? -1 : 1;
+  if(kr + fwd >= 0 && kr + fwd < 9) {
+    const o = board[kr + fwd][kc]; if(o?.owner === enemy && (o.code === 'FU' || o.code === 'TO')) return true;
   }
-  simulateUnmakeMove(undo);
-  return isMate;
+  if(kr + fwd * 2 >= 0 && kr + fwd * 2 < 9) {
+    for (const dc of [-1, 1]) {
+      const o = board[kr + fwd * 2][kc + dc]; if(o?.owner === enemy && o.code === 'KE') return true;
+    }
+  }
+  const offs = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+  for (const [dr, dc] of offs) {
+    const nr = kr + dr, nc = kc + dc;
+    if(nr < 0 || nr >= 9 || nc < 0 || nc >= 9) continue;
+    const o = board[nr][nc]; if(!o || o.owner !== enemy) continue;
+    const c = o.code, efwd = enemy === 'AI' ? 1 : -1;
+    if (c === 'OU') return true;
+    if (['KI', 'TO', 'NY', 'NK', 'NG'].includes(c) && ((dr === -efwd) || (dr === 0 && Math.abs(dc) === 1) || (dr === efwd && dc === 0))) return true;
+    if (c === 'GI' && ((dr === -efwd) || (Math.abs(dr) === 1 && Math.abs(dc) === 1))) return true;
+    if (c === 'RY' && Math.abs(dr) === 1 && Math.abs(dc) === 1) return true;
+    if (c === 'UM' && (dr === 0 || dc === 0)) return true;
+  }
+  for (const [dr, dc] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+    let nr = kr + dr, nc = kc + dc;
+    while(nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
+      const o = board[nr][nc];
+      if(o) {
+        if(o.owner === enemy && (o.code === 'HI' || o.code === 'RY' || (o.code === 'KY' && dr === -(enemy === 'AI' ? 1 : -1) && dc === 0))) return true;
+        break;
+      }
+      nr += dr; nc += dc;
+    }
+  }
+  for (const [dr, dc] of [[-1,-1],[-1,1],[1,-1],[1,1]]) {
+    let nr = kr + dr, nc = kc + dc;
+    while(nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
+      const o = board[nr][nc];
+      if(o) { if(o.owner === enemy && (o.code === 'KA' || o.code === 'UM')) return true; break; }
+      nr += dr; nc += dc;
+    }
+  }
+  return false;
 }
 
 function getLegalMoves(owner) {
   const pseudo = [];
+  const dir = owner === 'AI' ? 1 : -1;
+  const canT = (r, c) => !board[r][c] || board[r][c].owner !== owner;
+
   for(let r=0; r<9; r++) {
     for(let c=0; c<9; c++) {
-      if(board[r][c] && board[r][c].owner === owner) {
-        const item = board[r][c];
-        getValidBoardMoves(r, c, owner).forEach(m => {
-          const canP = PROMOTE_MAP[item.code] && (checkCanPromote(item.code, owner, r, m.r));
-          const mustP = checkMustPromote(item.code, owner, m.r);
-          if (mustP) {
-            pseudo.push({ type: 'move', from: {r, c}, to: m, owner, promote: true });
-          } else if (canP) {
-            pseudo.push({ type: 'move', from: {r, c}, to: m, owner, promote: true });
-            pseudo.push({ type: 'move', from: {r, c}, to: m, owner, promote: false });
-          } else {
-            pseudo.push({ type: 'move', from: {r, c}, to: m, owner, promote: false });
+      if(board[r][c]?.owner === owner) {
+        const item = board[r][c], moves = [];
+        const ray = dirs => dirs.forEach(([dr, dc]) => {
+          let nr = r + dr, nc = c + dc;
+          while (nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
+            if (!board[nr][nc]) moves.push({r: nr, c: nc});
+            else { if (canT(nr, nc)) moves.push({r: nr, c: nc}); break; }
+            nr += dr; nc += dc;
           }
+        });
+        const step = offs => offs.forEach(([dr, dc]) => {
+          const nr = r + dr, nc = c + dc;
+          if (nr >= 0 && nr < 9 && nc >= 0 && nc < 9 && canT(nr, nc)) moves.push({r: nr, c: nc});
+        });
+        const gold = [[dir, -1], [dir, 0], [dir, 1], [0, -1], [0, 1], [-dir, 0]];
+        switch(item.code) {
+          case 'FU': step([[dir, 0]]); break;
+          case 'KY': ray([[dir, 0]]); break;
+          case 'KE': step([[dir * 2, -1], [dir * 2, 1]]); break;
+          case 'GI': step([[dir, -1], [dir, 0], [dir, 1], [-dir, -1], [-dir, 1]]); break;
+          case 'KI': case 'TO': case 'NY': case 'NK': case 'NG': step(gold); break;
+          case 'OU': step([[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]); break;
+          case 'HI': ray([[-1,0],[1,0],[0,-1],[0,1]]); break;
+          case 'KA': ray([[-1,-1],[-1,1],[1,-1],[1,1]]); break;
+          case 'RY': ray([[-1,0],[1,0],[0,-1],[0,1]]); step([[-1,-1],[-1,1],[1,-1],[1,1]]); break;
+          case 'UM': ray([[-1,-1],[-1,1],[1,-1],[1,1]]); step([[-1,0],[1,0],[0,-1],[0,1]]); break;
+        }
+
+        moves.forEach(m => {
+          const inCamp = owner === 'AI' ? (r >= 6 || m.r >= 6) : (r <= 2 || m.r <= 2);
+          const canP = PROMOTE_MAP[item.code] && inCamp;
+          const mustP = owner === 'AI' ? ((item.code === 'FU' || item.code === 'KY') && m.r === 8 || (item.code === 'KE' && m.r >= 7))
+                                       : ((item.code === 'FU' || item.code === 'KY') && m.r === 0 || (item.code === 'KE' && m.r <= 1));
+          if (mustP) pseudo.push({ type: 'move', from: {r, c}, to: m, owner, promote: true });
+          else if (canP) {
+            pseudo.push({ type: 'move', from: {r, c}, to: m, owner, promote: true });
+            pseudo.push({ type: 'move', from: {r, c}, to: m, owner, promote: false });
+          } else pseudo.push({ type: 'move', from: {r, c}, to: m, owner, promote: false });
         });
       }
     }
   }
+
   for(let code in hands[owner]) {
     if(hands[owner][code] > 0) {
-      getValidDropMoves(code, owner).forEach(d => {
-        const dropMove = { type: 'drop', code, to: d, owner };
-        if (code === 'FU') {
-          if (!isPawnDropMateMain(dropMove, owner)) pseudo.push(dropMove);
-        } else {
-          pseudo.push(dropMove);
+      for(let r=0; r<9; r++) {
+        if((code === 'FU' || code === 'KY') && ((owner === 'AI' && r === 8) || (owner === 'PLAYER' && r === 0))) continue;
+        if(code === 'KE' && ((owner === 'AI' && r >= 7) || (owner === 'PLAYER' && r <= 1))) continue;
+        for(let c=0; c<9; c++) {
+          if(!board[r][c]) {
+            if(code === 'FU') {
+              let nifu = false;
+              for(let kr=0; kr<9; kr++) if(board[kr][c]?.owner === owner && board[kr][c]?.code === 'FU') { nifu = true; break; }
+              if(nifu) continue;
+            }
+            pseudo.push({ type: 'drop', code, to: {r, c}, owner });
+          }
         }
-      });
+      }
     }
   }
+
   return pseudo.filter(m => {
-    const undo = simulateMakeMove(m);
+    let undo;
+    if (m.type === 'drop') {
+      hands[m.owner][m.code]--; board[m.to.r][m.to.c] = { code: m.code, owner: m.owner };
+      undo = () => { hands[m.owner][m.code]++; board[m.to.r][m.to.c] = null; };
+    } else {
+      const item = board[m.from.r][m.from.c], target = board[m.to.r][m.to.c], prevCode = item.code;
+      if (target && target.code !== 'OU') hands[m.owner][UNPROMOTE_MAP[target.code]] = (hands[m.owner][UNPROMOTE_MAP[target.code]] || 0) + 1;
+      if (m.promote) item.code = PROMOTE_MAP[item.code];
+      board[m.to.r][move.to.c] = item; board[m.from.r][m.from.c] = null;
+      undo = () => {
+        item.code = prevCode; board[m.from.r][m.from.c] = item;
+        board[m.to.r][m.to.c] = target;
+        if (target && target.code !== 'OU') hands[m.owner][UNPROMOTE_MAP[target.code]]--;
+      };
+    }
     const safe = !isCheckState(owner);
-    simulateUnmakeMove(undo);
+    undo();
     return safe;
   });
 }
 
-function simulateMakeMove(move) {
-  const undo = { move };
-  if (move.type === 'drop') {
-    hands[move.owner][move.code]--;
-    board[move.to.r][move.to.c] = { code: move.code, owner: move.owner };
-  } else {
-    const item = board[move.from.r][move.from.c];
-    const target = board[move.to.r][move.to.c];
-    undo.fromCode = item.code;
-    if (target) {
-      undo.capturedCode = target.code;
-      if (target.code !== 'OU') {
-        const raw = UNPROMOTE_MAP[target.code];
-        undo.capturedRaw = raw;
-        hands[move.owner][raw] = (hands[move.owner][raw] || 0) + 1;
-      }
-    }
-    if (move.promote) item.code = PROMOTE_MAP[item.code];
-    board[move.to.r][move.to.c] = item;
-    board[move.from.r][move.from.c] = null;
-  }
-  return undo;
-}
-
-function simulateUnmakeMove(undo) {
-  const move = undo.move;
-  if (move.type === 'drop') {
-    hands[move.owner][move.code]++;
-    board[move.to.r][move.to.c] = null;
-  } else {
-    const item = board[move.to.r][move.to.c];
-    item.code = undo.fromCode;
-    board[move.from.r][move.from.c] = item;
-    if (undo.capturedCode) {
-      const enemy = move.owner === 'AI' ? 'PLAYER' : 'AI';
-      board[move.to.r][move.to.c] = { code: undo.capturedCode, owner: enemy };
-      if (undo.capturedRaw) hands[move.owner][undo.capturedRaw]--;
-    } else {
-      board[move.to.r][move.to.c] = null;
-    }
-  }
-}
-
-function findKingPosMain(owner) {
-  for(let r=0; r<9; r++) {
-    for(let c=0; c<9; c++) {
-      if(board[r][c] && board[r][c].owner === owner && board[r][c].code === 'OU') return {r, c};
-    }
-  }
-  return null;
-}
-
-function isCheckState(owner) {
-  const kingPos = findKingPosMain(owner);
-  if(!kingPos) return true;
-
-  const enemy = owner === 'PLAYER' ? 'AI' : 'PLAYER';
-  for(let r=0; r<9; r++) {
-    for(let c=0; c<9; c++) {
-      if(board[r][c] && board[r][c].owner === enemy) {
-        if(getValidBoardMoves(r, c, enemy, true).some(m => m.r === kingPos.r && m.c === kingPos.c)) return true;
-      }
-    }
-  }
-  return false;
-}
-
-function getValidDropMoves(code, owner) {
-  const moves = [];
-  for(let r=0; r<9; r++) {
-    if((code === 'FU' || code === 'KY') && ((owner === 'AI' && r === 8) || (owner === 'PLAYER' && r === 0))) continue;
-    if(code === 'KE' && ((owner === 'AI' && r >= 7) || (owner === 'PLAYER' && r <= 1))) continue;
-    for(let c=0; c<9; c++) {
-      if(board[r][c] === null) {
-        if(code === 'FU') {
-          let hasFu = false;
-          for(let kr=0; kr<9; kr++) {
-            if(board[kr][c] && board[kr][c].owner === owner && board[kr][c].code === 'FU') { hasFu = true; break; }
-          }
-          if(hasFu) continue;
-        }
-        moves.push({r, c});
-      }
-    }
-  }
-  return moves;
-}
-
-function getValidBoardMoves(r, c, owner, isChecking = false) {
-  const item = board[r][c];
-  if(!item) return [];
-  const dir = owner === 'AI' ? 1 : -1;
-  const moves = [];
-
-  const canTarget = (nr, nc) => {
-    if(!board[nr][nc]) return true;
-    if(board[nr][nc].owner !== owner) {
-      if(!isChecking && board[nr][nc].code === 'OU') return false;
-      return true;
-    }
-    return false;
-  };
-
-  const addRay = (dirs) => {
-    for(let [dr, dc] of dirs) {
-      let nr = r + dr, nc = c + dc;
-      while(nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
-        if(!board[nr][nc]) moves.push({r: nr, c: nc});
-        else {
-          if(canTarget(nr, nc)) moves.push({r: nr, c: nc});
-          break;
-        }
-        nr += dr; nc += dc;
-      }
-    }
-  };
-
-  const addStep = (offsets) => {
-    for(let [dr, dc] of offsets) {
-      let nr = r + dr, nc = c + dc;
-      if(nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
-        if(canTarget(nr, nc)) moves.push({r: nr, c: nc});
-      }
-    }
-  };
-
-  const gold = [[dir, -1], [dir, 0], [dir, 1], [0, -1], [0, 1], [-dir, 0]];
-  switch(item.code) {
-    case 'FU': addStep([[dir, 0]]); break;
-    case 'KY': addRay([[dir, 0]]); break;
-    case 'KE': addStep([[dir * 2, -1], [dir * 2, 1]]); break;
-    case 'GI': addStep([[dir, -1], [dir, 0], [dir, 1], [-dir, -1], [-dir, 1]]); break;
-    case 'KI': case 'TO': case 'NY': case 'NK': case 'NG': addStep(gold); break;
-    case 'OU': addStep([[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]); break;
-    case 'HI': addRay([[-1,0],[1,0],[0,-1],[0,1]]); break;
-    case 'KA': addRay([[-1,-1],[-1,1],[1,-1],[1,1]]); break;
-    case 'RY': addRay([[-1,0],[1,0],[0,-1],[0,1]]); addStep([[-1,-1],[-1,1],[1,-1],[1,1]]); break;
-    case 'UM': addRay([[-1,-1],[-1,1],[1,-1],[1,1]]); addStep([[-1,0],[1,0],[0,-1],[0,1]]); break;
-  }
-  return moves;
-}
-
 function aiTurn() {
   if (isGameOver) return;
-  const bookMove = getBookMoveForAI();
-  if (bookMove) {
-    executeMove(bookMove);
-    evalScoresHistory.push(0);
-    renderBoard();
-    renderKifu();
+  if (!isBookOut && currentAiLevel >= 3 && OPENING_BOOK['START_AI_SENTE'] && moveObjectsHistory.length === 0) {
+    const list = OPENING_BOOK['START_AI_SENTE'];
+    const chosen = list[Math.floor(Math.random() * list.length)];
+    executeMove(chosen); evalScoresHistory.push(0);
+    renderBoard(); renderKifu();
     if(!checkGameOver('PLAYER')) {
       turn = 'PLAYER';
-      setOrderMessage('【自軍手番】御屋形様、次なる一手をお決め下され。', true);
-      const isCheck = isCheckState('PLAYER');
-      if(isCheck) {
-        playCheckSound();
-        triggerCutin('敵の奇襲！ 御屋形様、お逃げあれ！');
-        updateWarlordQuote('check');
-      }
+      setOrderMessage('【自軍手番】幸村公、次なる一手をお決め下され。<br>真田赤備隊の気迫を見せつける刻に候！', true);
     }
     return;
   }
-
-  isBookOut = true;
-  isAiThinking = true;
-  const enemyName = WARLORDS_DATA[currentAiLevel].name;
-  setOrderMessage(`【敵将思案】${enemyName}公、天下の軍略を巡らせ中…`, false);
+  isBookOut = true; isAiThinking = true;
+  setOrderMessage(`【敵将思案】${WARLORDS_DATA[currentAiLevel].name}公、天下の軍略を巡らせ中…<br>真田の陣営、油断召されるな！`, false);
   aiWorker.postMessage({ board, hands, level: currentAiLevel });
 }
 
 function checkGameOver(nextTurnOwner) {
-  const currentHash = getBoardLegacyHash(nextTurnOwner);
-  let sameCount = 0;
-  let checkCountPlayer = 0, checkCountAI = 0;
-
-  for (let i = 0; i < historyStates.length; i++) {
-    if (historyStates[i].hash === currentHash) sameCount++;
-    if (historyStates[i].isCheck) {
-      if (historyStates[i].turn === 'AI') checkCountPlayer++;
-      else checkCountAI++;
-    }
-  }
-
-  if (sameCount >= 4) {
-    isGameOver = true;
-    playVictorySound();
-    if (checkCountPlayer >= 3) {
-      triggerCutin('連続王手の反則！ 徳川軍の敗北…');
-      document.getElementById('situation-text').textContent = '【反則負け】同一局面4回中、自軍が連続王手をかけていたため反則敗戦となりました。';
-      setOrderMessage('【連続王手反則】徳川軍、反則負けに候。', false);
-    } else if (checkCountAI >= 3) {
-      const enemyName = WARLORDS_DATA[currentAiLevel].name;
-      triggerCutin(`敵将の連続王手！ ${enemyName}反則負け！`);
-      document.getElementById('situation-text').textContent = `【大勝利！】敵将・${enemyName}が連続王手千日手の反則を侵し、自軍の勝ちとなりました！`;
-      setOrderMessage(`【敵将反則】${enemyName}の反則負けに候！`, false);
-      saveProgress(currentAiLevel);
-    } else {
-      triggerCutin('四度同じ布陣！ 和睦成立！');
-      document.getElementById('situation-text').textContent = '【千日手引き分け】同一布陣が四度現れ、両雄相譲らず和睦となりました。';
-      setOrderMessage('【和睦成立】千日手により引き分けに候。', false);
-    }
-    return true;
-  }
-
   if (getLegalMoves(nextTurnOwner).length === 0) {
     isGameOver = true;
     playVictorySound();
     const isPlayerWin = (nextTurnOwner === 'AI');
-    const enemyName = WARLORDS_DATA[currentAiLevel].name;
+    const foughtEnemyName = WARLORDS_DATA[currentAiLevel].name;
 
     if (isPlayerWin) {
       saveProgress(currentAiLevel);
-      triggerCutin(`敵将・${enemyName}、討ち取ったり！`);
-      
+      launchFireworksCelebration();
+      triggerCutin(`敵将・${foughtEnemyName}、討ち取ったり！`, true);
+
       if (currentAiLevel < 10) {
         const nextLvl = currentAiLevel + 1;
-        const nextEnemy = WARLORDS_DATA[nextLvl].name;
-        document.getElementById('situation-text').textContent = `【大勝利！】敵将・${enemyName}を討ち取ったり！ 次なる敵将「${nextEnemy} (Lv.${nextLvl})」が名乗りを上げ候！`;
-        setOrderMessage(`【天下統一へ前進】次なる敵将「${nextEnemy}」との合戦に備えよ！`, false);
+        const nextEnemyName = WARLORDS_DATA[nextLvl].name;
+        document.getElementById('situation-text').textContent = `【大勝利！】敵将・${foughtEnemyName}を見事討ち取ったり！ 次なる敵将「${nextEnemyName} (Lv.${nextLvl})」が真田軍の前に立ちはだかり候！`;
+        setOrderMessage(`【大勝利！】敵将・${foughtEnemyName}を討ち取ったり！<br>次なる敵将「${nextEnemyName}」との決戦に備えよ！`, false);
         setTimeout(() => {
           setAiLevel(nextLvl, false);
-        }, 2200);
+          setOrderMessage(`【次戦解放】敵将「${nextEnemyName} (Lv.${nextLvl})」へ挑戦可能！<br>「対局開始」を押し、いざ出陣されよ！`, false);
+        }, 3600);
       } else {
-        document.getElementById('situation-text').textContent = `【天下統一・完全制覇！】神君・徳川家康をも打ち破り、天下泰平の世を築き上げたり！ 万歳！`;
-        setOrderMessage('【天下統一達成】天下無双の覇王となられたり！', false);
+        document.getElementById('situation-text').textContent = `【天下統一・完全制覇！】神君・徳川家康をも討ち破り、真田日本一の武名を天下に轟かせたり！ 天下泰平の世ここに成る！`;
+        setOrderMessage('【天下統一達成！】徳川家康を打ち破り、真田幸村公が天下の頂に立たれたり！<br>あっぱれ、天下無双の覇王に候！', false);
       }
     } else {
       triggerCutin('無念… ここまでか…');
-      document.getElementById('situation-text').textContent = `【敗北…】本陣が討ち取られ候。無念の敗戦、天下の行方は${enemyName}の手に…`;
-      setOrderMessage('【合戦決着】本陣陥落。再起を期して挑まれよ。', false);
+      document.getElementById('situation-text').textContent = `【敗北…】真田本陣が討ち取られ候。無念の敗戦、天下の行方は${foughtEnemyName}の手に…`;
+      setOrderMessage(`【本陣陥落】${foughtEnemyName}に敗れ候。<br>「対局開始」を押し、雪辱を果たすべく再起されよ！`, false);
     }
     return true;
   }
   return false;
 }
 
-// 初期化実行
+document.addEventListener('click', () => { initAudio(); }, { once: true });
+document.addEventListener('touchstart', () => { initAudio(); }, { once: true });
+
 loadProgress();
 setAiLevel(currentAiLevel, false);
 initBoardState();
 renderBoard();
 renderKifu();
+
+/* 初回プレイ判定案内自動起動 */
+checkFirstVisitGuide();
 </script>
 </body>
 </html>
+
