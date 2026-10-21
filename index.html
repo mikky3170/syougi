@@ -50,21 +50,21 @@
     position: fixed; inset: 0; pointer-events: none; z-index: 2800;
   }
 
-  /* 最上部：金覆輪・彫金大名ヘッダー */
+  /* 最上部：金覆輪・彫金大名ヘッダー（機能純化） */
   .top-header {
     width: 100%; max-width: 500px; height: 38px;
     display: flex; justify-content: space-between; align-items: center;
     border: 2px solid #e0b034; border-radius: 5px;
     background: linear-gradient(180deg, #2b1307 0%, #120601 50%, #220d04 100%);
     box-shadow: 0 3px 10px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255, 240, 160, 0.5), inset 0 0 8px rgba(255,215,0,0.25);
-    padding: 2px 5px; flex-shrink: 0; position: relative; gap: 4px;
+    padding: 2px 6px; flex-shrink: 0; position: relative; gap: 4px;
   }
   .app-title-group {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     flex: 1; min-width: 0; padding: 0 2px;
   }
   .app-title-main {
-    font-size: 15.5px; letter-spacing: 2px; font-weight: 900;
+    font-size: 16px; letter-spacing: 2px; font-weight: 900;
     margin: 0; line-height: 1.05;
     background: var(--gold-rich);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -76,17 +76,15 @@
     color: #f7e2a8; text-shadow: 0 1px 3px #000, 0 0 6px #ffb300; margin: 0; line-height: 1.1;
   }
 
-  .header-actions { display: flex; gap: 3px; flex-shrink: 0; }
+  .header-actions { display: flex; gap: 4px; flex-shrink: 0; }
   .header-btn {
-    font-family: var(--kaisho-font); font-size: 9.5px; font-weight: 900;
-    padding: 3px 6px; border-radius: 4px; border: 1.2px solid #e5b338;
+    font-family: var(--kaisho-font); font-size: 10px; font-weight: 900;
+    padding: 3px 8px; border-radius: 4px; border: 1.2px solid #e5b338;
     color: #fff3c4; cursor: pointer;
     box-shadow: 0 2px 5px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,245,180,0.4);
     text-shadow: 0 1px 2px #000; white-space: nowrap;
   }
   .header-btn:active { transform: translateY(1px); }
-  .btn-warlord { background: linear-gradient(180deg, #7a1515 0%, #3a0505 100%); border-color: #ff9999; color: #ffe8e8; }
-  .btn-lvl { background: linear-gradient(180deg, #593112 0%, #261204 100%); }
   .btn-guide { background: linear-gradient(180deg, #664311 0%, #301f05 100%); border-color: #ffd700; color: #ffefa8; }
   .btn-kifu { background: linear-gradient(180deg, #1b3a57 0%, #0c1a29 100%); border-color: #5ea8e6; color: #d8eeff; }
   .btn-snd { background: linear-gradient(180deg, #442a4f 0%, #1f1124 100%); border-color: #b97de6; color: #f2e1ff; }
@@ -124,10 +122,29 @@
   .warlord-avatar svg { width: 92%; height: 92%; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.9)); }
 
   .warlord-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; text-align: left; }
-  .warlord-name-row { display: flex; align-items: center; gap: 4px; }
-  .crest-icon-mini { width: 14px; height: 14px; fill: #ffd700; flex-shrink: 0; }
-  .warlord-name { font-size: 13.5px; font-weight: 900; color: #ffe699; letter-spacing: 1px; }
-  .warlord-clan { font-size: 9px; color: #d6be89; font-weight: 700; line-height: 1.1; }
+  .warlord-name-row { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
+  .name-left-group { display: flex; align-items: center; gap: 4px; min-width: 0; }
+  .crest-icon-mini { width: 13px; height: 13px; fill: #ffd700; flex-shrink: 0; }
+  .warlord-name { font-size: 13.5px; font-weight: 900; color: #ffe699; letter-spacing: 0.8px; white-space: nowrap; }
+  
+  /* パネル内埋め込み：武将変更小判ボタン */
+  .panel-select-btn {
+    font-family: var(--kaisho-font); font-size: 8.5px; font-weight: 900;
+    padding: 1.5px 6px; border-radius: 3px; cursor: pointer; white-space: nowrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.4);
+    text-shadow: 0 1px 2px #000; display: flex; align-items: center; gap: 2px;
+  }
+  .panel-select-btn:active { transform: translateY(1px); }
+  .btn-select-enemy {
+    background: linear-gradient(180deg, #593112 0%, #220c02 100%);
+    border: 1px solid #ffd700; color: #ffe899;
+  }
+  .btn-select-player {
+    background: linear-gradient(180deg, #8a1515 0%, #300505 100%);
+    border: 1px solid #ff9999; color: #ffffff;
+  }
+
+  .warlord-clan { font-size: 8.8px; color: #d6be89; font-weight: 700; line-height: 1.1; }
   
   /* 武将セリフ枠 ＆ 激熱パルス点滅 */
   .warlord-quote {
@@ -142,7 +159,7 @@
   }
   .warlord-quote.quote-climax {
     animation: climax-glow-pulse 0.6s infinite ease-in-out !important;
-    font-size: 10px !important; font-weight: 900 !important;
+    font-size: 9.8px !important; font-weight: 900 !important;
     background: linear-gradient(90deg, #fffbe0, #ffd700, #ff3b30);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
@@ -654,31 +671,32 @@
 <canvas id="celebration-canvas"></canvas>
 <audio id="bgm-audio" src="nobunaga_song.mp3" loop preload="auto"></audio>
 
-<!-- 最上部：彫金大名ヘッダー -->
+<!-- 最上部：金覆輪ヘッダー（機能純化） -->
 <div class="top-header">
   <div class="header-actions">
-    <button class="header-btn btn-warlord" onclick="openPlayerWarlordModal()" id="btn-header-player">🪭 自将選択</button>
-    <button class="header-btn btn-lvl" onclick="openLevelSelectModal()" id="btn-header-level">⚙ 天下統一 Lv.1</button>
+    <button class="header-btn btn-guide" onclick="openGuideModal('tutorial')">📜 指南</button>
   </div>
   <div class="app-title-group">
     <h1 class="app-title-main">将棋王 2026</h1>
     <div class="app-title-sub">〜 天下統一・戦国決戦 〜</div>
   </div>
   <div class="header-actions">
-    <button class="header-btn btn-guide" onclick="openGuideModal('tutorial')">📜 指南</button>
     <button class="header-btn btn-kifu" onclick="openKifuModal()">📖 棋譜</button>
     <button class="header-btn btn-snd" id="sound-toggle" onclick="toggleSound()">♪ 音ON</button>
   </div>
 </div>
 
 <div class="main-wrapper">
-  <!-- 敵将エリア -->
+  <!-- 敵将エリア（敵将変更ボタンをパネル内に直感配置） -->
   <div class="warlord-panel" id="ai-panel">
     <div class="warlord-avatar" id="ai-avatar-container" onclick="openLevelSelectModal()" title="敵将変更"></div>
     <div class="warlord-info">
       <div class="warlord-name-row">
-        <svg class="crest-icon-mini" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#ffd700" stroke-width="8"/><circle cx="50" cy="50" r="16" fill="#ffd700"/></svg>
-        <span class="warlord-name" id="ai-name-disp">木下藤吉郎</span>
+        <div class="name-left-group">
+          <svg class="crest-icon-mini" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#ffd700" stroke-width="8"/><circle cx="50" cy="50" r="16" fill="#ffd700"/></svg>
+          <span class="warlord-name" id="ai-name-disp">木下藤吉郎</span>
+        </div>
+        <button class="panel-select-btn btn-select-enemy" onclick="openLevelSelectModal()" id="btn-enemy-change">⚙ 敵将変更</button>
       </div>
       <div class="warlord-clan" id="ai-clan-disp">織田足軽隊｜後の天下人 (Lv.1)</div>
       <div class="warlord-quote" id="ai-quote-disp">「猿と呼ばれても、負けはしませぬ！」</div>
@@ -734,16 +752,19 @@
   <!-- 合戦伝令メッセージ帯 -->
   <div class="order-message-banner" id="order-message-banner">
     <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
-    <div class="order-message-text" id="order-message-text">「対局開始」を押し、天運の振り駒を執り行われよ。<br>天下統一の初陣に候！</div>
+    <div class="order-message-text" id="order-message-text">【初陣の刻】上下のパネルより「自将」と「敵将」を選定されよ。<br>陣容が定まり次第、「対局開始」にて振り駒を執り行われよ！</div>
   </div>
 
-  <!-- 自将エリア -->
+  <!-- 自将エリア（自将変更ボタンをパネル内に直感配置） -->
   <div class="warlord-panel" id="player-panel">
-    <div class="warlord-avatar" id="player-avatar-container" onclick="openPlayerWarlordModal()" title="武将変更"></div>
+    <div class="warlord-avatar" id="player-avatar-container" onclick="openPlayerWarlordModal()" title="自将変更"></div>
     <div class="warlord-info">
       <div class="warlord-name-row">
-        <svg class="crest-icon-mini" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
-        <span class="warlord-name" id="player-name-disp">真田幸村</span>
+        <div class="name-left-group">
+          <svg class="crest-icon-mini" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
+          <span class="warlord-name" id="player-name-disp">真田幸村</span>
+        </div>
+        <button class="panel-select-btn btn-select-player" onclick="openPlayerWarlordModal()" id="btn-player-change">🪭 自将変更</button>
       </div>
       <div class="warlord-clan" id="player-clan-disp">真田赤備隊 ｜ 日本一の兵</div>
       <div class="warlord-quote" id="player-quote-disp">「不惜身命！ この一手に命を懸ける！」</div>
@@ -1152,7 +1173,7 @@ function negamax(depth, alpha, beta, owner) {
     const undo = makeMove(moves[i]);
     const score = -negamax(depth - 1, -beta, -alpha, nextOwner);
     unmakeMove(undo);
-    if (isSearchTimeout) return bestVal;
+    if (isSearchTimeout) break;
     if (score > bestVal) bestVal = score;
     if (score > alpha) alpha = score;
     if (alpha >= beta) break;
@@ -1231,7 +1252,7 @@ const bgmAudio = document.getElementById('bgm-audio');
 if (bgmAudio) bgmAudio.volume = 0.35;
 
 /* 陣太鼓（Web Audio API 戦況連動） */
-let drumInterval = null, drumType = 'normal'; // 'normal', 'advantage', 'pinch'
+let drumInterval = null, drumType = 'normal';
 
 function playTaikoHit(isDon = true) {
   if (!soundEnabled || !audioCtx) return;
@@ -1254,14 +1275,12 @@ function updateBattleDrums(status) {
   if (!soundEnabled) return;
 
   if (status === 'advantage') {
-    // 優勢：ドドン！と高揚する進撃太鼓
     drumInterval = setInterval(() => {
       playTaikoHit(true);
       setTimeout(() => playTaikoHit(false), 160);
       setTimeout(() => playTaikoHit(true), 320);
     }, 2800);
   } else if (status === 'pinch') {
-    // 劣勢・王手：切迫の連打太鼓
     drumInterval = setInterval(() => {
       playTaikoHit(true);
       setTimeout(() => playTaikoHit(false), 120);
@@ -1754,7 +1773,6 @@ function setPlayerWarlord(wId, notify = true) {
   document.getElementById('player-name-disp').textContent = pData.name;
   document.getElementById('player-clan-disp').textContent = pData.clan;
   document.getElementById('player-quote-disp').textContent = pData.quotes.default;
-  document.getElementById('btn-header-player').textContent = `🪭 ${pData.name}`;
 
   const av = document.getElementById('player-avatar-container');
   av.style.background = pData.bgGrad;
@@ -1799,7 +1817,7 @@ function setAiLevel(lvl, notify = true) {
   document.getElementById('ai-quote-disp').textContent = data.quotes.default;
   document.getElementById('ai-power-disp').textContent = data.power;
   document.getElementById('ai-avatar-container').innerHTML = `<svg viewBox="0 0 100 100">${data.crestSvg}</svg>`;
-  document.getElementById('btn-header-level').textContent = `⚙ 天下統一 Lv.${currentAiLevel}`;
+  document.getElementById('btn-enemy-change').textContent = `⚙ 敵将 (Lv.${currentAiLevel})`;
   closeLevelModal();
   if (notify) setOrderMessage(`【軍略変更】敵将に「${data.name} (Lv.${currentAiLevel})」が着陣仕候！<br>「対局開始」にて振り駒を執り行われよ。`, false);
 }
@@ -1853,14 +1871,15 @@ function switchGuideTab(tab) {
   if (tab === 'tutorial') {
     contentBox.innerHTML = `
       <div class="guide-section-box">
-        <h4><span class="guide-step-tag">壱</span> 天下統一への道（主役五傑の勝ち抜き合戦）</h4>
-        殿は<b>真田幸村・前田慶次・伊達政宗・直江兼続・本多忠勝</b>の中から我が分身となる武将を選び、天下を獲る戦いへ挑みます！<br>
-        敵将はLv.1の<b>木下藤吉郎</b>から始まり、歴戦の豪傑を討ち取るごとに次なる難敵が解放。最終戦の覇王<b>徳川家康</b>を破り天下統一を成し遂げられよ！
+        <h4><span class="guide-step-tag">壱</span> 自陣と敵陣の武将選定（主役五傑 vs 十大名）</h4>
+        ・<b>【自将変更】</b>：画面下の自将パネル内にある<b>「🪭 自将変更」</b>より、我が分身となる武将（幸村・慶次・政宗・兼続・忠勝）を選べます。<br>
+        ・<b>【敵将変更】</b>：画面上の敵将パネル内にある<b>「⚙ 敵将変更」</b>より、挑むべき敵将（Lv.1木下藤吉郎〜Lv.10徳川家康）を選べます。<br>
+        ・陣容が定まったら、最下部中央の<b>「⚜ 対局開始」</b>で天運の振り駒を執り行い、いざ合戦へ出陣します！
       </div>
 
       <div class="guide-section-box">
         <h4><span class="guide-step-tag">弐</span> 合戦の流れ（振り駒〜進軍）</h4>
-        <b>①【対局開始】</b>を押すと、伝統の<b>「振り駒の儀」</b>が執り行われます。歩が多ければ自軍が先手、と金が多ければ敵軍が先手となります。<br>
+        <b>①【振り駒の儀】</b>歩が多ければ自軍が先手、と金が多ければ敵軍が先手となります。<br>
         <b>②【進軍操作】</b>自軍の駒をタップすると進めるマスが<b>緑色</b>に光ります。マスをタップして進軍！<br>
         <b>③【成りの儀】</b>敵陣深くに攻め入ると、駒をより強力な「成り駒」へ昇格できます。<br>
         <b>④【手駒の運用】</b>討ち取った敵駒は、持ち駒エリアから盤上の空きマスに打ち込めます。
@@ -2039,7 +2058,7 @@ function updateMoraleAndSituation(scoreAI = 0) {
 const PIECES = { OU:'王将', HI:'飛車', KA:'角行', KI:'金将', GI:'銀将', KE:'桂馬', KY:'香車', FU:'歩兵', RY:'竜王', UM:'竜馬', NG:'成銀', NK:'成桂', NY:'成香', TO:'と金' };
 const PROMOTED_PIECES = ['RY', 'UM', 'NG', 'NK', 'NY', 'TO'];
 const KANJI_NUMS = ['一','二','三','四','五','六','七','八','九'];
-const ARABIC_NUMS = ['１','２','３','４','５','６','７','８','９'];
+const ARABIC_NUMS = ['１','２','３','４','五','６','７','８','９'];
 const UNPROMOTE_MAP = { RY:'HI', UM:'KA', NG:'GI', NK:'KE', NY:'KY', TO:'FU', HI:'HI', KA:'KA', KI:'KI', GI:'GI', KE:'KE', KY:'KY', FU:'FU', OU:'OU' };
 const PROMOTE_MAP = { HI:'RY', KA:'UM', GI:'NG', KE:'NK', KY:'NY', FU:'TO' };
 
