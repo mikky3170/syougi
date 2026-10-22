@@ -371,13 +371,13 @@ function negamax(depth, alpha, beta, owner, maxQ) {
     unmakeMove(undo);
     if (isSearchTimeout) break;
 
-    // 千日手・往復ループの抑制
+    // 千日手・往復ループの抑制（全探索深度共通）
     if (moveHistory.length >= 2) {
       const last = moveHistory[moveHistory.length - 2];
       if (m.type === 'move' && last.type === 'move' &&
           m.to.r === last.from.r && m.to.c === last.from.c &&
           m.from.r === last.to.r && m.from.c === last.to.c) {
-        score -= 400;
+        score -= 500;
       }
     }
 
@@ -416,23 +416,28 @@ self.onmessage = function(e) {
       const nextHash = getBoardHash(board, hands, enemyOwner);
       const hashOccurrences = pastHashes.filter(h => h === nextHash).length;
       if (hashOccurrences >= 2) {
-        loopPenalty += 3500;
+        loopPenalty += 4000;
       } else if (hashOccurrences === 1) {
-        loopPenalty += 1200;
+        loopPenalty += 1500;
       }
 
-      if (isHintRequest && moveHistory.length >= 4) {
-        const lastMyMove = moveHistory[moveHistory.length - 2];
-        const prevMyMove = moveHistory[moveHistory.length - 4];
-        if (m.type === 'move') {
-          if (lastMyMove?.type === 'move' &&
-              m.to.r === lastMyMove.from.r && m.to.c === lastMyMove.from.c &&
-              m.from.r === lastMyMove.to.r && m.from.c === lastMyMove.to.c) {
-            loopPenalty += 2500;
+      // 【千日手・往復膠着ループの超強力打破ペナルティ：全レベルAI ＆ 軍師進言に完全適用】
+      if (moveHistory.length >= 2) {
+        const lastOwnerMove = moveHistory[moveHistory.length - 2];
+        if (m.type === 'move' && lastOwnerMove?.type === 'move') {
+          // 直前の自分の着手と完全に元に戻る往復運動（fromとtoの入れ替わり）
+          if (m.to.r === lastOwnerMove.from.r && m.to.c === lastOwnerMove.from.c &&
+              m.from.r === lastOwnerMove.to.r && m.from.c === lastOwnerMove.to.c) {
+            loopPenalty += 2800;
           }
-          if (prevMyMove?.type === 'move' &&
-              m.to.r === prevMyMove.to.r && m.to.c === prevMyMove.to.c) {
-            loopPenalty += 1500;
+        }
+      }
+      if (moveHistory.length >= 4) {
+        const prevOwnerMove = moveHistory[moveHistory.length - 4];
+        if (m.type === 'move' && prevOwnerMove?.type === 'move') {
+          // 4手前と全く同じマスへ進む手（定位置反復の膠着）
+          if (m.to.r === prevOwnerMove.to.r && m.to.c === prevOwnerMove.to.c) {
+            loopPenalty += 1600;
           }
         }
       }
@@ -597,7 +602,7 @@ function launchFireworksCelebration() {
 /* =========================================================
    Web Speech API：軍師／姫侍・項目別音声朗読エンジン
    ========================================================= */
-let guideVoiceGender = 'male'; // 'male' または 'female'
+let guideVoiceGender = 'male';
 let currentReadingCardId = null;
 
 function setGuideVoiceGender(gender) {
@@ -627,7 +632,6 @@ function stopGuideSpeech() {
   }
 }
 
-// 戦国・将棋用語を流暢に聴かせる正規化補正フィルター
 function cleanSpeechText(rawText) {
   let text = rawText;
   text = text.replace(/🔊\s*朗読/g, '').replace(/⏹\s*停止/g, '');
@@ -667,13 +671,11 @@ function toggleCardSpeech(cardId) {
     return;
   }
 
-  // すでに同じカードを読んでいる場合は停止
   if (currentReadingCardId === cardId) {
     stopGuideSpeech();
     return;
   }
 
-  // 別のカードを読んでいる場合は一度停止
   stopGuideSpeech();
 
   const cardEl = document.getElementById(cardId);
@@ -693,19 +695,18 @@ function toggleCardSpeech(cardId) {
   const uttr = new SpeechSynthesisUtterance(speechText);
   uttr.lang = 'ja-JP';
 
-  // 利用可能な音声一覧から最適な声を選択
   const voices = window.speechSynthesis.getVoices();
   const jaVoices = voices.filter(v => v.lang === 'ja' || v.lang === 'ja-JP' || v.lang.startsWith('ja'));
 
   if (guideVoiceGender === 'female') {
     const fVoice = jaVoices.find(v => /female|kyoko|haruka|ayumi|sayaka|nanami|hikari/i.test(v.name));
     if (fVoice) uttr.voice = fVoice;
-    uttr.pitch = 1.15; // 澄んだ少し高めの優美な声
+    uttr.pitch = 1.15;
     uttr.rate = 0.96;
   } else {
     const mVoice = jaVoices.find(v => /male|otoya|keita|ichiro|hattori|kenji/i.test(v.name));
     if (mVoice) uttr.voice = mVoice;
-    uttr.pitch = 0.85; // 太く落ち着いた威厳ある軍師の声
+    uttr.pitch = 0.85;
     uttr.rate = 0.93;
   }
 
@@ -728,7 +729,6 @@ function toggleCardSpeech(cardId) {
   window.speechSynthesis.speak(uttr);
 }
 
-// 音声リストの初期ロード
 if ('speechSynthesis' in window) {
   window.speechSynthesis.onvoiceschanged = () => {
     window.speechSynthesis.getVoices();
@@ -1360,9 +1360,6 @@ function setOrderMessage(txt, isMyTurn = false) {
   updateRivalryButton();
 }
 
-/* =========================================================
-   📜 宿命秘話（指南モーダル・其の四への直接自動スクロール）
-   ========================================================= */
 function openRivalryInGuide(targetKey = null) {
   playPieceSound();
   const rivalKey = targetKey || `${currentMyWarlordId}_${currentAiLevel}`;
@@ -1612,7 +1609,6 @@ function createNewWorker() {
 }
 createNewWorker();
 
-/* 軍師進言の手の「戦術理由・意図」を判定 */
 function analyzeTacticsIntent(bm) {
   const targetPiece = board[bm.to.r][bm.to.c];
   const movingPieceCode = (bm.type === 'move') ? (board[bm.from.r][bm.from.c]?.code || bm.code) : bm.code;
@@ -2095,7 +2091,6 @@ function drawEvaluationChart() {
   document.getElementById('chart-eval-num-bottom').textContent = lastPt.pScore < 0 ? `${lastPt.pScore}` : '';
 }
 
-/* 指南モーダル：現在選択中の敵将に連動して攻略法を動的生成 */
 function renderDynamicTactics() {
   const container = document.getElementById('dynamic-tactics-content');
   if (!container) return;
@@ -2177,7 +2172,6 @@ function openPlayerWarlordModal() {
 }
 function closePlayerWarlordModal() { document.getElementById('player-warlord-modal').style.display = 'none'; }
 
-/* 国盗り絵巻UI */
 function updateConquestMapUI() {
   const clearedCount = clearedProvinces.length;
   document.getElementById('conquest-pct-disp').textContent = `${clearedCount * 10}%`;
@@ -2453,7 +2447,7 @@ function replayFromHistory(recordId) {
   const lastSnap = historyStates[reviewingIndex];
   board = cloneBoardState(lastSnap.board);
   hands = JSON.parse(JSON.stringify(lastSnap.hands));
-  lastMove = (reviewingIndex > 0) ? lastSnap.moveObjectsHistory[snap.moveObjectsHistory.length - 1] : null;
+  lastMove = (reviewingIndex > 0) ? lastSnap.moveObjectsHistory[lastSnap.moveObjectsHistory.length - 1] : null;
   isGameOver = true;
 
   renderBoard();
