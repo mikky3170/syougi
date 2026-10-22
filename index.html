@@ -25,7 +25,7 @@
     </h1>
   </div>
   <div class="header-actions">
-    <!-- 合戦戦歴一覧を開くボタンを新設 -->
+    <!-- 合戦戦歴一覧を開くボタン -->
     <button class="header-btn btn-3d btn-history" onclick="openHistoryModal()">📜 戦歴</button>
     <button class="header-btn btn-3d btn-kifu" onclick="openKifuModal()">📖 棋譜</button>
     <button class="header-btn btn-3d btn-snd" id="sound-toggle" onclick="toggleSound()">♪ 音ON</button>
@@ -222,7 +222,7 @@
   </div>
 </div>
 
-<!-- 【新設】合戦戦歴帳モーダル（全対局履歴＆絞り込み一覧表） -->
+<!-- 合戦戦歴帳モーダル（全対局履歴＆絞り込み一覧表） -->
 <div id="battle-history-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content battle-history-modal-box">
     <h3 style="margin:0; color:#ffd700; border-bottom:1.5px solid #8e6c31; padding-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
@@ -290,7 +290,7 @@
   </div>
 </div>
 
-<!-- 棋譜＆形勢推移モーダル（新・合戦絵巻） -->
+<!-- 棋譜＆形勢推移モーダル -->
 <div id="kifu-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content modal-kifu-panorama">
     <h3 style="margin:0; color:#ffd700; border-bottom:1px solid #8e6c31; padding-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
@@ -335,7 +335,7 @@
   </div>
 </div>
 
-<!-- 指南モーダル -->
+<!-- 指南モーダル（🔰 初陣の極意タブを新設） -->
 <div id="guide-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content guide-modal-box">
     <h3 style="margin:0 0 7px 0; color:#ffd700; border-bottom:1.5px solid #ffd700; padding-bottom:4px; text-align:center; letter-spacing:1px;">
@@ -343,14 +343,42 @@
     </h3>
     
     <div class="guide-tab-bar">
-      <button class="guide-tab-btn btn-3d active" onclick="switchGuideTab(1)">其の壱：合戦手引</button>
+      <button class="guide-tab-btn btn-3d active" onclick="switchGuideTab(0)">🔰 初陣の極意</button>
+      <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(1)">其の壱：合戦手引</button>
       <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(2)">其の弐：兵法極意</button>
       <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(3)">其の参：敵将十傑</button>
       <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(4)">其の四：宿命録</button>
     </div>
 
     <div class="guide-scroll-body">
-      <div class="guide-pane active" id="guide-pane-1">
+      <!-- 🔰 新設：初陣の極意（初心者必勝手引き） -->
+      <div class="guide-pane active" id="guide-pane-0">
+        <div class="guide-card-box beginner-highlight-box">
+          <h4>🔰 木下藤吉郎（Lv.1）を討ち破る「三箇条の鉄則」</h4>
+          将棋を始めたばかりの主君へ、専属軍師が贈る必勝の秘伝です！難しい定跡は一切不要。この3つだけを守れば、Lv.1は必ず討ち取れます。<br><br>
+          <b class="kw-gold">一、駒に「ヒモ（守り）」がついているか確認せよ！</b><br>
+          ・動かそうとする駒に、後ろの味方の利き（矢印）が重なっているかを見よ。<br>
+          ・取られても味方が取り返せる状態なら安全！ 相手の「ヒモがない駒」はタダで奪い取る絶好の獲物に候！<br><br>
+          <b class="kw-crimson">二、飛車と角の道を開け、敵陣で「龍王・龍馬」に覚醒せよ！</b><br>
+          ・飛車と角は自軍の最強大砲。序盤に前の歩を突いて道を開けよ。<br>
+          ・敵陣（上から3段目以内）へ飛び込み、必ず<span class="kw-crimson">「成る」</span>べし！ 龍王が敵陣に入れば、藤吉郎の陣は一気に崩壊いたします！<br><br>
+          <b class="kw-blue">三、玉将（大将）を真ん中から端へ逃がせ！</b><br>
+          ・初心者が負ける最大の原因は「玉が初期位置にいて流れ弾に当たること」。<br>
+          ・戦火が開く前に、玉を左か右へトコトコと1〜2マス避難させ、金銀で寄り添わせるだけで即死を防げます！
+        </div>
+
+        <div class="guide-card-box">
+          <h4>💡 初陣おすすめの「開戦五手」</h4>
+          対局が始まったら、まずはこの通りに指してみられよ！<br>
+          1. <b>７六歩</b>（角の前の歩を突いて道を開ける）<br>
+          2. <b>２六歩</b>（飛車の前の歩を突いて敵陣を目指す）<br>
+          3. <b>４八銀</b> または <b>６八玉</b>（玉を少し横へ避難させ、銀を前へ）<br>
+          4. <b>２五歩</b>（飛車先の歩をさらに前進）<br>
+          5. 敵陣を破り、飛車を敵陣へ突入させて<b>【龍王】</b>へ成る！
+        </div>
+      </div>
+
+      <div class="guide-pane" id="guide-pane-1">
         <div class="guide-card-box">
           <h4>⚜ 一、合戦の手順（天下統一の道）</h4>
           1. <b class="kw-gold">陣容の選定</b>：上下のパネルより「自将（主役五傑）」と進軍先の「敵国（国盗り絵巻）」を決定します。自将ごとに異なる<span class="kw-gold">専属軍師</span>が随伴します。<br>

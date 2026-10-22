@@ -186,7 +186,6 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
 
-/* キャラ選択ボタン拡大 */
 .panel-select-btn {
   font-family: var(--font-ui); font-size: 11px; font-weight: 900;
   padding: 3.5px 8.5px; border-radius: 4px; cursor: pointer; white-space: nowrap;
@@ -358,8 +357,16 @@ body {
   50% { box-shadow: inset 0 0 18px #ffb300, 0 0 12px #fff9c4; }
   100% { box-shadow: inset 0 0 6px #ffd700, 0 0 4px #ffeb3b; }
 }
-.cell.hint-source { animation: hint-soft-pulse 1.3s infinite ease-in-out; }
-.cell.hint-target { animation: hint-soft-pulse 1.3s infinite ease-in-out; border: 1.5px dashed #ffeb3b; }
+.cell.hint-source {
+  animation: hint-soft-pulse 1.3s infinite ease-in-out;
+  border: 2px solid #ff9100 !important;
+  background: rgba(255, 145, 0, 0.45) !important;
+}
+.cell.hint-target {
+  animation: hint-soft-pulse 1.3s infinite ease-in-out;
+  border: 2px dashed #ffd700 !important;
+  background: rgba(255, 215, 0, 0.45) !important;
+}
 
 .board-star {
   position: absolute; width: 4px; height: 4px; background: #261103;
@@ -377,7 +384,7 @@ body {
 }
 
 /* =========================================================
-   【重要】本格二文字駒：文字拡大 ＆ 迫力ある堂々たるバランス
+   本格二文字駒：文字拡大 ＆ 迫力ある堂々たるバランス
    ========================================================= */
 .piece {
   width: 95%; height: 97%;
@@ -385,7 +392,7 @@ body {
   clip-path: polygon(50% 0%, 90% 18%, 100% 100%, 0% 100%, 10% 18%);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   font-family: var(--font-kaisho);
-  font-size: clamp(14px, 2.7vh, 19px); /* 堂々たる大文字 */
+  font-size: clamp(14px, 2.7vh, 19px);
   line-height: 1.0; font-weight: 900; pointer-events: none;
   box-shadow: 0 2px 4px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.95);
   text-align: center;
@@ -395,7 +402,7 @@ body {
 
 .piece.promoted {
   font-family: var(--font-gyosho) !important;
-  font-size: clamp(15.5px, 2.9vh, 20.5px) !important; /* 成駒はさらに迫力ある大字 */
+  font-size: clamp(15.5px, 2.9vh, 20.5px) !important;
   color: var(--promoted-crimson) !important;
   text-shadow: 0 0 1.5px rgba(186,12,12,0.6);
 }
@@ -464,10 +471,10 @@ body {
 }
 
 .order-message-banner {
-  width: 100%; height: clamp(42px, 5.8vh, 48px);
+  width: 100%; height: clamp(44px, 6.2vh, 52px);
   background: linear-gradient(90deg, #281409 0%, #4a2410 50%, #281409 100%);
   border: 1.8px solid #b88a32; border-radius: 5px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
   padding: 2px 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.9); flex-shrink: 0;
   transition: all 0.4s ease;
 }
@@ -478,7 +485,7 @@ body {
 }
 
 .order-message-text {
-  font-size: clamp(11.5px, 1.6vh, 13px); font-weight: 900; color: #ffe699; letter-spacing: 0.5px;
+  font-size: clamp(10.5px, 1.55vh, 12px); font-weight: 800; color: #ffe699; letter-spacing: 0.3px;
   line-height: 1.25; text-align: center; flex: 1;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   text-shadow: 0 1px 3px #000;
@@ -486,15 +493,33 @@ body {
 .order-message-banner.my-turn { animation: breathe-player-turn 3.2s infinite ease-in-out !important; }
 .order-message-banner.my-turn .order-message-text { animation: pulse-text-glow 2.2s infinite ease-in-out !important; }
 
+/* 軍師助言用：戦術意図バッジ＆ハイライト装飾 */
+.tactics-reason-badge {
+  font-size: 8.5px; font-weight: 900; padding: 1px 5px; border-radius: 3px;
+  border: 0.8px solid #ffd700; white-space: nowrap; margin-right: 3px;
+  line-height: 1.1; vertical-align: middle;
+}
+.badge-tactics-capture { background: #8a1414; color: #fff2a8; }
+.badge-tactics-promote { background: #9c27b0; color: #ffd700; }
+.badge-tactics-defense { background: #0d47a1; color: #e1f5fe; border-color: #4fc3f7; }
+.badge-tactics-trap    { background: #e65100; color: #ffffff; }
+.badge-tactics-attack  { background: #b71c1c; color: #ffffff; }
+.badge-tactics-open    { background: #1b5e20; color: #c8e6c9; border-color: #81c784; }
+
+.hl-from { color: #ffb74d; font-weight: 900; text-decoration: underline; }
+.hl-to   { color: #ffd700; font-weight: 900; }
+.hl-act  { color: #76ff03; font-weight: 900; }
+.hl-prom { color: #ff5252; font-weight: 900; }
+
 /* 軍師助言インライン顔アイコン */
 .strategist-inline-icon {
   display: inline-block;
-  width: 26px; height: 30px;
+  width: 24px; height: 28px;
   object-fit: cover; object-position: center 10%;
   border-radius: 3px; border: 1.2px solid #ffd700;
   box-shadow: 0 0 6px rgba(255, 215, 0, 0.7);
   vertical-align: middle;
-  margin: 0 4px 1px 4px;
+  margin: 0 3px 1px 3px;
 }
 
 /* 棋譜帯 */
@@ -594,9 +619,7 @@ body {
   background: linear-gradient(180deg, #3d2111 0%, #170a04 100%); color: #ffe58f; cursor: pointer;
 }
 
-/* =========================================================
-   【新機能】合戦戦歴帳モーダル（対戦結果アーカイブ一覧）
-   ========================================================= */
+/* 合戦戦歴帳モーダル */
 .battle-history-modal-box {
   width: 96vw !important; max-width: 540px !important; height: 88vh !important;
   display: flex; flex-direction: column; justify-content: space-between;
@@ -610,7 +633,6 @@ body {
   padding: 4px 10px; margin-bottom: 6px; font-size: 11px; font-weight: 900;
 }
 
-/* 絞り込みフィルターバー */
 .history-filter-grid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 4px 8px;
   background: rgba(20, 9, 3, 0.9); border: 1px solid #73511f;
@@ -624,7 +646,6 @@ body {
   border-radius: 3px; padding: 2px 4px; outline: none; flex: 1;
 }
 
-/* 戦歴レコードリスト */
 .history-records-scroll {
   flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
   padding-right: 3px; margin-bottom: 6px;
@@ -863,16 +884,16 @@ body {
 .badge-tennozan { background: #b71c1c; color: #fff; }
 .badge-shock { background: #0d47a1; color: #fff; }
 
-/* 指南モーダル */
+/* 指南モーダル（5分割タブ対応） */
 .guide-modal-box {
   width: 96vw; max-width: 530px; height: 88vh; display: flex; flex-direction: column;
   background: radial-gradient(circle at center, #2e1408 0%, #0c0401 100%) !important;
   border: 2px solid #ffd700 !important; box-shadow: 0 0 35px rgba(255, 215, 0, 0.45) !important;
 }
-.guide-tab-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 8px; }
+.guide-tab-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin-bottom: 8px; }
 .guide-tab-btn {
-  font-family: var(--font-ui); font-size: 10px; font-weight: 900;
-  padding: 6px 2px; border-radius: 3px; border: 1.2px solid #a67c33;
+  font-family: var(--font-ui); font-size: 9.5px; font-weight: 900;
+  padding: 6px 1px; border-radius: 3px; border: 1.2px solid #a67c33;
   background: linear-gradient(180deg, #2f1607 0%, #150802 100%); color: #ebd4a0; cursor: pointer; text-align: center;
   white-space: nowrap;
 }
@@ -893,6 +914,12 @@ body {
   border: 1.2px solid #8e6c31; border-radius: 5px; padding: 9px 11px; margin-bottom: 9px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.85);
 }
+.beginner-highlight-box {
+  border: 2px solid #ffd700 !important;
+  background: linear-gradient(180deg, rgba(64, 25, 8, 0.98) 0%, rgba(26, 8, 2, 0.98) 100%) !important;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.45) !important;
+}
+
 .guide-card-box h4 {
   margin: 0 0 6px 0; color: #ffd700; font-size: 13px; font-weight: 900;
   border-bottom: 1.2px solid #8c671a; padding-bottom: 3px; display: flex; align-items: center; gap: 5px;
