@@ -114,10 +114,11 @@
     <div class="warlord-hand-area" id="player-hand" title="自軍持ち駒"></div>
   </div>
 
-  <!-- 合戦伝令メッセージ帯 -->
+  <!-- 合戦伝令メッセージ帯（宿命秘話ボタン統合） -->
   <div class="order-message-banner" id="order-message-banner">
     <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
     <div class="order-message-text" id="order-message-text">【初陣の刻】上下のパネルより「自将」と「進軍先」を選定されよ。<br>陣容が定まり次第、「対局開始」にて振り駒を執り行われよ！</div>
+    <button class="rivalry-story-btn btn-3d" id="btn-rivalry-story" onclick="openRivalryInGuide()" style="display:none;">📜 宿命秘話</button>
   </div>
 
   <!-- 下部帯：「📖 棋譜」展開ボタン ＆ 直近手順ストリーム -->
@@ -351,7 +352,7 @@
       <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(4)">其の四：宿命録</button>
     </div>
 
-    <div class="guide-scroll-body">
+    <div class="guide-scroll-body" id="guide-scroll-container">
       <!-- 第1タブ：現在選択中の敵将に合わせた極意・攻略法を動的注入 -->
       <div class="guide-pane active" id="guide-pane-0">
         <div id="dynamic-tactics-content"></div>
@@ -415,7 +416,6 @@
         </div>
         <div class="guide-card-box">
           <h4>🏯 二、敵将十傑の気風・動員録</h4>
-          <!-- 1行完結レイアウト：スマホでも絶対に改行しない美しい並び -->
           <div class="enemy-line-item">
             <span class="enemy-line-left">Lv.1 尾張｜木下藤吉郎</span>
             <span class="enemy-line-right">足軽乱戦（兵力3,200）</span>
@@ -459,35 +459,121 @@
         </div>
       </div>
 
+      <!-- 其の四：宿命録（完全な歴史絵巻図鑑） -->
       <div class="guide-pane" id="guide-pane-4">
         <div class="guide-card-box">
-          <h4>🔥 一、宿命の対決（因縁のライバルマッチ）</h4>
-          特定の自将と敵将が激突したとき、特別な<span class="kw-crimson">開幕因縁カットイン</span>と<span class="kw-gold">専用の舌戦・掛け合い</span>が盤上で勃発します！
+          <h4>🔥 宿命の対決録（史実が紡ぐ五大因縁秘話）</h4>
+          特定の自将と敵将が激突したとき、特別な<span class="kw-crimson">開幕因縁カットイン</span>と<span class="kw-gold">専用の舌戦・掛け合い</span>が盤上で勃発します。史実の背景を知ることで、合戦の熱気は最高潮へと高まります！
         </div>
-        <div class="guide-card-box">
-          <h4>【大坂の陣】真田幸村 vs 徳川家康</h4>
-          ・幸村「<span class="kw-crimson">不惜身命！ 徳川の天下、この幸村が盤上で覆して見せようぞ！</span>」<br>
-          ・家康「<span class="kw-blue">真田か…！ 目の上の瘤め、大坂の雪辱はさせぬぞ！</span>」
+
+        <!-- 1. 真田幸村 vs 徳川家康 -->
+        <div class="guide-card-box rivalry-story-card" id="rivalry-card-sanada_10">
+          <div class="rivalry-card-header">
+            <span class="rivalry-badge-tag">大坂の陣</span>
+            <h4>真田幸村 vs 徳川家康</h4>
+          </div>
+          <div class="rivalry-story-sub">死線を越えた真田赤備えの最終決戦</div>
+          <p class="rivalry-story-p">
+            <b class="kw-gold">【歴史の真実】</b> 慶長二十年（1615年）の大坂夏の陣。豊臣家の命運が尽きかけ、徳川軍十五万の大軍に包囲された絶望の窮地において、真田幸村はわずか数千の赤備え部隊を率いて出陣。「真田の武士の生き様を見せる刻」と覚悟を決め、家康の本陣目がけて怒涛の突撃を敢行しました。
+          </p>
+          <p class="rivalry-story-p">
+            <b class="kw-gold">【語り継がれるドラマ】</b> 鬼神の如き突進は徳川軍の旗本隊を蹴散らし、家康の本陣を三度突き崩しました。家康は馬印を倒され切腹を覚悟したと伝わります。後に敵の薩摩島津家からも「真田日本一の兵（ひのもといちのつわもの）」と称賛された、戦国最大の英雄劇です。
+          </p>
+          <div class="rivalry-dialogue-box">
+            ・幸村「<span class="kw-crimson">不惜身命！ 徳川の天下、この幸村が盤上で覆して見せようぞ！</span>」<br>
+            ・家康「<span class="kw-blue">真田か…！ 目の上の瘤め、大坂の雪辱はさせぬぞ！</span>」
+          </div>
+          <p class="rivalry-story-p" style="margin-bottom:0; font-size:10.5px; color:#ffe899;">
+            ⚔ <b>盤上の見どころ</b>：家康の築く「江戸幕府の鉄壁（Lv.10最深探索AI）」へ、軍師・真田昌幸の知謀とともに突撃し歴史の雪辱を果たされよ！
+          </p>
         </div>
-        <div class="guide-card-box">
-          <h4>【前田の血脈】前田慶次 vs 前田利家</h4>
-          ・慶次「<span class="kw-gold">叔父貴、ぬるい水風呂の礼をせねばな！ ど派手に傾くぜ！</span>」<br>
-          ・利家「<span class="kw-blue">慶次！ その放蕩、前田の当主として盤上で成敗いたす！</span>」
+
+        <!-- 2. 前田慶次 vs 前田利家 -->
+        <div class="guide-card-box rivalry-story-card" id="rivalry-card-keiji_2">
+          <div class="rivalry-card-header">
+            <span class="rivalry-badge-tag">前田の血脈</span>
+            <h4>前田慶次 vs 前田利家</h4>
+          </div>
+          <div class="rivalry-story-sub">掟に生きる当主と、自由を愛した傾奇者</div>
+          <p class="rivalry-story-p">
+            <b class="kw-gold">【歴史の真実】</b> 義理の叔父と甥の間柄。利家は織田信長に仕え槍一本で加賀百万石の礎を築いた謹厳実直な当主。一方の慶次は天下無双の武士でありながら権威を笑い飛ばす当代随一の「傾奇者（かぶきもの）」でした。
+          </p>
+          <p class="rivalry-story-p">
+            <b class="kw-gold">【語り継がれるドラマ】</b> 慶次は加賀を出奔する際、利家に「茶を差し上げたい」と偽って招き、厳冬の寒空の下、真水の風呂（ぬるい水風呂）に入らせて逃亡。さらに名馬「松風」を奪い去った痛快な逸話が残されています。利家は激怒しながらも、その天衣無縫な器量に生涯一目置き続けました。
+          </p>
+          <div class="rivalry-dialogue-box">
+            ・慶次「<span class="kw-gold">叔父貴、ぬるい水風呂の礼をせねばな！ ど派手に傾くぜ！</span>」<br>
+            ・利家「<span class="kw-blue">慶次！ その放蕩、前田の当主として盤上で成敗いたす！</span>」
+          </div>
+          <p class="rivalry-story-p" style="margin-bottom:0; font-size:10.5px; color:#ffe899;">
+            ⚔ <b>盤上の見どころ</b>：中央5筋を豪快に突進する叔父・利家の槍（飛車）を、慶次ならではの天下無双の傾奇の一手で跳ね返されよ！
+          </p>
         </div>
-        <div class="guide-card-box">
-          <h4>【直江状の義戦】直江兼続 vs 徳川家康</h4>
-          ・兼続「<span class="kw-green">不義の天下に道はなし！ 義の刃、盤上にて受けてみよ！</span>」<br>
-          ・家康「<span class="kw-blue">直江兼続… 筆鋒鋭き小僧め、盤上で捻り潰してくれる！</span>」
+
+        <!-- 3. 直江兼続 vs 徳川家康 -->
+        <div class="guide-card-box rivalry-story-card" id="rivalry-card-kanetsugu_10">
+          <div class="rivalry-card-header">
+            <span class="rivalry-badge-tag">直江状の義戦</span>
+            <h4>直江兼続 vs 徳川家康</h4>
+          </div>
+          <div class="rivalry-story-sub">天下を震撼させた弾劾状「直江状」</div>
+          <p class="rivalry-story-p">
+            <b class="kw-gold">【歴史の真実】</b> 秀吉没後、覇権を狙う徳川家康は上杉家へ「謀反の疑いあり、上洛して釈明せよ」と高圧的に詰問。これに対し上杉景勝の懐刀・直江兼続が叩きつけた返書こそが、歴史的名文とされる「直江状」です。
+          </p>
+          <p class="rivalry-story-p">
+            <b class="kw-gold">【語り継がれるドラマ】</b> 兼続は「景勝に逆心なし。噂を信じて理不尽を強いる貴殿こそ豊臣の恩義を忘れた不義の輩」「田舎侍が武具を集めるのは当然の嗜み、疑うなら攻め寄越すがよい」と徹底糾弾。家康は床を叩いて激怒し、関ヶ原の引き金となる会津征伐を決意しました。
+          </p>
+          <div class="rivalry-dialogue-box">
+            ・兼続「<span class="kw-green">不義の天下に道はなし！ 義の刃、盤上にて受けてみよ！</span>」<br>
+            ・家康「<span class="kw-blue">直江兼続… 筆鋒鋭き小僧め、盤上で捻り潰してくれる！</span>」
+          </div>
+          <p class="rivalry-story-p" style="margin-bottom:0; font-size:10.5px; color:#ffe899;">
+            ⚔ <b>盤上の見どころ</b>：不義を許さぬ上杉の「愛と義の陣形」が家康の覇道と激突。筆鋒のみならず将棋盤上でも天下の正道を示されよ！
+          </p>
         </div>
-        <div class="guide-card-box">
-          <h4>【天下への野望】伊達政宗 vs 豊臣秀吉</h4>
-          ・伊達「<span class="kw-blue">太閤殿下！ 白装束の礼は済んだ、盤上は容赦しねえ！</span>」<br>
-          ・秀吉「<span class="kw-gold">伊達の若造、その野心ごとのみ込んで見せようぞ！</span>」
+
+        <!-- 4. 伊達政宗 vs 豊臣秀吉 -->
+        <div class="guide-card-box rivalry-story-card" id="rivalry-card-masamune_9">
+          <div class="rivalry-card-header">
+            <span class="rivalry-badge-tag">天下への野望</span>
+            <h4>伊達政宗 vs 豊臣秀吉</h4>
+          </div>
+          <div class="rivalry-story-sub">白装束で挑んだ天下人との命懸けの駆け引き</div>
+          <p class="rivalry-story-p">
+            <b class="kw-gold">【歴史の真実】</b> 天正十八年（1590年）、秀吉の小田原攻め。奥州の覇者・伊達政宗は「秀吉に従うか、天下を争うか」の決断を迫られ参陣を大幅に遅延。激怒した秀吉は政宗処刑の構えを見せました。
+          </p>
+          <p class="rivalry-story-p">
+            <b class="kw-gold">【語り継がれるドラマ】</b> 政宗は死を覚悟した「全身白装束」で秀吉の本陣へ乗り込み、千利休に茶を乞うなど大胆不敵な肝の太さを誇示。対面した秀吉は杖で政宗の首元を突き「もう少し遅ければここが危なかったぞ」と笑い、その器量に免じて領地を安堵しました。
+          </p>
+          <div class="rivalry-dialogue-box">
+            ・政宗「<span class="kw-blue">太閤殿下！ 白装束の礼は済んだ、盤上は容赦しねえ！</span>」<br>
+            ・秀吉「<span class="kw-gold">伊達の若造、その野心ごとのみ込んで見せようぞ！</span>」
+          </div>
+          <p class="rivalry-story-p" style="margin-bottom:0; font-size:10.5px; color:#ffe899;">
+            ⚔ <b>盤上の見どころ</b>：持ち駒を操る太閤の包囲殲滅戦に対し、片倉小十郎とともに竜の牙で挑み「太閤超え」を成就させよ！
+          </p>
         </div>
-        <div class="guide-card-box">
-          <h4>【三方ヶ原の死線】本多忠勝 vs 武田信玄</h4>
-          ・忠勝「<span class="kw-gold">信玄公！ 我が蜻蛉切、家康公の盾となり打ち砕かん！</span>」<br>
-          ・信玄「<span class="kw-crimson">忠勝、家康に過ぎたるものよ。虎の牙を凌げるか！</span>」
+
+        <!-- 5. 本多忠勝 vs 武田信玄 -->
+        <div class="guide-card-box rivalry-story-card" id="rivalry-card-tadakatsu_7">
+          <div class="rivalry-card-header">
+            <span class="rivalry-badge-tag">三方ヶ原の死線</span>
+            <h4>本多忠勝 vs 武田信玄</h4>
+          </div>
+          <div class="rivalry-story-sub">家康生涯最大の惨敗と、単騎防戦の伝説</div>
+          <p class="rivalry-story-p">
+            <b class="kw-gold">【歴史の真実】</b> 元亀三年（1572年）、武田信玄の軍勢二万七千に対し、若き徳川家康は三方ヶ原にて迎撃するも完膚なきまでに惨敗。家康は恐怖のあまり脱糞し命からがら浜松城へ逃げ帰りました。
+          </p>
+          <p class="rivalry-story-p">
+            <b class="kw-gold">【語り継がれるドラマ】</b> 総崩れの大混乱の中、殿（しんがり）を務めたのが本多忠勝。名槍「蜻蛉切」を振るい武田の大軍を単騎で食い止め家康を救出。武田軍は「家康に過ぎたるものが二つあり、唐の頭に本多平八（忠勝）」と狂歌を詠んで称賛しました。
+          </p>
+          <div class="rivalry-dialogue-box">
+            ・忠勝「<span class="kw-gold">信玄公！ 我が蜻蛉切、家康公の盾となり打ち砕かん！</span>」<br>
+            ・信玄「<span class="kw-crimson">忠勝、家康に過ぎたるものよ。虎の牙を凌げるか！</span>」
+          </div>
+          <p class="rivalry-story-p" style="margin-bottom:0; font-size:10.5px; color:#ffe899;">
+            ⚔ <b>盤上の見どころ</b>：金銀で固めた「風林火山の要塞」に対し、忠勝の剛槍と参謀・本多正信の知謀で立ち向かい虎の喉首を貫かれよ！
+          </p>
         </div>
       </div>
     </div>
@@ -499,4 +585,5 @@
 <script src="main.js"></script>
 </body>
 </html>
+
 

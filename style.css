@@ -93,7 +93,7 @@ body {
   .title-sub-txt { font-size: 10.5px; }
 }
 
-/* ヘッダーボタン：余裕を持たせ文字・ボタンを一回り拡大 */
+/* ヘッダーボタン */
 .header-actions { display: flex; gap: 5px; flex-shrink: 0; }
 .header-btn {
   font-family: var(--font-ui); font-size: 11px; font-weight: 900;
@@ -216,9 +216,7 @@ body {
 .morale-enemy { background: linear-gradient(90deg, #991414, #ff4d4d); }
 .morale-player { background: linear-gradient(90deg, #b86b14, #ffd700); }
 
-/* =========================================================
-   取った駒の置き場（駒台）
-   ========================================================= */
+/* 取った駒の置き場（駒台） */
 .warlord-hand-area {
   flex: 1.1; height: 90%; min-width: 85px;
   background: var(--board-wood);
@@ -414,7 +412,7 @@ body {
 }
 
 /* =========================================================
-   本格二文字駒：駒枠に文字が被らない黄金比率（余白確保）
+   本格二文字駒
    ========================================================= */
 .piece {
   width: 90%; height: 92%;
@@ -422,7 +420,6 @@ body {
   clip-path: polygon(50% 0%, 88% 18%, 100% 100%, 0% 100%, 12% 18%);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   font-family: var(--font-kaisho);
-  /* 縮尺を0.34em相当に調整し枠への被りを解消 */
   font-size: clamp(10.5px, calc(min(100vw - 36px, 100vh - 350px, 460px) / 9 * 0.34), 18px);
   line-height: 0.95; font-weight: 900; pointer-events: none;
   box-shadow: 0 2px 4px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.95);
@@ -506,9 +503,9 @@ body {
   width: 100%; height: clamp(40px, 5.8vh, 48px);
   background: linear-gradient(90deg, #281409 0%, #4a2410 50%, #281409 100%);
   border: 1.8px solid #b88a32; border-radius: 5px;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
   padding: 2px 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.9); flex-shrink: 0;
-  transition: all 0.4s ease;
+  transition: all 0.4s ease; position: relative;
 }
 
 .order-crest-icon {
@@ -524,6 +521,75 @@ body {
 }
 .order-message-banner.my-turn { animation: breathe-player-turn 3.2s infinite ease-in-out !important; }
 .order-message-banner.my-turn .order-message-text { animation: pulse-text-glow 2.2s infinite ease-in-out !important; }
+
+/* 📜 宿命秘話ボタン（伝令帯内に動的出現・黄金脈動） */
+@keyframes pulse-rivalry-btn {
+  0% { transform: scale(1); box-shadow: 0 2px 0 #3b0500, 0 0 6px #ff7700; }
+  50% { transform: scale(1.06); box-shadow: 0 2.5px 0 #3b0500, 0 0 14px #ffd700; }
+  100% { transform: scale(1); box-shadow: 0 2px 0 #3b0500, 0 0 6px #ff7700; }
+}
+
+.rivalry-story-btn {
+  font-family: var(--font-ui); font-size: 10px; font-weight: 900;
+  background: linear-gradient(180deg, #b81414 0%, #4a0808 100%);
+  border: 1.3px solid #ffd700; border-radius: 4px;
+  color: #fff9db; padding: 3px 7px; white-space: nowrap; cursor: pointer;
+  animation: pulse-rivalry-btn 1.8s infinite ease-in-out;
+  flex-shrink: 0; line-height: 1.1;
+}
+
+/* =========================================================
+   指南モーダル内・其の四：宿命絵巻スタイル
+   ========================================================= */
+.rivalry-story-card {
+  border: 1.5px solid #a67c33;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.rivalry-card-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
+  margin-bottom: 2px;
+}
+.rivalry-card-header h4 {
+  margin: 0 !important; border-bottom: none !important; padding-bottom: 0 !important;
+  font-size: 13.5px !important; color: #ffe699 !important;
+}
+
+.rivalry-badge-tag {
+  font-size: 9px; font-weight: 900; color: #fff3cc;
+  background: linear-gradient(180deg, #8a1414 0%, #420808 100%);
+  border: 0.8px solid #ffd700; border-radius: 3px;
+  padding: 1px 6px; white-space: nowrap; line-height: 1.1;
+}
+
+.rivalry-story-sub {
+  font-size: 10.5px; font-weight: 800; color: #ffb74d;
+  margin-bottom: 5px; border-bottom: 1px dashed rgba(255, 215, 0, 0.35); padding-bottom: 3px;
+}
+
+.rivalry-story-p {
+  margin: 0 0 5px 0; font-size: 11px; line-height: 1.65; color: #fcedcb;
+}
+
+.rivalry-dialogue-box {
+  background: rgba(14, 5, 2, 0.9); border: 1px solid #73511f;
+  border-left: 3px solid #ff3b30; border-radius: 3px;
+  padding: 4px 7px; margin: 5px 0; font-size: 10.5px; line-height: 1.55;
+}
+
+/* スムーズスクロール到達時の黄金脈動ハイライト演出 */
+@keyframes pulse-rivalry-highlight {
+  0% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); border-color: #ffd700; }
+  50% { box-shadow: 0 0 24px rgba(255, 215, 0, 0.95); border-color: #ffffff; }
+  100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); border-color: #ffd700; }
+}
+
+.highlight-rivalry-card {
+  animation: pulse-rivalry-highlight 1.2s 3 ease-in-out !important;
+  border: 2px solid #ffffff !important;
+  background: linear-gradient(180deg, rgba(64, 25, 8, 0.98) 0%, rgba(26, 8, 2, 0.98) 100%) !important;
+}
 
 /* 軍師助言用：戦術意図バッジ */
 .tactics-reason-badge {
@@ -568,7 +634,6 @@ body {
   width: 52px; border-right: 1px solid #73511f; padding-right: 3px; flex-shrink: 0;
 }
 
-/* 「📖 棋譜」展開ボタン（立体山吹黄金） */
 .btn-kifu-launcher {
   width: 100%; height: 18px; font-family: var(--font-ui);
   font-size: 10.5px; font-weight: 900; color: #ffd700;
@@ -1001,7 +1066,6 @@ body {
 .kw-green { color: #76ff03; font-weight: 900; }
 .kw-blue { color: #4fc3f7; font-weight: 900; }
 
-/* 指南 其の参：1行完結レイアウト */
 .enemy-line-item {
   display: flex; justify-content: space-between; align-items: center;
   border-bottom: 1px dashed rgba(166, 124, 51, 0.35); padding: 2.5px 0;
@@ -1009,4 +1073,5 @@ body {
 }
 .enemy-line-left { font-weight: 900; color: #ffe899; }
 .enemy-line-right { color: #d6be89; font-size: 9.5px; }
+
 

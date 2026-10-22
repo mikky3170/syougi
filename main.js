@@ -1,3 +1,4 @@
+
 /* =========================================================
    将棋王 2026 〜 天下統一・戦国決戦 〜
    メインスクリプト（軍略・演出・思考エンジン統合管理）
@@ -750,7 +751,7 @@ const PLAYER_WARLORDS = {
   }
 };
 
-/* 敵将十傑（実戦特徴・ワンポイント攻略付き） */
+/* 敵将十傑 */
 const WARLORDS_DATA = {
   1: {
     id: 'enemy_1', province: '尾張国', name: '木下藤吉郎', clan: '尾張国｜織田足軽隊', power: '動員兵力 3,200',
@@ -860,6 +861,7 @@ const WARLORDS_DATA = {
   }
 };
 
+/* 宿命の対決録 */
 const RIVALRIES = {
   'sanada_10': {
     title: '【宿命の対決】大坂の陣！ 日本一の兵 vs 天下の覇者',
@@ -1163,6 +1165,7 @@ function initBoardState() {
   updateStrategistUI();
   updateWarlordBGM(currentAiLevel);
   renderMainPortraits();
+  updateRivalryButton();
 
   board[0] = [{code:'KY',owner:'AI'},{code:'KE',owner:'AI'},{code:'GI',owner:'AI'},{code:'KI',owner:'AI'},{code:'OU',owner:'AI'},{code:'KI',owner:'AI'},{code:'GI',owner:'AI'},{code:'KE',owner:'AI'},{code:'KY',owner:'AI'}];
   board[1][1] = {code:'HI',owner:'AI'}; board[1][7] = {code:'KA',owner:'AI'};
@@ -1196,11 +1199,48 @@ function updateStrategistUI() {
   }
 }
 
+function updateRivalryButton() {
+  const btn = document.getElementById('btn-rivalry-story');
+  if (!btn) return;
+  const rivalKey = `${currentMyWarlordId}_${currentAiLevel}`;
+  if (RIVALRIES[rivalKey]) {
+    btn.style.display = 'inline-block';
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
 function setOrderMessage(txt, isMyTurn = false) {
   const el = document.getElementById('order-message-banner');
   document.getElementById('order-message-text').innerHTML = txt;
   el.classList.toggle('my-turn', isMyTurn);
   document.getElementById('player-panel').classList.toggle('player-active', isMyTurn);
+  updateRivalryButton();
+}
+
+/* =========================================================
+   📜 宿命秘話（指南モーダル・其の四への直接自動スクロール）
+   ========================================================= */
+function openRivalryInGuide(targetKey = null) {
+  playPieceSound();
+  const rivalKey = targetKey || `${currentMyWarlordId}_${currentAiLevel}`;
+  
+  // 指南モーダルを開いて第4タブ（其の四：宿命録）へ切り替え
+  openGuideModal();
+  switchGuideTab(4);
+
+  // 該当する宿命対決カードへスムーズスクロール＆黄金脈動ハイライト
+  setTimeout(() => {
+    const cardEl = document.getElementById(`rivalry-card-${rivalKey}`);
+    if (cardEl) {
+      cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      cardEl.classList.remove('highlight-rivalry-card');
+      // リフローを起こして再アニメーション適用
+      void cardEl.offsetWidth;
+      cardEl.classList.add('highlight-rivalry-card');
+      setTimeout(() => cardEl.classList.remove('highlight-rivalry-card'), 3800);
+    }
+  }, 100);
 }
 
 function openFurigomaModal() {
@@ -1386,7 +1426,7 @@ function executeMove(m) {
 
   if (m.type === 'drop') {
     hands[m.owner][m.code]--;
-    board[m.to.r][m.to.c] = { code: m.code, owner: m.owner };
+    board[m.to.r][moveObjectsHistory[moveObjectsHistory.length - 1].to.c] = { code: m.code, owner: m.owner };
   } else {
     const fp = board[m.from.r][m.from.c], tp = board[m.to.r][m.to.c];
     if (tp && tp.code !== 'OU') {
@@ -1987,7 +2027,7 @@ function openPlayerWarlordModal() {
 }
 function closePlayerWarlordModal() { document.getElementById('player-warlord-modal').style.display = 'none'; }
 
-/* 国盗り絵巻UI（重複のLv表記削除 ＆ 実戦ワンポイント特徴の表示） */
+/* 国盗り絵巻UI */
 function updateConquestMapUI() {
   const clearedCount = clearedProvinces.length;
   document.getElementById('conquest-pct-disp').textContent = `${clearedCount * 10}%`;
@@ -2072,6 +2112,7 @@ function selectConquestProvince(lvl) {
   } else {
     setOrderMessage(`【進軍先決定】${w.province}・「${w.name}」との決戦に候！${levelHint}<br>「対局開始」を押されよ。`, false);
   }
+  updateRivalryButton();
 }
 
 function setPlayerWarlord(k) {
@@ -2287,4 +2328,5 @@ document.addEventListener('touchstart', () => initAudio(), { once: true });
 loadProgress();
 setPlayerWarlord(currentMyWarlordId);
 initBoardState();
+
 
