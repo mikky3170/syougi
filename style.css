@@ -216,12 +216,21 @@ body {
 .morale-enemy { background: linear-gradient(90deg, #991414, #ff4d4d); }
 .morale-player { background: linear-gradient(90deg, #b86b14, #ffd700); }
 
+/* =========================================================
+   取った駒の置き場（駒台）：将棋盤と同色の銘木調天板
+   ========================================================= */
 .warlord-hand-area {
   flex: 1.1; height: 90%; min-width: 85px;
-  background: rgba(10, 5, 2, 0.88); border: 1.2px solid #8f692c;
+  background: var(--board-wood);
+  border: 1.5px solid #a67c33;
   border-radius: 3px; padding: 2px 3px;
   display: flex; align-items: center; overflow-x: auto; gap: 4px;
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.95);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5), inset 0 -1px 2px rgba(255,255,255,0.4), 0 2px 5px rgba(0,0,0,0.85);
+  position: relative;
+}
+.warlord-hand-area::after {
+  content: ''; position: absolute; inset: 0;
+  border: 0.8px solid rgba(80, 40, 10, 0.4); pointer-events: none; border-radius: 2px;
 }
 .panel-enemy .warlord-hand-area { justify-content: flex-start; }
 .panel-player .warlord-hand-area { justify-content: flex-end; }
@@ -277,22 +286,35 @@ body {
 }
 
 /* =========================================================
-   将棋盤＆目盛り枠：重なり根絶・完全自動フィット設計
+   将棋盤＆目盛り枠：完全正方形（1:1）絶対保証設計
    ========================================================= */
 .board-wrapper {
-  width: 100%; display: flex; justify-content: center; align-items: center;
-  flex: 1 1 0; min-height: 0; position: relative; overflow: hidden;
+  width: 100%; max-width: 100%;
+  display: flex; justify-content: center; align-items: center;
+  flex: 1 1 0; min-height: 0; min-width: 0;
+  position: relative; overflow: hidden;
+  padding: 1px 2px;
 }
 
+/* 縦横同一の式でブラウザの自動伸縮を完全に封じ、寸分違わぬ正方形を形成 */
 .shogi-board-frame {
   display: flex; flex-direction: column;
   background: var(--border-frame);
   border: 2px solid #cca135; border-radius: 4px;
-  padding: 1px 1px 2px 1px;
+  padding: 1px;
   box-shadow: 0 5px 18px rgba(0,0,0,0.98), inset 0 0 10px rgba(0,0,0,0.95);
-  height: 100%; max-height: 100%; width: auto; max-width: 100%;
-  aspect-ratio: 1 / 1;
+  width: min(calc(100vw - 12px), calc(100vh - 350px), 480px);
+  height: min(calc(100vw - 12px), calc(100vh - 350px), 480px);
+  max-width: 100%; max-height: 100%;
+  flex-shrink: 0;
   position: relative;
+}
+
+@media (min-width: 600px) {
+  .shogi-board-frame {
+    width: min(calc(100vw - 40px), calc(100vh - 350px), 520px) !important;
+    height: min(calc(100vw - 40px), calc(100vh - 350px), 520px) !important;
+  }
 }
 
 .shogi-board-frame::after {
@@ -300,18 +322,25 @@ body {
   border: 1px solid rgba(255, 215, 0, 0.4); pointer-events: none; border-radius: 2px;
 }
 
-.board-top-row { display: flex; width: 100%; height: 12px; margin-bottom: 1px; flex-shrink: 0; }
-.rank-index-container { flex: 1; display: grid; grid-template-columns: repeat(9, 1fr); }
+.board-top-row {
+  display: flex; width: 100%; height: 12px; margin-bottom: 1px; flex-shrink: 0;
+}
+.rank-index-container {
+  flex: 1; display: grid; grid-template-columns: repeat(9, 1fr);
+}
 .rank-cell {
   display: flex; align-items: center; justify-content: center;
   font-size: 10.5px; font-weight: 900; color: #ffe57f; text-shadow: 0 1px 2px #000;
 }
 .rank-corner-spacer { width: 13px; flex-shrink: 0; }
 
-.board-main-row { display: flex; width: 100%; flex: 1 1 0; min-height: 0; align-items: stretch; }
+.board-main-row {
+  display: flex; width: 100%; flex: 1 1 0; min-height: 0;
+  align-items: stretch;
+}
 
 #board {
-  flex: 1 1 0; aspect-ratio: 1 / 1;
+  flex: 1 1 0; min-width: 0; min-height: 0;
   display: grid; grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(9, 1fr);
   gap: 1px; background-color: var(--grid-line);
   border: 1.2px solid var(--grid-line);
@@ -322,6 +351,7 @@ body {
   background: var(--board-wood);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; position: relative; transition: background 0.15s ease;
+  min-width: 0; min-height: 0; overflow: hidden;
 }
 .cell.selected { background: rgba(255, 215, 0, 0.88) !important; }
 
@@ -384,7 +414,7 @@ body {
 }
 
 /* =========================================================
-   本格二文字駒：文字拡大 ＆ 迫力ある堂々たるバランス
+   本格二文字駒：端末を問わずマスに比例する黄金比率
    ========================================================= */
 .piece {
   width: 95%; height: 97%;
@@ -392,7 +422,7 @@ body {
   clip-path: polygon(50% 0%, 90% 18%, 100% 100%, 0% 100%, 10% 18%);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   font-family: var(--font-kaisho);
-  font-size: clamp(14px, 2.7vh, 19px);
+  font-size: clamp(12px, calc(min(100vw - 36px, 100vh - 370px, 460px) / 9 * 0.45), 22px);
   line-height: 1.0; font-weight: 900; pointer-events: none;
   box-shadow: 0 2px 4px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.95);
   text-align: center;
@@ -402,7 +432,7 @@ body {
 
 .piece.promoted {
   font-family: var(--font-gyosho) !important;
-  font-size: clamp(15.5px, 2.9vh, 20.5px) !important;
+  font-size: clamp(13px, calc(min(100vw - 36px, 100vh - 370px, 460px) / 9 * 0.48), 24px) !important;
   color: var(--promoted-crimson) !important;
   text-shadow: 0 0 1.5px rgba(186,12,12,0.6);
 }
@@ -619,7 +649,9 @@ body {
   background: linear-gradient(180deg, #3d2111 0%, #170a04 100%); color: #ffe58f; cursor: pointer;
 }
 
-/* 合戦戦歴帳モーダル */
+/* =========================================================
+   合戦戦歴帳モーダル：タイトル・通算成績特大銘板
+   ========================================================= */
 .battle-history-modal-box {
   width: 96vw !important; max-width: 540px !important; height: 88vh !important;
   display: flex; flex-direction: column; justify-content: space-between;
@@ -627,10 +659,28 @@ body {
   border: 2.2px solid #ffd700 !important;
 }
 
-.history-summary-bar {
-  display: flex; justify-content: space-between; align-items: center;
-  background: rgba(0,0,0,0.65); border: 1.2px solid #8e6c31; border-radius: 4px;
-  padding: 4px 10px; margin-bottom: 6px; font-size: 11px; font-weight: 900;
+.history-header-box {
+  display: flex; flex-direction: column; gap: 5px;
+  border-bottom: 1.5px solid #8e6c31; padding-bottom: 6px; margin-bottom: 4px;
+}
+.history-title-txt {
+  margin: 0; color: #ffd700; font-size: 14.5px; font-weight: 900;
+  text-align: center; letter-spacing: 1px;
+}
+
+.history-total-banner {
+  background: linear-gradient(180deg, #421c08 0%, #1a0802 100%);
+  border: 1.8px solid #ffd700; border-radius: 5px;
+  padding: 5px 8px; text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,240,160,0.5);
+}
+.history-total-summary {
+  font-family: var(--font-kaisho);
+  font-size: clamp(14px, 3.8vw, 17px); font-weight: 900;
+  letter-spacing: 1px; line-height: 1.2;
+  background: linear-gradient(180deg, #ffffff 0%, #ffe066 50%, #ffb700 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.9));
 }
 
 .history-filter-grid {
@@ -884,7 +934,7 @@ body {
 .badge-tennozan { background: #b71c1c; color: #fff; }
 .badge-shock { background: #0d47a1; color: #fff; }
 
-/* 指南モーダル（5分割タブ対応） */
+/* 指南モーダル */
 .guide-modal-box {
   width: 96vw; max-width: 530px; height: 88vh; display: flex; flex-direction: column;
   background: radial-gradient(circle at center, #2e1408 0%, #0c0401 100%) !important;

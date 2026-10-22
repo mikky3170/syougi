@@ -33,7 +33,13 @@
 </div>
 
 <div class="main-wrapper">
-  <!-- 敵将エリア（点対称：左に持ち駒、中央に情報、右に大型絵柄ポートレート） -->
+  <!-- 軍師戦況評定エリア（最上段へ配置変更） -->
+  <div class="situation-banner">
+    <div class="situation-title">戦況</div>
+    <div class="situation-text" id="situation-text">互角の戦い。両軍ともに布陣を整え、緊迫の機を伺っております。一手一手が天下を動かす刻に候。</div>
+  </div>
+
+  <!-- 敵将エリア（将棋盤の直上に対峙） -->
   <div class="warlord-panel panel-enemy" id="ai-panel">
     <div class="warlord-hand-area" id="ai-hand" title="敵軍持ち駒"></div>
     <div class="warlord-info">
@@ -53,13 +59,7 @@
     <div class="warlord-avatar" id="ai-avatar-container" onclick="openConquestMapModal()" title="天下統一・国盗り絵巻"></div>
   </div>
 
-  <!-- 軍師戦況評定エリア -->
-  <div class="situation-banner">
-    <div class="situation-title">戦況</div>
-    <div class="situation-text" id="situation-text">互角の戦い。両軍ともに布陣を整え、緊迫の機を伺っております。一手一手が天下を動かす刻に候。</div>
-  </div>
-
-  <!-- 将棋盤＆目盛り枠（親要素にぴったり追従・重なり根絶） -->
+  <!-- 将棋盤＆目盛り枠（中央配置・盤を挟んで両軍が対峙） -->
   <div class="board-wrapper">
     <div class="shogi-board-frame">
       <div class="board-top-row">
@@ -94,13 +94,7 @@
     </div>
   </div>
 
-  <!-- 合戦伝令メッセージ帯（広々メッセージ領域・インライン軍師画像対応） -->
-  <div class="order-message-banner" id="order-message-banner">
-    <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
-    <div class="order-message-text" id="order-message-text">【初陣の刻】上下のパネルより「自将」と「進軍先」を選定されよ。<br>陣容が定まり次第、「対局開始」にて振り駒を執り行われよ！</div>
-  </div>
-
-  <!-- 自将エリア（点対称：左に大型絵柄ポートレート、中央に情報、右に持ち駒） -->
+  <!-- 自将エリア（将棋盤の直下に配置変更・盤を挟んだ対局構造） -->
   <div class="warlord-panel panel-player" id="player-panel">
     <div class="warlord-avatar" id="player-avatar-container" onclick="openPlayerWarlordModal()" title="自将変更"></div>
     <div class="warlord-info">
@@ -121,6 +115,12 @@
     <div class="warlord-hand-area" id="player-hand" title="自軍持ち駒"></div>
   </div>
 
+  <!-- 合戦伝令メッセージ帯（自将エリアの下へ配置変更） -->
+  <div class="order-message-banner" id="order-message-banner">
+    <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
+    <div class="order-message-text" id="order-message-text">【初陣の刻】上下のパネルより「自将」と「進軍先」を選定されよ。<br>陣容が定まり次第、「対局開始」にて振り駒を執り行われよ！</div>
+  </div>
+
   <!-- 戦歴棋譜（最新復帰ボタン完備） -->
   <div class="kifu-bottom-banner">
     <div class="kifu-nav-col">
@@ -137,7 +137,7 @@
   </div>
 </div>
 
-<!-- 最下部コマンドバー（軍師ボタン表記を直感的な「軍師進言」へ統一） -->
+<!-- 最下部コマンドバー -->
 <div class="bottom-command-bar">
   <button class="cmd-btn btn-3d btn-undo" onclick="undoMove()">🪭 待った</button>
   <button class="cmd-btn btn-3d btn-surrender" onclick="surrenderGame()">🏳 投了</button>
@@ -222,13 +222,15 @@
   </div>
 </div>
 
-<!-- 合戦戦歴帳モーダル（全対局履歴＆絞り込み一覧表） -->
+<!-- 合戦戦歴帳モーダル（タイトルと通算成績を改行・特大表示） -->
 <div id="battle-history-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content battle-history-modal-box">
-    <h3 style="margin:0; color:#ffd700; border-bottom:1.5px solid #8e6c31; padding-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
-      <span>📜 天下合戦戦歴帳（対戦履歴）</span>
-      <span id="history-total-summary" style="font-size:10px; color:#ffeb3b;">通算 0勝0敗</span>
-    </h3>
+    <div class="history-header-box">
+      <h3 class="history-title-txt">📜 天下合戦戦歴帳（対戦履歴）</h3>
+      <div class="history-total-banner">
+        <div id="history-total-summary" class="history-total-summary">通算 0戦 0勝 0敗 0分 (勝率 0%)</div>
+      </div>
+    </div>
 
     <!-- 絞り込みフィルターバー -->
     <div class="history-filter-grid">
@@ -335,7 +337,7 @@
   </div>
 </div>
 
-<!-- 指南モーダル（🔰 初陣の極意タブを新設） -->
+<!-- 指南モーダル -->
 <div id="guide-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content guide-modal-box">
     <h3 style="margin:0 0 7px 0; color:#ffd700; border-bottom:1.5px solid #ffd700; padding-bottom:4px; text-align:center; letter-spacing:1px;">
@@ -351,7 +353,6 @@
     </div>
 
     <div class="guide-scroll-body">
-      <!-- 🔰 新設：初陣の極意（初心者必勝手引き） -->
       <div class="guide-pane active" id="guide-pane-0">
         <div class="guide-card-box beginner-highlight-box">
           <h4>🔰 木下藤吉郎（Lv.1）を討ち破る「三箇条の鉄則」</h4>
