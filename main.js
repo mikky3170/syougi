@@ -1,3 +1,4 @@
+
 /* =========================================================
    将棋王 2026 〜 天下統一・戦国決戦 〜
    メインスクリプト（軍略・演出・思考エンジン統合管理）
@@ -29,7 +30,7 @@ const LEVEL_CFG = {
   10: { depth: 5, qDepth: 7, time: 5000 }
 };
 
-// 移動可能マス取得（味方のマスは除外）
+// 移動可能マス取得
 function getValidBoardMoves(r, c, owner) {
   const item = board[r][c]; if (!item) return [];
   const dir = owner === 'AI' ? 1 : -1, moves = [];
@@ -62,7 +63,6 @@ function getValidBoardMoves(r, c, owner) {
   return moves;
 }
 
-// 駒の利きマス取得
 function getControlSquares(r, c, owner) {
   const item = board[r][c]; if (!item) return [];
   const dir = owner === 'AI' ? 1 : -1, squares = [];
@@ -170,7 +170,6 @@ function isUchifuzume(move) {
   return enemyLegals.length === 0;
 }
 
-// 局面評価関数
 function evaluatePosition() {
   let score = 0;
   let pKing = null, aiKing = null;
@@ -579,10 +578,8 @@ function launchFireworksCelebration() {
 }
 
 /* =========================================================
-   武将・軍師ポートレート画像ローダー（SVGフォールバック完全対応）
+   武将ポートレート画像ローダー（割れ画像エラー100%撲滅仕様）
    ========================================================= */
-
-// 武将用画像ローダー（画像がない場合は兜・家紋SVGを中央表示）
 function getWarlordPortraitHtml(warlordData) {
   const baseName = warlordData.customImg || `images/${warlordData.id}`;
   const pngPath = `${baseName}.png`;
@@ -591,8 +588,16 @@ function getWarlordPortraitHtml(warlordData) {
 
   return `
     <div style="width:100%; height:100%; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+      <svg viewBox="0 0 100 100" style="display:block; width:100%; height:100%;">
+        ${warlordData.portraitSvg}
+      </svg>
       <img src="${pngPath}" 
            alt="${warlordData.name}" 
+           onload="
+             this.style.display = 'block';
+             var svg = this.parentElement.querySelector('svg');
+             if (svg) svg.style.display = 'none';
+           "
            onerror="
              if (!this.dataset.triedJpg) {
                this.dataset.triedJpg = 'true';
@@ -601,49 +606,31 @@ function getWarlordPortraitHtml(warlordData) {
                this.dataset.triedWebp = 'true';
                this.src = '${webpPath}';
              } else {
-               this.style.display = 'none';
-               var svg = this.parentElement.querySelector('svg');
-               if (svg) svg.style.display = 'block';
+               this.remove();
              }
            "
-           style="width:100%; height:100%; object-fit:cover; object-position:center 10%; display:block;">
-      <svg viewBox="0 0 100 100" style="display:none; width:100%; height:100%;">
-        ${warlordData.portraitSvg}
-      </svg>
+           style="display:none; width:100%; height:100%; object-fit:cover; object-position:center 10%; position:absolute; inset:0;">
     </div>
   `;
 }
 
-// 軍師用画像ローダー（画像がない場合は軍師専用SVGを中央表示）
-function getStrategistPortraitHtml(warlordData) {
-  const baseName = `images/${warlordData.strategistImgId}`;
-  const pngPath = `${baseName}.png`;
-  const jpgPath = `${baseName}.jpg`;
-  const webpPath = `${baseName}.webp`;
-
-  return `
-    <div style="width:100%; height:100%; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-      <img src="${pngPath}" 
-           alt="${warlordData.strategistName}" 
-           onerror="
-             if (!this.dataset.triedJpg) {
-               this.dataset.triedJpg = 'true';
-               this.src = '${jpgPath}';
-             } else if (!this.dataset.triedWebp) {
-               this.dataset.triedWebp = 'true';
-               this.src = '${webpPath}';
-             } else {
-               this.style.display = 'none';
-               var svg = this.parentElement.querySelector('svg');
-               if (svg) svg.style.display = 'block';
-             }
-           "
-           style="width:100%; height:100%; object-fit:cover; object-position:center 10%; display:block;">
-      <svg viewBox="0 0 100 100" style="display:none; width:100%; height:100%;">
-        ${warlordData.strategistSvg}
-      </svg>
-    </div>
-  `;
+/* 軍師助言用：インライン顔アイコン生成（画像がある場合のみ【軍師進言】と軍師名の間に表示） */
+function getStrategistInlineImgHtml(imgId) {
+  const base = `images/${imgId}`;
+  return `<img src="${base}.png" class="strategist-inline-icon"
+               onload="this.style.display='inline-block'"
+               onerror="
+                 if (!this.dataset.triedJpg) {
+                   this.dataset.triedJpg = 'true';
+                   this.src = '${base}.jpg';
+                 } else if (!this.dataset.triedWebp) {
+                   this.dataset.triedWebp = 'true';
+                   this.src = '${base}.webp';
+                 } else {
+                   this.remove();
+                 }
+               "
+               style="display:none;">`;
 }
 
 /* 主役五傑（専属軍師 ＆ 兜・軍師ポートレートアート） */
@@ -669,16 +656,6 @@ const PLAYER_WARLORDS = {
         <circle cx="42" cy="52" r="4.5"/><circle cx="50" cy="52" r="4.5"/><circle cx="58" cy="52" r="4.5"/>
       </g>
       <path d="M 24,72 Q 50,96 76,72 L 72,82 Q 50,100 28,82 Z" fill="#ffd700"/>
-    `,
-    strategistSvg: `
-      <rect width="100" height="100" rx="6" fill="#2d1306"/>
-      <polygon points="50,12 66,32 50,26 34,32" fill="#ffd700"/>
-      <circle cx="50" cy="52" r="22" fill="#170902" stroke="#ffd700" stroke-width="2"/>
-      <g fill="#ffd700">
-        <circle cx="44" cy="46" r="3.5"/><circle cx="50" cy="46" r="3.5"/><circle cx="56" cy="46" r="3.5"/>
-        <circle cx="44" cy="56" r="3.5"/><circle cx="50" cy="56" r="3.5"/><circle cx="56" cy="56" r="3.5"/>
-      </g>
-      <text x="50" y="88" font-size="11" font-weight="900" fill="#ffd700" text-anchor="middle">謀将昌幸</text>
     `
   },
   keiji: {
@@ -699,13 +676,6 @@ const PLAYER_WARLORDS = {
       <circle cx="50" cy="45" r="9" fill="#ffd700"/>
       <circle cx="50" cy="26" r="6" fill="#ffd700"/><circle cx="68" cy="38" r="6" fill="#ffd700"/>
       <circle cx="62" cy="62" r="6" fill="#ffd700"/><circle cx="38" cy="62" r="6" fill="#ffd700"/><circle cx="32" cy="38" r="6" fill="#ffd700"/>
-    `,
-    strategistSvg: `
-      <rect width="100" height="100" rx="6" fill="#1b1d28"/>
-      <polygon points="50,15 70,38 30,38" fill="#ffd700"/>
-      <path d="M 26,44 Q 50,28 74,44 L 76,74 Q 50,82 24,74 Z" fill="#2d354d" stroke="#ffd700" stroke-width="1.8"/>
-      <circle cx="50" cy="56" r="12" fill="#ffd700"/>
-      <text x="50" y="90" font-size="11" font-weight="900" fill="#ffd700" text-anchor="middle">助右衛門</text>
     `
   },
   masamune: {
@@ -725,13 +695,6 @@ const PLAYER_WARLORDS = {
       <path d="M 28,48 Q 50,28 72,48 L 76,76 Q 50,84 24,76 Z" fill="#0d1f36" stroke="#4fc3f7" stroke-width="1.8"/>
       <circle cx="40" cy="60" r="4" fill="#ffd700"/>
       <path d="M 34,58 L 46,62" stroke="#000" stroke-width="2"/>
-    `,
-    strategistSvg: `
-      <rect width="100" height="100" rx="6" fill="#071b26"/>
-      <path d="M 20,40 Q 50,15 80,40 L 76,75 Q 50,85 24,75 Z" fill="#13364b" stroke="#ffd700" stroke-width="2"/>
-      <circle cx="50" cy="46" r="15" fill="#ffd700"/>
-      <circle cx="50" cy="46" r="10" fill="#071b26"/>
-      <text x="50" y="90" font-size="11" font-weight="900" fill="#ffd700" text-anchor="middle">竜の右目</text>
     `
   },
   kanetsugu: {
@@ -750,13 +713,6 @@ const PLAYER_WARLORDS = {
       <text x="50" y="44" font-size="34" font-weight="900" fill="#ffd700" text-anchor="middle" font-family="Shippori Mincho, serif">愛</text>
       <path d="M 28,48 Q 50,32 72,48 L 75,76 Q 50,84 25,76 Z" fill="#30103b" stroke="#ffd700" stroke-width="1.8"/>
       <path d="M 24,72 Q 50,94 76,72" fill="none" stroke="#ba68c8" stroke-width="3"/>
-    `,
-    strategistSvg: `
-      <rect width="100" height="100" rx="6" fill="#1d1226"/>
-      <path d="M 26,45 Q 50,18 74,45 L 76,78 Q 50,86 24,78 Z" fill="#38214a" stroke="#ffd700" stroke-width="1.8"/>
-      <circle cx="50" cy="46" r="16" fill="#150a1c"/>
-      <text x="50" y="52" font-size="14" font-weight="900" fill="#ffd700" text-anchor="middle">懸</text>
-      <text x="50" y="90" font-size="11" font-weight="900" fill="#ffd700" text-anchor="middle">総帥景勝</text>
     `
   },
   tadakatsu: {
@@ -776,13 +732,6 @@ const PLAYER_WARLORDS = {
       <path d="M 78,25 Q 88,46 68,54 Q 82,36 72,26 Z" fill="#ffd700"/>
       <path d="M 30,48 Q 50,30 70,48 L 74,76 Q 50,84 26,76 Z" fill="#241505" stroke="#ffd700" stroke-width="1.8"/>
       <circle cx="50" cy="62" r="14" fill="none" stroke="#ffd700" stroke-width="3.5" stroke-dasharray="3,3"/>
-    `,
-    strategistSvg: `
-      <rect width="100" height="100" rx="6" fill="#261705"/>
-      <polygon points="50,16 68,36 50,30 32,36" fill="#ffd700"/>
-      <path d="M 28,45 Q 50,28 72,45 L 75,76 Q 50,84 25,76 Z" fill="#4d2f0a" stroke="#ffd700" stroke-width="1.8"/>
-      <circle cx="50" cy="58" r="13" fill="#ffd700"/>
-      <text x="50" y="90" font-size="11" font-weight="900" fill="#ffd700" text-anchor="middle">佐渡守</text>
     `
   }
 };
@@ -905,9 +854,10 @@ const RIVALRIES = {
   }
 };
 
+/* 【成駒旧字化】飛車・角行の成り文字を「龍王」「龍馬」へ */
 const PIECES = {
   OU: '王将', HI: '飛車', KA: '角行', KI: '金将', GI: '銀将', KE: '桂馬', KY: '香車', FU: '歩兵',
-  RY: '竜王', UM: '竜馬', NG: '成銀', NK: '成桂', NY: '成香', TO: 'と金'
+  RY: '龍王', UM: '龍馬', NG: '成銀', NK: '成桂', NY: '成香', TO: 'と金'
 };
 const PROMOTED_PIECES = ['RY', 'UM', 'NG', 'NK', 'NY', 'TO'];
 const KANJI_NUMS = ['一','二','三','四','五','六','七','八','九'];
@@ -919,6 +869,9 @@ let board = [], hands = { PLAYER: {}, AI: {} }, turn = null, isGameOver = true;
 let selectedPos = null, currentValidMoves = [], moveObjectsHistory = [], historyStates = [], reviewingIndex = -1, evalScoresHistory = [0];
 let hintSourceCell = null, hintTargetCell = null, pendingMove = null, isAiThinking = false, isHintThinking = false;
 let boardHashHistory = [], checkHistory = [], lastMove = null;
+
+// 軍師助言使用回数・合戦統計管理
+let hintUsedCount = 0, awakenedHintCount = 0, battleStartTurn = 'PLAYER';
 
 // 移動可能マス取得
 function getValidBoardMoves(r, c, owner) {
@@ -1150,16 +1103,19 @@ function checkSennichite() {
     if (playerChecking >= 3 && aiChecking === 0) {
       triggerCutin('連続王手の反則！ 敗戦に候！', true);
       setOrderMessage('【反則負け】連続王手の千日手は武士道違反（反則負け）に候！<br>陣を立て直し再戦されよ。', false);
+      saveBattleRecord('lose', '反則負け');
       return true;
     } else if (aiChecking >= 3 && playerChecking === 0) {
       triggerCutin('敵将の反則！ 我が軍の勝利！', true);
       setOrderMessage('【反則勝ち】敵将が連続王手の千日手を犯し候！ 我が軍の勝利なり！', false);
       saveProgress(currentAiLevel); launchFireworksCelebration();
+      saveBattleRecord('win', '反則勝ち');
       return true;
     }
 
     triggerCutin('千日手！ 痛み分けの引き分け！');
     setOrderMessage('【千日手】同一局面四回にて引き分け（痛み分け）に候。<br>「対局開始」にて再戦されよ。', false);
+    saveBattleRecord('draw', '千日手');
     return true;
   }
   return false;
@@ -1175,8 +1131,6 @@ function initBoardState() {
 
   updateStrategistUI();
   updateWarlordBGM(currentAiLevel);
-
-  // 対局画面ポートレートの完全描画・更新
   renderMainPortraits();
 
   board[0] = [{code:'KY',owner:'AI'},{code:'KE',owner:'AI'},{code:'GI',owner:'AI'},{code:'KI',owner:'AI'},{code:'OU',owner:'AI'},{code:'KI',owner:'AI'},{code:'GI',owner:'AI'},{code:'KE',owner:'AI'},{code:'KY',owner:'AI'}];
@@ -1191,7 +1145,6 @@ function initBoardState() {
   renderBoard(); renderKifu(); updateMoraleAndSituation(0);
 }
 
-// 対局画面アバター（自将・敵将）のポートレートを確実に描画
 function renderMainPortraits() {
   const p = PLAYER_WARLORDS[currentMyWarlordId];
   const w = WARLORDS_DATA[currentAiLevel];
@@ -1201,6 +1154,7 @@ function renderMainPortraits() {
   if (aiBox) aiBox.innerHTML = getWarlordPortraitHtml(w);
 }
 
+/* 【軍師ボタン表記統一】誰を選んでいても一目で分かりやすい「軍師進言」へ */
 function updateStrategistUI() {
   const p = PLAYER_WARLORDS[currentMyWarlordId];
   const badge = document.getElementById('player-strategist-badge');
@@ -1208,27 +1162,15 @@ function updateStrategistUI() {
   const hintBtn = document.getElementById('btn-master-hint');
   if (hintBtn) {
     hintBtn.classList.remove('awakened');
-    hintBtn.textContent = `💡 ${p.strategistShort}進言`;
+    hintBtn.textContent = '💡 軍師進言';
   }
 }
 
-// 伝令メッセージ表示（軍師ポートレート連動）
-function setOrderMessage(txt, isMyTurn = false, showStrategistAvatar = false) {
+function setOrderMessage(txt, isMyTurn = false) {
   const el = document.getElementById('order-message-banner');
-  const slot = document.getElementById('order-avatar-slot');
   document.getElementById('order-message-text').innerHTML = txt;
   el.classList.toggle('my-turn', isMyTurn);
   document.getElementById('player-panel').classList.toggle('player-active', isMyTurn);
-
-  if (slot) {
-    if (showStrategistAvatar) {
-      slot.classList.add('has-strategist');
-      slot.innerHTML = getStrategistPortraitHtml(PLAYER_WARLORDS[currentMyWarlordId]);
-    } else {
-      slot.classList.remove('has-strategist');
-      slot.innerHTML = `<svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>`;
-    }
-  }
 }
 
 function openFurigomaModal() {
@@ -1254,6 +1196,7 @@ function openFurigomaModal() {
   setTimeout(() => {
     const isPlayerSente = (5 - toCount) >= 3;
     turn = isPlayerSente ? 'PLAYER' : 'AI';
+    battleStartTurn = turn;
     t.innerHTML = isPlayerSente ? `<span style="color:#ff5252;">歩が${5 - toCount}枚！ 我が軍の先手！</span>` : `<span style="color:#ffd700;">と金が${toCount}枚！ 敵軍の先手！</span>`;
     setTimeout(() => { m.style.display = 'none'; startBattle(); }, 1200);
   }, 1300);
@@ -1261,6 +1204,7 @@ function openFurigomaModal() {
 
 function startBattle() {
   isGameOver = false; initBoardState();
+  hintUsedCount = 0; awakenedHintCount = 0;
   const rivalKey = `${currentMyWarlordId}_${currentAiLevel}`;
   const rivalry = RIVALRIES[rivalKey];
 
@@ -1422,8 +1366,8 @@ function executeMove(m) {
     }
     if (m.promote) {
       fp.code = PROMOTE_MAP[fp.code];
-      if (fp.code === 'RY') triggerCutin('竜王顕現！ 敵陣を薙ぎ払え！', true);
-      else if (fp.code === 'UM') triggerCutin('竜馬咆哮！ 神速の刃！', true);
+      if (fp.code === 'RY') triggerCutin('龍王顕現！ 敵陣を薙ぎ払え！', true);
+      else if (fp.code === 'UM') triggerCutin('龍馬咆哮！ 神速の刃！', true);
     }
     board[m.to.r][m.to.c] = fp;
     board[m.from.r][m.from.c] = null;
@@ -1464,14 +1408,19 @@ function handleWorkerMessage(e) {
   if (data.type === 'hintDone') {
     isHintThinking = false;
     const bm = data.bestMove;
-    if (!bm) { setOrderMessage(`${p.strategistShort}「進言できる妙手がござらぬ…！」`, true, true); return; }
+    const imgHtml = getStrategistInlineImgHtml(p.strategistImgId);
+
+    if (!bm) {
+      setOrderMessage(`【軍師進言】${imgHtml}${p.strategistShort}「進言できる妙手がござらぬ…！」`, true);
+      return;
+    }
     const pName = bm.type === 'drop' ? PIECES[bm.code] : PIECES[board[bm.from.r][bm.from.c]?.code || bm.code];
     
     if (data.isAwakened) {
       triggerCutin(`軍師覚醒！ ${p.strategistName}の神算鬼謀！`, true);
-      setOrderMessage(`【覚醒進言】${p.strategistShort}「これぞ天下を動かす一手！ <b>${9 - bm.to.c}${KANJI_NUMS[bm.to.r]}へ${pName}</b>を進軍されよ！」`, true, true);
+      setOrderMessage(`【覚醒進言】${imgHtml}${p.strategistShort}「これぞ天下を動かす一手！ <b>${9 - bm.to.c}${KANJI_NUMS[bm.to.r]}へ${pName}</b>を進軍されよ！」`, true);
     } else {
-      setOrderMessage(`【軍師進言】${p.strategistShort}「<b>${9 - bm.to.c}${KANJI_NUMS[bm.to.r]}へ${pName}</b>を進軍されよ！」`, true, true);
+      setOrderMessage(`【軍師進言】${imgHtml}${p.strategistShort}「<b>${9 - bm.to.c}${KANJI_NUMS[bm.to.r]}へ${pName}</b>を進軍されよ！」`, true);
     }
     
     hintSourceCell = bm.type === 'move' ? { r: bm.from.r, c: bm.from.c } : null;
@@ -1520,15 +1469,17 @@ function showMasterHint() {
     return;
   }
   playPieceSound(); isHintThinking = true;
+  hintUsedCount++;
   const p = PLAYER_WARLORDS[currentMyWarlordId];
   const hintBtn = document.getElementById('btn-master-hint');
   const isAwakenedNow = hintBtn.classList.contains('awakened');
   
   if (isAwakenedNow) {
-    setOrderMessage(`【覚醒軍師思案中】${p.strategistName}、深淵の神算鬼謀を探索中…！`, false, true);
+    awakenedHintCount++;
+    setOrderMessage(`【覚醒軍師思案中】${p.strategistName}、深淵の神算鬼謀を探索中…！`, false);
     aiWorker.postMessage({ board, hands, level: 10, isHintRequest: true, isAwakened: true, history: moveObjectsHistory });
   } else {
-    setOrderMessage(`【軍師思案中】${p.strategistName}、勝機の一手を探索中…`, false, true);
+    setOrderMessage(`【軍師思案中】${p.strategistName}、勝機の一手を探索中…`, false);
     aiWorker.postMessage({ board, hands, level: 8, isHintRequest: true, isAwakened: false, history: moveObjectsHistory });
   }
 }
@@ -1559,6 +1510,7 @@ function surrenderGame() {
   if (isGameOver) return;
   isGameOver = true; triggerCutin('無念… 降伏いたす…');
   setOrderMessage('【敗戦】再起の陣を敷き、雪辱を期されよ！', false);
+  saveBattleRecord('lose', '降伏(投了)');
 }
 
 function checkGameOver(nextOwner) {
@@ -1573,9 +1525,11 @@ function checkGameOver(nextOwner) {
       } else {
         setOrderMessage('【大勝利！】敵本陣を陥落させ候！ 天下平定！', false);
       }
+      saveBattleRecord('win', '大勝利');
     } else {
       triggerCutin('本陣陥落… 敗北に候…');
       setOrderMessage('【敗戦】敵将に敗れ候。再起を期されよ！', false);
+      saveBattleRecord('lose', '本陣陥落');
     }
     return true;
   }
@@ -1598,10 +1552,10 @@ function updateMoraleAndSituation(scoreAI) {
 
   if (canAwaken && !isGameOver) {
     hintBtn.classList.add('awakened');
-    hintBtn.textContent = `🔥 覚醒${p.strategistShort}`;
+    hintBtn.textContent = '🔥 覚醒進言';
   } else {
     hintBtn.classList.remove('awakened');
-    hintBtn.textContent = `💡 ${p.strategistShort}進言`;
+    hintBtn.textContent = '💡 軍師進言';
   }
 
   const sit = document.getElementById('situation-text');
@@ -1947,7 +1901,6 @@ function selectConquestProvince(lvl) {
   document.getElementById('ai-quote-disp').textContent = w.quotes.default;
   document.getElementById('ai-power-disp').textContent = w.power;
   
-  // 対局画面敵将ポートレートの更新
   const aiBox = document.getElementById('ai-avatar-container');
   if (aiBox) aiBox.innerHTML = getWarlordPortraitHtml(w);
 
@@ -1973,7 +1926,6 @@ function setPlayerWarlord(k) {
   document.getElementById('player-clan-disp').textContent = p.clan;
   document.getElementById('player-quote-disp').textContent = p.quotes.default;
   
-  // 対局画面自将ポートレートの更新
   const pBox = document.getElementById('player-avatar-container');
   if (pBox) pBox.innerHTML = getWarlordPortraitHtml(p);
 
@@ -2012,6 +1964,170 @@ function downloadKifu() {
   a.href = URL.createObjectURL(b);
   a.download = `将棋王_戦国合戦棋譜_${pName}対${eName}.kif`;
   a.click();
+}
+
+/* =========================================================
+   【新機能】合戦戦歴帳（対戦結果アーカイブ・絞り込み保存）
+   ========================================================= */
+function saveBattleRecord(resultType, resultLabel) {
+  if (moveObjectsHistory.length === 0) return;
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+  
+  const record = {
+    id: Date.now(),
+    date: dateStr,
+    playerWarlordId: currentMyWarlordId,
+    playerWarlordName: PLAYER_WARLORDS[currentMyWarlordId].name,
+    enemyLevel: currentAiLevel,
+    enemyName: WARLORDS_DATA[currentAiLevel].name,
+    enemyProvince: WARLORDS_DATA[currentAiLevel].province,
+    result: resultType,          // 'win' | 'lose' | 'draw'
+    resultLabel: resultLabel,    // '大勝利', '本陣陥落', '降伏(投了)', '千日手' など
+    movesCount: moveObjectsHistory.length,
+    sente: battleStartTurn === 'PLAYER' ? '先手' : '後手',
+    hintUsed: hintUsedCount,
+    awakenedHintUsed: awakenedHintCount,
+    historyStates: JSON.parse(JSON.stringify(historyStates)),
+    moveObjectsHistory: JSON.parse(JSON.stringify(moveObjectsHistory)),
+    evalScoresHistory: JSON.parse(JSON.stringify(evalScoresHistory))
+  };
+
+  try {
+    let records = JSON.parse(localStorage.getItem('shogi_battle_records') || '[]');
+    records.unshift(record); // 最新を先頭へ
+    if (records.length > 100) records = records.slice(0, 100); // 最大100局保存
+    localStorage.setItem('shogi_battle_records', JSON.stringify(records));
+  } catch(e) {}
+}
+
+function openHistoryModal() {
+  renderBattleHistoryList();
+  document.getElementById('battle-history-modal').style.display = 'flex';
+}
+function closeHistoryModal() {
+  document.getElementById('battle-history-modal').style.display = 'none';
+}
+
+function renderBattleHistoryList() {
+  let records = [];
+  try {
+    records = JSON.parse(localStorage.getItem('shogi_battle_records') || '[]');
+  } catch(e) { records = []; }
+
+  // 通算集計
+  const total = records.length;
+  const wins = records.filter(r => r.result === 'win').length;
+  const loses = records.filter(r => r.result === 'lose').length;
+  const draws = records.filter(r => r.result === 'draw').length;
+  const winRate = total > 0 ? Math.round((wins / (total - draws || 1)) * 100) : 0;
+  
+  const summaryEl = document.getElementById('history-total-summary');
+  if (summaryEl) {
+    summaryEl.textContent = `通算 ${total}戦 ${wins}勝 ${loses}敗 ${draws}分 (勝率${winRate}%)`;
+  }
+
+  // フィルター取得
+  const resF = document.getElementById('filter-result')?.value || 'all';
+  const hintF = document.getElementById('filter-hint')?.value || 'all';
+  const warF = document.getElementById('filter-warlord')?.value || 'all';
+  const lvlF = document.getElementById('filter-level')?.value || 'all';
+
+  const filtered = records.filter(r => {
+    if (resF !== 'all' && r.result !== resF) return false;
+    if (hintF === 'none' && r.hintUsed > 0) return false;
+    if (hintF === 'used' && r.hintUsed === 0) return false;
+    if (warF !== 'all' && r.playerWarlordId !== warF) return false;
+    if (lvlF !== 'all' && r.enemyLevel !== parseInt(lvlF, 10)) return false;
+    return true;
+  });
+
+  const listEl = document.getElementById('history-records-list');
+  listEl.innerHTML = '';
+
+  if (filtered.length === 0) {
+    listEl.innerHTML = `<div style="text-align:center; padding:25px; color:#c4aa76; font-size:11px;">条件に合致する合戦記録はござらぬ。</div>`;
+    return;
+  }
+
+  filtered.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'history-record-card';
+
+    let badgeClass = 'badge-lose';
+    if (r.result === 'win') badgeClass = 'badge-win';
+    else if (r.result === 'draw') badgeClass = 'badge-draw';
+
+    let hintBadgeHtml = '';
+    if (r.hintUsed === 0) {
+      hintBadgeHtml = `<span class="badge-hint-none">✨ 軍師助言: なし(自力)</span>`;
+    } else {
+      const awkStr = r.awakenedHintUsed > 0 ? ` (覚醒${r.awakenedHintUsed})` : '';
+      hintBadgeHtml = `<span class="badge-hint-count">💡 軍師助言: ${r.hintUsed}回${awkStr}</span>`;
+    }
+
+    card.innerHTML = `
+      <div class="history-card-top-row">
+        <span class="history-date-txt">📅 ${r.date}</span>
+        <span class="history-res-badge ${badgeClass}">【${r.resultLabel}】</span>
+      </div>
+      <div class="history-matchup-row">
+        <span>${r.playerWarlordName} (${r.sente})</span>
+        <span class="matchup-vs-txt">⚔ VS ⚔</span>
+        <span>${r.enemyProvince}・${r.enemyName} (Lv.${r.enemyLevel})</span>
+      </div>
+      <div class="history-details-bottom-row">
+        <span>総手数: <b>${r.movesCount}手</b></span>
+        ${hintBadgeHtml}
+        <button class="history-replay-btn btn-3d" onclick="replayFromHistory(${r.id})">棋譜再現</button>
+      </div>
+    `;
+    listEl.appendChild(card);
+  });
+}
+
+function replayFromHistory(recordId) {
+  let records = [];
+  try {
+    records = JSON.parse(localStorage.getItem('shogi_battle_records') || '[]');
+  } catch(e) { records = []; }
+  
+  const rec = records.find(r => r.id === recordId);
+  if (!rec) return;
+
+  playPieceSound();
+  closeHistoryModal();
+
+  // 選択合戦の局面・履歴を復元
+  currentMyWarlordId = rec.playerWarlordId;
+  currentAiLevel = rec.enemyLevel;
+  setPlayerWarlord(currentMyWarlordId);
+  selectConquestProvince(currentAiLevel);
+
+  historyStates = rec.historyStates;
+  moveObjectsHistory = rec.moveObjectsHistory;
+  evalScoresHistory = rec.evalScoresHistory;
+
+  reviewingIndex = historyStates.length - 1;
+  const lastSnap = historyStates[reviewingIndex];
+  board = cloneBoardState(lastSnap.board);
+  hands = JSON.parse(JSON.stringify(lastSnap.hands));
+  lastMove = (reviewingIndex > 0) ? lastSnap.moveObjectsHistory[lastSnap.moveObjectsHistory.length - 1] : null;
+  isGameOver = true;
+
+  renderBoard();
+  renderKifu();
+  updateMoraleAndSituation(evalScoresHistory[evalScoresHistory.length - 1] || 0);
+  
+  setOrderMessage(`【戦歴再生中】${rec.date} の合戦記録（${rec.playerWarlordName} vs ${rec.enemyName}・${rec.resultLabel}）を再現中。`, false);
+  openKifuModal(); // そのまま棋譜モーダルを開いて全手順と形勢グラフを確認
+}
+
+function clearBattleHistory() {
+  if (confirm('これまでの合戦戦歴をすべて消去いたしますか？')) {
+    localStorage.removeItem('shogi_battle_records');
+    renderBattleHistoryList();
+  }
 }
 
 /* 起動イベント */

@@ -48,23 +48,23 @@ body {
    本丸扁額風・極彩山吹黄金立体銘板（金覆輪立体タイトル）
    ========================================================= */
 .top-header {
-  width: 100%; max-width: 520px; height: 46px;
+  width: 100%; max-width: 520px; height: 44px;
   display: flex; justify-content: space-between; align-items: center;
   border: 2.5px solid #ffd700; border-radius: 6px;
   background: linear-gradient(180deg, #441d0c 0%, #170702 50%, #351406 100%);
   box-shadow: 
-    0 5px 0 #120501,
-    0 8px 18px rgba(0,0,0,0.98),
+    0 4px 0 #120501,
+    0 6px 16px rgba(0,0,0,0.98),
     inset 0 1.5px 0 rgba(255, 255, 220, 0.9),
     inset 0 -1.5px 0 rgba(0, 0, 0, 0.8),
     inset 0 0 16px rgba(255, 215, 0, 0.45);
-  padding: 2px 6px; flex-shrink: 0; position: relative; gap: 4px;
+  padding: 2px 5px; flex-shrink: 0; position: relative; gap: 3px;
   transition: max-width 0.3s ease;
 }
 
 .app-title-group {
   display: flex; align-items: center; justify-content: center;
-  flex: 1; min-width: 0; padding: 0 2px;
+  flex: 1; min-width: 0; padding: 0 1px;
 }
 
 .app-title-main {
@@ -78,31 +78,29 @@ body {
 }
 
 .title-main-txt {
-  font-size: clamp(13px, 3.2vw, 17px);
-  font-weight: 900; letter-spacing: 1.4px; white-space: nowrap;
+  font-size: clamp(12px, 3.0vw, 16px);
+  font-weight: 900; letter-spacing: 1.2px; white-space: nowrap;
 }
 
 .title-sub-txt {
-  font-size: clamp(8px, 2.0vw, 10.5px);
-  font-weight: 700; letter-spacing: 0.8px; white-space: nowrap; opacity: 0.95;
+  font-size: clamp(7.5px, 1.8vw, 10px);
+  font-weight: 700; letter-spacing: 0.6px; white-space: nowrap; opacity: 0.95;
 }
 
-/* タブレット・PC（幅481px以上）：堂々たる一行表示 */
 @media (min-width: 481px) {
-  .app-title-main {
-    flex-direction: row; gap: 6px;
-  }
-  .title-main-txt { font-size: 16px; }
-  .title-sub-txt { font-size: 11px; }
+  .app-title-main { flex-direction: row; gap: 5px; }
+  .title-main-txt { font-size: 15.5px; }
+  .title-sub-txt { font-size: 10.5px; }
 }
 
-.header-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.header-actions { display: flex; gap: 3px; flex-shrink: 0; }
 .header-btn {
-  font-family: var(--font-ui); font-size: 10px; font-weight: 900;
-  padding: 3px 6px; border-radius: 4px; border: 1.2px solid #ffd700;
+  font-family: var(--font-ui); font-size: 9.5px; font-weight: 900;
+  padding: 3px 5px; border-radius: 4px; border: 1.2px solid #ffd700;
   color: #fff8d6; cursor: pointer; white-space: nowrap;
 }
 .btn-guide { background: linear-gradient(180deg, #664311 0%, #301f05 100%); border-color: #ffd700; color: #ffefa8; }
+.btn-history { background: linear-gradient(180deg, #661818 0%, #300606 100%); border-color: #ff9e9e; color: #ffe8e8; }
 .btn-kifu { background: linear-gradient(180deg, #1b3a57 0%, #0c1a29 100%); border-color: #5ea8e6; color: #d8eeff; }
 .btn-snd { background: linear-gradient(180deg, #442a4f 0%, #1f1124 100%); border-color: #b97de6; color: #f2e1ff; }
 
@@ -126,8 +124,9 @@ body {
 /* メイン骨格 */
 .main-wrapper {
   display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-  width: 100%; max-width: 520px; flex: 1; min-height: 0; gap: 2px;
+  width: 100%; max-width: 520px; flex: 1 1 0; min-height: 0; gap: 2px;
   transition: max-width 0.3s ease;
+  position: relative;
 }
 
 @media (min-width: 600px) {
@@ -138,11 +137,9 @@ body {
 
 /* =========================================================
    武将金蒔絵パネル（点対称・シンメトリー構造）
-   敵将：左に駒台 ─ 中に情報 ─ 右に大型絵柄
-   自将：左に大型絵柄 ─ 中に情報 ─ 右に駒台
    ========================================================= */
 .warlord-panel {
-  width: 100%; min-height: clamp(68px, 9.5vh, 82px);
+  width: 100%; min-height: clamp(66px, 9.0vh, 78px);
   background: linear-gradient(180deg, rgba(38, 19, 8, 0.98) 0%, rgba(14, 6, 2, 0.98) 100%);
   border: 1.8px solid #c99832; border-radius: 5px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,235,150,0.4);
@@ -154,29 +151,22 @@ body {
   border-color: #ffd700 !important;
 }
 
-/* 【角を少し丸くした四角形（大型額縁ポートレート）】 */
 .warlord-avatar {
-  width: clamp(54px, 7.5vh, 64px) !important;
-  height: clamp(60px, 8.2vh, 70px) !important;
+  width: clamp(52px, 7.2vh, 62px) !important;
+  height: clamp(58px, 8.0vh, 68px) !important;
   border-radius: 6px !important;
   border: 2px solid #ffd700 !important;
   background: radial-gradient(circle at 35% 35%, #3d1c0c 0%, #080301 100%);
   overflow: hidden !important; position: relative; flex-shrink: 0 !important;
-  box-shadow: 
-    0 3px 6px rgba(0,0,0,0.95),
-    0 0 12px rgba(255, 215, 0, 0.5),
-    inset 0 0 4px rgba(0,0,0,0.8);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.95), 0 0 12px rgba(255, 215, 0, 0.5), inset 0 0 4px rgba(0,0,0,0.8);
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  transition: transform 0.15s ease;
+  cursor: pointer; transition: transform 0.15s ease;
 }
 .warlord-avatar:hover { transform: scale(1.04); }
 
 .warlord-avatar img, .warlord-avatar svg {
   width: 100% !important; height: 100% !important;
-  object-fit: cover !important;
-  object-position: center 10% !important;
-  display: block !important;
+  object-fit: cover !important; object-position: center 10% !important; display: block !important;
 }
 
 .warlord-info { flex: 1.25; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
@@ -186,11 +176,8 @@ body {
 .warlord-name-row { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
 .name-left-group, .name-right-group { display: flex; align-items: center; gap: 5px; min-width: 0; }
 .panel-enemy .warlord-name-row { justify-content: space-between; }
-
-/* 武将名表示（ひと回り拡大） */
 .warlord-name { font-size: 14.5px; font-weight: 900; color: #ffe699; letter-spacing: 0.8px; white-space: nowrap; }
 
-/* 軍師バッジ銘板 */
 .warlord-strategist-badge {
   font-size: 9px; font-weight: 900; color: #fff8e7;
   background: linear-gradient(180deg, #5c2009 0%, #290a02 100%);
@@ -199,10 +186,10 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
 
-/* 【キャラ選択ボタン拡大（国盗り絵巻 / 自将変更）】 */
+/* キャラ選択ボタン拡大 */
 .panel-select-btn {
   font-family: var(--font-ui); font-size: 11px; font-weight: 900;
-  padding: 4px 9px; border-radius: 4px; cursor: pointer; white-space: nowrap;
+  padding: 3.5px 8.5px; border-radius: 4px; cursor: pointer; white-space: nowrap;
   display: flex; align-items: center; gap: 3px; letter-spacing: 0.5px;
   box-shadow: 0 2.5px 0 rgba(0,0,0,0.9), 0 3px 5px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.4);
 }
@@ -215,25 +202,21 @@ body {
   border: 1.3px solid #ffb3b3; color: #ffffff;
 }
 
-/* 所属・兵力・セリフ文字の拡大 */
-.warlord-clan { font-size: 9.5px; color: #d6be89; font-weight: 700; line-height: 1.2; margin-top: 1px; }
+.warlord-clan { font-size: 9px; color: #d6be89; font-weight: 700; line-height: 1.1; margin-top: 1px; }
 
-/* 武将セリフ（ひと回り大きく、視認性を大幅向上） */
 .warlord-quote {
-  font-size: 10.5px; color: #fff8e7; font-weight: 800;
+  font-size: 10px; color: #fff8e7; font-weight: 800;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  text-shadow: 0 1px 2px #000;
-  margin: 1.5px 0; transition: all 0.3s ease;
+  text-shadow: 0 1px 2px #000; margin: 1px 0; transition: all 0.3s ease;
 }
 
 .gauge-group { display: flex; flex-direction: column; gap: 1px; margin-top: 1px; }
-.gauge-label-row { display: flex; justify-content: space-between; font-size: 9px; color: #f2e3c6; font-weight: 900; }
-.morale-bar-frame { width: 100%; height: 5.5px; background: #000; border: 0.5px solid #8e6c31; border-radius: 2px; overflow: hidden; }
+.gauge-label-row { display: flex; justify-content: space-between; font-size: 8.5px; color: #f2e3c6; font-weight: 900; }
+.morale-bar-frame { width: 100%; height: 5px; background: #000; border: 0.5px solid #8e6c31; border-radius: 2px; overflow: hidden; }
 .morale-bar-fill { height: 100%; width: 50%; transition: width 0.4s ease-out; }
 .morale-enemy { background: linear-gradient(90deg, #991414, #ff4d4d); }
 .morale-player { background: linear-gradient(90deg, #b86b14, #ffd700); }
 
-/* 蒔絵仕立ての駒台トレイ（敵軍は左配置、自軍は右配置） */
 .warlord-hand-area {
   flex: 1.1; height: 90%; min-width: 85px;
   background: rgba(10, 5, 2, 0.88); border: 1.2px solid #8f692c;
@@ -244,99 +227,73 @@ body {
 .panel-enemy .warlord-hand-area { justify-content: flex-start; }
 .panel-player .warlord-hand-area { justify-content: flex-end; }
 
-/* =========================================================
-   スマートフォン用レスポンシブ最適化（幅480px以下）
-   ========================================================= */
+/* スマホ用レスポンシブ最適化 */
 @media (max-width: 480px) {
   .warlord-panel {
     display: grid !important;
     height: auto !important;
-    min-height: 76px !important;
-    padding: 3px 5px !important;
-    gap: 3px 6px !important;
+    min-height: 70px !important;
+    padding: 2.5px 5px !important;
+    gap: 2px 6px !important;
   }
-  
-  /* 敵将：上段に情報＋絵柄、下段左に駒台 */
   .panel-enemy {
     grid-template-columns: 1fr auto !important;
     grid-template-rows: auto auto !important;
   }
   .panel-enemy .warlord-hand-area {
-    grid-column: 1 / 2 !important;
-    grid-row: 2 / 3 !important;
-    height: 38px !important;
-    width: 100% !important;
-    justify-content: flex-start !important;
+    grid-column: 1 / 2 !important; grid-row: 2 / 3 !important;
+    height: 36px !important; width: 100% !important; justify-content: flex-start !important;
   }
-  .panel-enemy .warlord-info {
-    grid-column: 1 / 2 !important;
-    grid-row: 1 / 2 !important;
-  }
-  .panel-enemy .warlord-avatar {
-    grid-column: 2 / 3 !important;
-    grid-row: 1 / 3 !important;
-    align-self: center !important;
-  }
+  .panel-enemy .warlord-info { grid-column: 1 / 2 !important; grid-row: 1 / 2 !important; }
+  .panel-enemy .warlord-avatar { grid-column: 2 / 3 !important; grid-row: 1 / 3 !important; align-self: center !important; }
 
-  /* 自将：上段右に駒台、下段に絵柄＋情報 */
   .panel-player {
     grid-template-columns: auto 1fr !important;
     grid-template-rows: auto auto !important;
   }
-  .panel-player .warlord-avatar {
-    grid-column: 1 / 2 !important;
-    grid-row: 1 / 3 !important;
-    align-self: center !important;
-  }
+  .panel-player .warlord-avatar { grid-column: 1 / 2 !important; grid-row: 1 / 3 !important; align-self: center !important; }
   .panel-player .warlord-hand-area {
-    grid-column: 2 / 3 !important;
-    grid-row: 1 / 2 !important;
-    height: 38px !important;
-    width: 100% !important;
-    justify-content: flex-end !important;
+    grid-column: 2 / 3 !important; grid-row: 1 / 2 !important;
+    height: 36px !important; width: 100% !important; justify-content: flex-end !important;
   }
-  .panel-player .warlord-info {
-    grid-column: 2 / 3 !important;
-    grid-row: 2 / 3 !important;
-  }
+  .panel-player .warlord-info { grid-column: 2 / 3 !important; grid-row: 2 / 3 !important; }
 }
 
 /* 軍師戦況評定エリア */
 .situation-banner {
-  width: 100%; min-height: 25px; max-height: 30px;
+  width: 100%; min-height: 24px; max-height: 28px;
   background: linear-gradient(90deg, #1f0f06 0%, #44210c 50%, #1f0f06 100%);
   border: 1.2px solid #b88a32; border-radius: 3px;
   display: flex; align-items: center; gap: 8px;
   padding: 2px 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.85); flex-shrink: 0;
 }
 .situation-title {
-  font-size: 13.5px; font-weight: 900; white-space: nowrap;
-  border-right: 1.5px solid #8c671a; padding-right: 7px; line-height: 1; letter-spacing: 1.5px;
+  font-size: 13px; font-weight: 900; white-space: nowrap;
+  border-right: 1.5px solid #8c671a; padding-right: 6px; line-height: 1; letter-spacing: 1.5px;
   background: var(--gold-rich); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 .situation-text {
-  font-size: 10px; font-weight: 800; color: #fff8e7; line-height: 1.2;
+  font-size: 9.5px; font-weight: 800; color: #fff8e7; line-height: 1.2;
   flex: 1; text-align: left; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 
-/* 将棋盤＆目盛り枠 */
+/* =========================================================
+   将棋盤＆目盛り枠：重なり根絶・完全自動フィット設計
+   ========================================================= */
 .board-wrapper {
   width: 100%; display: flex; justify-content: center; align-items: center;
-  flex-grow: 1; min-height: 0; position: relative;
+  flex: 1 1 0; min-height: 0; position: relative; overflow: hidden;
 }
+
 .shogi-board-frame {
   display: flex; flex-direction: column;
   background: var(--border-frame);
   border: 2px solid #cca135; border-radius: 4px;
   padding: 1px 1px 2px 1px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.98), inset 0 0 10px rgba(0,0,0,0.95);
-  width: 99.5vw; max-width: min(99.5vw, 53vh, 470px);
+  box-shadow: 0 5px 18px rgba(0,0,0,0.98), inset 0 0 10px rgba(0,0,0,0.95);
+  height: 100%; max-height: 100%; width: auto; max-width: 100%;
+  aspect-ratio: 1 / 1;
   position: relative;
-}
-@media (min-width: 600px) {
-  .shogi-board-frame {
-    max-width: min(94vw, 58vh, 560px) !important;
-  }
 }
 
 .shogi-board-frame::after {
@@ -344,18 +301,18 @@ body {
   border: 1px solid rgba(255, 215, 0, 0.4); pointer-events: none; border-radius: 2px;
 }
 
-.board-top-row { display: flex; width: 100%; height: 13px; margin-bottom: 1px; }
+.board-top-row { display: flex; width: 100%; height: 12px; margin-bottom: 1px; flex-shrink: 0; }
 .rank-index-container { flex: 1; display: grid; grid-template-columns: repeat(9, 1fr); }
 .rank-cell {
   display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 900; color: #ffe57f; text-shadow: 0 1px 2px #000;
+  font-size: 10.5px; font-weight: 900; color: #ffe57f; text-shadow: 0 1px 2px #000;
 }
-.rank-corner-spacer { width: 14px; flex-shrink: 0; }
+.rank-corner-spacer { width: 13px; flex-shrink: 0; }
 
-.board-main-row { display: flex; width: 100%; align-items: stretch; }
+.board-main-row { display: flex; width: 100%; flex: 1 1 0; min-height: 0; align-items: stretch; }
 
 #board {
-  flex: 1; aspect-ratio: 1 / 1;
+  flex: 1 1 0; aspect-ratio: 1 / 1;
   display: grid; grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(9, 1fr);
   gap: 1px; background-color: var(--grid-line);
   border: 1.2px solid var(--grid-line);
@@ -369,26 +326,16 @@ body {
 }
 .cell.selected { background: rgba(255, 215, 0, 0.88) !important; }
 
-/* 【直近の手：着地点1点のみの黄金脈動】 */
+/* 着地点黄金脈動 */
 @keyframes pulse-last-to {
-  0% {
-    box-shadow: inset 0 0 8px #ffd700, 0 0 6px #ff6f00;
-    border-color: #ffd700;
-  }
-  50% {
-    box-shadow: inset 0 0 20px #ff9100, 0 0 14px #ff3d00;
-    border-color: #ffffff;
-  }
-  100% {
-    box-shadow: inset 0 0 8px #ffd700, 0 0 6px #ff6f00;
-    border-color: #ffd700;
-  }
+  0% { box-shadow: inset 0 0 8px #ffd700, 0 0 6px #ff6f00; border-color: #ffd700; }
+  50% { box-shadow: inset 0 0 20px #ff9100, 0 0 14px #ff3d00; border-color: #ffffff; }
+  100% { box-shadow: inset 0 0 8px #ffd700, 0 0 6px #ff6f00; border-color: #ffd700; }
 }
 .cell.last-move-to {
   background: linear-gradient(135deg, rgba(230, 81, 0, 0.85) 0%, rgba(255, 179, 0, 0.95) 100%) !important;
   animation: pulse-last-to 2.2s infinite ease-in-out !important;
-  border: 2px solid #ffffff !important;
-  z-index: 2;
+  border: 2px solid #ffffff !important; z-index: 2;
 }
 
 .cell.target-move {
@@ -415,7 +362,7 @@ body {
 .cell.hint-target { animation: hint-soft-pulse 1.3s infinite ease-in-out; border: 1.5px dashed #ffeb3b; }
 
 .board-star {
-  position: absolute; width: 4.5px; height: 4.5px; background: #261103;
+  position: absolute; width: 4px; height: 4px; background: #261103;
   border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 5;
 }
 #star-1 { top: calc(100% * 3 / 9); left: calc(100% * 3 / 9); }
@@ -423,22 +370,23 @@ body {
 #star-3 { top: calc(100% * 6 / 9); left: calc(100% * 3 / 9); }
 #star-4 { top: calc(100% * 6 / 9); left: calc(100% * 6 / 9); }
 
-.file-index-col { width: 14px; flex-shrink: 0; display: grid; grid-template-rows: repeat(9, 1fr); margin-left: 1px; }
+.file-index-col { width: 13px; flex-shrink: 0; display: grid; grid-template-rows: repeat(9, 1fr); margin-left: 1px; }
 .file-cell {
   display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 900; color: #ffe57f; text-shadow: 0 1px 2px #000;
+  font-size: 10.5px; font-weight: 900; color: #ffe57f; text-shadow: 0 1px 2px #000;
 }
 
-/* 本格二文字駒 */
+/* =========================================================
+   【重要】本格二文字駒：文字拡大 ＆ 迫力ある堂々たるバランス
+   ========================================================= */
 .piece {
-  width: 94%; height: 96%;
+  width: 95%; height: 97%;
   background: var(--piece-bg); border: 1.2px solid #5a3813;
   clip-path: polygon(50% 0%, 90% 18%, 100% 100%, 0% 100%, 10% 18%);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   font-family: var(--font-kaisho);
-  font-size: clamp(11.5px, 2.1vh, 15px);
-  line-height: 1.0; font-weight: 900;
-  pointer-events: none;
+  font-size: clamp(14px, 2.7vh, 19px); /* 堂々たる大文字 */
+  line-height: 1.0; font-weight: 900; pointer-events: none;
   box-shadow: 0 2px 4px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.95);
   text-align: center;
 }
@@ -447,19 +395,20 @@ body {
 
 .piece.promoted {
   font-family: var(--font-gyosho) !important;
-  font-size: clamp(12.5px, 2.3vh, 16.5px) !important;
+  font-size: clamp(15.5px, 2.9vh, 20.5px) !important; /* 成駒はさらに迫力ある大字 */
   color: var(--promoted-crimson) !important;
   text-shadow: 0 0 1.5px rgba(186,12,12,0.6);
 }
-.piece-char-top { margin-bottom: 0.5px; }
-.piece-char-bottom { margin-top: 0.5px; }
+.piece-char-top { margin-bottom: 0px; }
+.piece-char-bottom { margin-top: 0px; }
 
+/* 持ち駒 */
 .hand-piece {
-  width: 28px; height: 34px;
+  width: 29px; height: 35px;
   background: var(--piece-bg); border: 1.2px solid #5a3813;
   clip-path: polygon(50% 0%, 90% 20%, 100% 100%, 0% 100%, 10% 20%);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  font-family: var(--font-kaisho); font-size: 9.5px; line-height: 1.0; font-weight: 900;
+  font-family: var(--font-kaisho); font-size: 11px; line-height: 1.0; font-weight: 900;
   cursor: pointer; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.7); flex-shrink: 0;
   text-align: center;
 }
@@ -467,45 +416,44 @@ body {
 .hand-piece.ai { color: var(--ai-color); transform: rotate(180deg); }
 .hand-piece.selected { background: #fff59d; box-shadow: 0 0 10px #ffd700; border-color: #ffd700; }
 .hand-piece-count {
-  position: absolute; bottom: 0; right: 0; font-size: 8px;
+  position: absolute; bottom: 0; right: 0; font-size: 8.5px;
   color: #fff; font-weight: 900; background: #960d0d;
-  border-radius: 50%; padding: 0 3px; line-height: 1.1;
+  border-radius: 50%; padding: 0 3.5px; line-height: 1.1;
   border: 0.5px solid #ffd700; box-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
 
-/* カットイン演出 */
+/* カットイン演出（オーバーレイ） */
 .cutin-slot {
-  width: 100%; height: 26px; min-height: 26px;
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 92%; max-width: 440px; height: 0; min-height: 0;
   display: flex; align-items: center; justify-content: center;
-  position: relative; flex-shrink: 0; pointer-events: none;
+  pointer-events: none; z-index: 100;
 }
 .cutin-banner {
-  width: 95%; max-width: 460px; height: 26px;
+  width: 100%; height: 30px;
   background: linear-gradient(180deg, rgba(30,10,5,0.98) 0%, rgba(150,15,15,0.98) 50%, rgba(30,10,5,0.98) 100%);
-  border: 1.8px solid #ffd700; border-radius: 4px;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.85);
+  border: 2px solid #ffd700; border-radius: 5px;
+  box-shadow: 0 0 24px rgba(255, 215, 0, 0.9);
   display: flex; align-items: center; justify-content: center;
-  opacity: 0; transform: scale(0.9);
+  opacity: 0; transform: scale(0.85);
   transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .cutin-banner.rivalry {
   background: linear-gradient(180deg, rgba(40,10,0,0.98) 0%, rgba(180,60,0,0.98) 50%, rgba(40,10,0,0.98) 100%) !important;
   border-color: #ffea70 !important;
-  box-shadow: 0 0 25px rgba(255, 120, 0, 0.9) !important;
+  box-shadow: 0 0 28px rgba(255, 120, 0, 0.95) !important;
 }
 .cutin-text {
-  font-size: 13.5px; font-weight: 900; color: #fff9e6;
+  font-size: 14px; font-weight: 900; color: #fff9e6;
   text-shadow: 0 0 10px #ffd700, 0 2px 4px #000; letter-spacing: 1.2px;
   white-space: nowrap; line-height: 1;
 }
 .cutin-active .cutin-banner { opacity: 1 !important; transform: scale(1) !important; }
 
-/* =========================================================
-   合戦伝令メッセージ帯 ＆ 軍師進言ポートレート枠
-   ========================================================= */
+/* 合戦伝令メッセージ帯 ＆ インライン軍師顔画像 */
 @keyframes breathe-player-turn {
   0% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.3), inset 0 0 4px rgba(255, 215, 0, 0.2); border-color: #cca135; }
-  50% { box-shadow: 0 0 22px rgba(255, 215, 0, 0.85), inset 0 0 12px rgba(255, 235, 120, 0.6); border-color: #ffffff; }
+  50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.85), inset 0 0 12px rgba(255, 235, 120, 0.6); border-color: #ffffff; }
   100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.3), inset 0 0 4px rgba(255, 215, 0, 0.2); border-color: #cca135; }
 }
 
@@ -516,48 +464,42 @@ body {
 }
 
 .order-message-banner {
-  width: 100%; height: clamp(46px, 6.2vh, 52px);
+  width: 100%; height: clamp(42px, 5.8vh, 48px);
   background: linear-gradient(90deg, #281409 0%, #4a2410 50%, #281409 100%);
   border: 1.8px solid #b88a32; border-radius: 5px;
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  padding: 3px 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.9); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 2px 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.9); flex-shrink: 0;
   transition: all 0.4s ease;
 }
 
-/* 伝令帯の左端家紋アイコン枠 */
-.order-crest-slot {
-  width: 24px; height: 24px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-}
-.order-crest-icon { width: 20px; height: 20px; fill: #ffd700; filter: drop-shadow(0 0 4px #ffd700); }
-
-/* 伝令帯の軍師進言ポートレート（セリフ右側にひと回り大きく配置） */
-.order-avatar-slot {
-  width: 40px; height: 46px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  position: relative; border-radius: 4px;
-}
-.order-avatar-slot.has-strategist {
-  border: 1.8px solid #ffd700; border-radius: 4px;
-  background: #140502; overflow: hidden;
-  box-shadow: 0 0 12px rgba(255, 215, 0, 0.75), inset 0 0 5px rgba(0,0,0,0.9);
-}
-.order-avatar-slot img, .order-avatar-slot svg {
-  width: 100%; height: 100%; object-fit: cover; object-position: center 10%; display: block;
+.order-crest-icon {
+  width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;
+  filter: drop-shadow(0 0 4px #ffd700);
 }
 
 .order-message-text {
-  font-size: clamp(11.5px, 1.6vh, 13.5px); font-weight: 900; color: #ffe699; letter-spacing: 0.5px;
-  line-height: 1.3; text-align: center; flex: 1;
+  font-size: clamp(11.5px, 1.6vh, 13px); font-weight: 900; color: #ffe699; letter-spacing: 0.5px;
+  line-height: 1.25; text-align: center; flex: 1;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   text-shadow: 0 1px 3px #000;
 }
 .order-message-banner.my-turn { animation: breathe-player-turn 3.2s infinite ease-in-out !important; }
 .order-message-banner.my-turn .order-message-text { animation: pulse-text-glow 2.2s infinite ease-in-out !important; }
 
+/* 軍師助言インライン顔アイコン */
+.strategist-inline-icon {
+  display: inline-block;
+  width: 26px; height: 30px;
+  object-fit: cover; object-position: center 10%;
+  border-radius: 3px; border: 1.2px solid #ffd700;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.7);
+  vertical-align: middle;
+  margin: 0 4px 1px 4px;
+}
+
 /* 棋譜帯 */
 .kifu-bottom-banner {
-  width: 100%; height: clamp(56px, 7.8vh, 64px);
+  width: 100%; height: clamp(52px, 7.2vh, 60px);
   background: linear-gradient(180deg, rgba(25, 12, 5, 0.98) 0%, rgba(10, 5, 2, 0.98) 100%);
   border: 1.5px solid #a67c33; border-radius: 4px;
   display: flex; align-items: stretch; padding: 2px 4px; gap: 4px;
@@ -574,12 +516,12 @@ body {
   background: #2b170c; color: #ffd700; cursor: pointer; border-radius: 2px;
 }
 .kifu-stream-box {
-  display: grid; grid-template-rows: repeat(3, 16px); grid-auto-flow: column;
+  display: grid; grid-template-rows: repeat(3, 15px); grid-auto-flow: column;
   gap: 1px 12px; overflow-x: auto; overflow-y: hidden;
   flex-grow: 1; font-size: 10px; color: #fcedcb; text-align: left;
   white-space: nowrap; align-items: center; padding-bottom: 2px;
 }
-.kifu-item-cell { display: flex; align-items: center; white-space: nowrap; cursor: pointer; line-height: 16px; }
+.kifu-item-cell { display: flex; align-items: center; white-space: nowrap; cursor: pointer; line-height: 15px; }
 .kifu-item-cell:hover { color: #ffd700; text-decoration: underline; }
 .kifu-item-cell.active-review { color: #ffeb3b; font-weight: 900; text-shadow: 0 0 5px #ffd700; }
 
@@ -597,32 +539,22 @@ body {
   position: relative; overflow: hidden;
 }
 
-/* 待った：本紫漆 */
 .btn-undo {
   background: linear-gradient(180deg, #591b4f 0%, #260a22 100%);
   border: 1.5px solid #e094f7; color: #fce8ff;
   box-shadow: 0 3px 0 #140312, 0 5px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.45);
 }
-
-/* 投了：藍鉄漆 */
 .btn-surrender {
   background: linear-gradient(180deg, #1b324a 0%, #081522 100%);
   border: 1.5px solid #7cb5eb; color: #e1f0ff;
   box-shadow: 0 3px 0 #04090f, 0 5px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.45);
 }
-
-/* 対局開始：燃える朱漆塗り・特大立体小判 */
 .btn-start {
   background: linear-gradient(180deg, #d11919 0%, #6e0808 50%, #450404 100%) !important;
   border: 2px solid #ffd700 !important; color: #ffffff !important; font-weight: 900;
-  box-shadow: 
-    0 3.5px 0 #2b0202,
-    0 6px 14px rgba(255, 30, 30, 0.7),
-    inset 0 1.5px 0 rgba(255,245,180,0.9) !important;
+  box-shadow: 0 3.5px 0 #2b0202, 0 6px 14px rgba(255, 30, 30, 0.7), inset 0 1.5px 0 rgba(255,245,180,0.9) !important;
   font-size: clamp(10.5px, 1.5vh, 12px) !important;
 }
-
-/* 軍師進言：翡翠青漆 */
 .btn-hint {
   background: linear-gradient(180deg, #195228 0%, #07240f 100%);
   border: 1.5px solid #6ee08b; color: #e5ffe9;
@@ -639,8 +571,6 @@ body {
   border: 2px solid #ffd700 !important; color: #fff9db !important;
   animation: kanbei-awakened-glow 1.4s infinite ease-in-out !important;
 }
-
-/* 天下絵巻：黄金小判 */
 .btn-book {
   background: linear-gradient(180deg, #704c16 0%, #301f05 100%);
   border: 1.5px solid #ffd700; color: #fff2d6;
@@ -662,6 +592,86 @@ body {
   font-family: var(--font-ui); font-size: 12px; font-weight: 900;
   padding: 5px 18px; border-radius: 4px; border: 1.5px solid #d4af37;
   background: linear-gradient(180deg, #3d2111 0%, #170a04 100%); color: #ffe58f; cursor: pointer;
+}
+
+/* =========================================================
+   【新機能】合戦戦歴帳モーダル（対戦結果アーカイブ一覧）
+   ========================================================= */
+.battle-history-modal-box {
+  width: 96vw !important; max-width: 540px !important; height: 88vh !important;
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: radial-gradient(circle at center, #2e1408 0%, #0d0401 100%) !important;
+  border: 2.2px solid #ffd700 !important;
+}
+
+.history-summary-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(0,0,0,0.65); border: 1.2px solid #8e6c31; border-radius: 4px;
+  padding: 4px 10px; margin-bottom: 6px; font-size: 11px; font-weight: 900;
+}
+
+/* 絞り込みフィルターバー */
+.history-filter-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px 8px;
+  background: rgba(20, 9, 3, 0.9); border: 1px solid #73511f;
+  border-radius: 4px; padding: 6px 8px; margin-bottom: 6px;
+}
+.filter-item-group { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
+.filter-label { font-size: 9.5px; font-weight: 900; color: #ffd700; white-space: nowrap; }
+.history-select-input {
+  font-family: var(--font-ui); font-size: 9.5px; font-weight: 800;
+  background: #170702; color: #ffe899; border: 1px solid #a67c33;
+  border-radius: 3px; padding: 2px 4px; outline: none; flex: 1;
+}
+
+/* 戦歴レコードリスト */
+.history-records-scroll {
+  flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
+  padding-right: 3px; margin-bottom: 6px;
+}
+.history-record-card {
+  background: rgba(22, 10, 4, 0.95); border: 1.2px solid #73511f; border-radius: 4px;
+  padding: 6px 8px; display: flex; flex-direction: column; gap: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.85); transition: border-color 0.2s ease;
+}
+.history-record-card:hover { border-color: #ffd700; }
+
+.history-card-top-row {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.history-date-txt { font-size: 9px; color: #d6be89; font-weight: 700; }
+.history-res-badge {
+  font-size: 9px; font-weight: 900; padding: 1px 6px; border-radius: 3px;
+  border: 0.8px solid #ffd700; white-space: nowrap;
+}
+.badge-win { background: #8a1414; color: #ffe699; }
+.badge-lose { background: #1a324a; color: #cbe5ff; border-color: #5ea8e6; }
+.badge-draw { background: #4a3814; color: #ffeb3b; }
+
+.history-matchup-row {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11.5px; font-weight: 900; color: #fff8e7;
+}
+.matchup-vs-txt { color: #ffd700; font-size: 10px; margin: 0 4px; }
+
+.history-details-bottom-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 9px; color: #e0d0b0; border-top: 1px dashed rgba(255,215,0,0.25);
+  padding-top: 3px; margin-top: 1px;
+}
+.badge-hint-count {
+  font-size: 8.5px; font-weight: 900; padding: 0.5px 5px; border-radius: 3px;
+  background: #194723; color: #99ffaa; border: 0.5px solid #6ee08b;
+}
+.badge-hint-none {
+  font-size: 8.5px; font-weight: 900; padding: 0.5px 5px; border-radius: 3px;
+  background: #6e4c0a; color: #fff2a8; border: 0.8px solid #ffd700;
+}
+.history-replay-btn {
+  font-family: var(--font-ui); font-size: 8.5px; font-weight: 900;
+  padding: 1.5px 7px; border-radius: 3px; border: 1px solid #ffd700;
+  background: linear-gradient(180deg, #573210 0%, #241103 100%);
+  color: #ffe899; cursor: pointer;
 }
 
 /* 振り駒モーダル */
@@ -859,9 +869,7 @@ body {
   background: radial-gradient(circle at center, #2e1408 0%, #0c0401 100%) !important;
   border: 2px solid #ffd700 !important; box-shadow: 0 0 35px rgba(255, 215, 0, 0.45) !important;
 }
-.guide-tab-bar {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 8px;
-}
+.guide-tab-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 8px; }
 .guide-tab-btn {
   font-family: var(--font-ui); font-size: 10px; font-weight: 900;
   padding: 6px 2px; border-radius: 3px; border: 1.2px solid #a67c33;
