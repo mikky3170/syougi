@@ -505,6 +505,7 @@ function handleVisibilityChange() {
   if (document.hidden) {
     isPageHidden = true;
     pauseBgm();
+    stopGuideSpeech();
     if (audioCtx && audioCtx.state === 'running') {
       audioCtx.suspend().catch(() => {});
     }
@@ -519,7 +520,7 @@ function handleVisibilityChange() {
   }
 }
 document.addEventListener('visibilitychange', handleVisibilityChange);
-window.addEventListener('pagehide', () => { isPageHidden = true; pauseBgm(); });
+window.addEventListener('pagehide', () => { isPageHidden = true; pauseBgm(); stopGuideSpeech(); });
 window.addEventListener('pageshow', () => { isPageHidden = false; if (soundEnabled) startBgm(); });
 
 function playPieceSound() {
@@ -591,6 +592,147 @@ function launchFireworksCelebration() {
     else ctxCelebration.clearRect(0, 0, canvasCelebration.width, canvasCelebration.height);
   }
   loop();
+}
+
+/* =========================================================
+   Web Speech API：軍師／姫侍・項目別音声朗読エンジン
+   ========================================================= */
+let guideVoiceGender = 'male'; // 'male' または 'female'
+let currentReadingCardId = null;
+
+function setGuideVoiceGender(gender) {
+  playPieceSound();
+  guideVoiceGender = gender;
+  document.getElementById('btn-voice-male').classList.toggle('active', gender === 'male');
+  document.getElementById('btn-voice-female').classList.toggle('active', gender === 'female');
+  if (currentReadingCardId) {
+    const cardId = currentReadingCardId;
+    stopGuideSpeech();
+    toggleCardSpeech(cardId);
+  }
+}
+
+function stopGuideSpeech() {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+  if (currentReadingCardId) {
+    const cardEl = document.getElementById(currentReadingCardId);
+    if (cardEl) {
+      cardEl.classList.remove('reading-active');
+      const btn = cardEl.querySelector('.card-speech-btn');
+      if (btn) btn.innerHTML = '🔊 朗読';
+    }
+    currentReadingCardId = null;
+  }
+}
+
+// 戦国・将棋用語を流暢に聴かせる正規化補正フィルター
+function cleanSpeechText(rawText) {
+  let text = rawText;
+  text = text.replace(/🔊\s*朗読/g, '').replace(/⏹\s*停止/g, '');
+  text = text.replace(/[⚜🪭📜🔰🔥🛡⚔👑🏯💡⚖▶◀⏭♪]/g, '');
+
+  text = text.replace(/７六歩/g, 'ななろくふ、');
+  text = text.replace(/２六歩/g, 'にいろくふ、');
+  text = text.replace(/４八銀/g, 'よんはちぎん、');
+  text = text.replace(/６八玉/g, 'ろくはちぎょく、');
+  text = text.replace(/２五歩/g, 'にすごふ、');
+  text = text.replace(/５筋/g, 'ごすじ');
+  text = text.replace(/１筋/g, 'いちすじ');
+  text = text.replace(/９筋/g, 'きゅうすじ');
+  text = text.replace(/Lv\.(\d+)/gi, 'レベル$1、');
+  text = text.replace(/三間飛車/g, 'さんげんびしゃ');
+  text = text.replace(/飛車/g, 'ひしゃ');
+  text = text.replace(/角行/g, 'かくぎょう');
+  text = text.replace(/龍王/g, 'りゅうおう');
+  text = text.replace(/龍馬/g, 'りゅうま');
+  text = text.replace(/成駒/g, 'なりごま');
+  text = text.replace(/金銀/g, 'きんぎん');
+  text = text.replace(/詰ます/g, 'つます');
+  text = text.replace(/詰めろ/g, 'つめろ');
+  text = text.replace(/王手/g, 'おうて');
+  text = text.replace(/千日手/g, 'せんにちて');
+  text = text.replace(/vs/gi, '、対、');
+
+  text = text.replace(/【/g, '、').replace(/】/g, '、');
+  text = text.replace(/・/g, '。');
+  text = text.replace(/\s+/g, ' ').trim();
+  return text;
+}
+
+function toggleCardSpeech(cardId) {
+  if (!('speechSynthesis' in window)) {
+    alert('ご使用の端末は音声読み上げに対応しておりませぬ。');
+    return;
+  }
+
+  // すでに同じカードを読んでいる場合は停止
+  if (currentReadingCardId === cardId) {
+    stopGuideSpeech();
+    return;
+  }
+
+  // 別のカードを読んでいる場合は一度停止
+  stopGuideSpeech();
+
+  const cardEl = document.getElementById(cardId);
+  if (!cardEl) return;
+
+  const btn = cardEl.querySelector('.card-speech-btn');
+  const rawText = cardEl.innerText;
+  const speechText = cleanSpeechText(rawText);
+
+  if (!speechText) return;
+
+  initAudio();
+  currentReadingCardId = cardId;
+  cardEl.classList.add('reading-active');
+  if (btn) btn.innerHTML = '⏹ 停止';
+
+  const uttr = new SpeechSynthesisUtterance(speechText);
+  uttr.lang = 'ja-JP';
+
+  // 利用可能な音声一覧から最適な声を選択
+  const voices = window.speechSynthesis.getVoices();
+  const jaVoices = voices.filter(v => v.lang === 'ja' || v.lang === 'ja-JP' || v.lang.startsWith('ja'));
+
+  if (guideVoiceGender === 'female') {
+    const fVoice = jaVoices.find(v => /female|kyoko|haruka|ayumi|sayaka|nanami|hikari/i.test(v.name));
+    if (fVoice) uttr.voice = fVoice;
+    uttr.pitch = 1.15; // 澄んだ少し高めの優美な声
+    uttr.rate = 0.96;
+  } else {
+    const mVoice = jaVoices.find(v => /male|otoya|keita|ichiro|hattori|kenji/i.test(v.name));
+    if (mVoice) uttr.voice = mVoice;
+    uttr.pitch = 0.85; // 太く落ち着いた威厳ある軍師の声
+    uttr.rate = 0.93;
+  }
+
+  uttr.onend = () => {
+    if (currentReadingCardId === cardId) {
+      cardEl.classList.remove('reading-active');
+      if (btn) btn.innerHTML = '🔊 朗読';
+      currentReadingCardId = null;
+    }
+  };
+
+  uttr.onerror = () => {
+    if (currentReadingCardId === cardId) {
+      cardEl.classList.remove('reading-active');
+      if (btn) btn.innerHTML = '🔊 朗読';
+      currentReadingCardId = null;
+    }
+  };
+
+  window.speechSynthesis.speak(uttr);
+}
+
+// 音声リストの初期ロード
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.onvoiceschanged = () => {
+    window.speechSynthesis.getVoices();
+  };
 }
 
 /* =========================================================
@@ -1225,17 +1367,14 @@ function openRivalryInGuide(targetKey = null) {
   playPieceSound();
   const rivalKey = targetKey || `${currentMyWarlordId}_${currentAiLevel}`;
   
-  // 指南モーダルを開いて第4タブ（其の四：宿命録）へ切り替え
   openGuideModal();
   switchGuideTab(4);
 
-  // 該当する宿命対決カードへスムーズスクロール＆黄金脈動ハイライト
   setTimeout(() => {
     const cardEl = document.getElementById(`rivalry-card-${rivalKey}`);
     if (cardEl) {
       cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       cardEl.classList.remove('highlight-rivalry-card');
-      // リフローを起こして再アニメーション適用
       void cardEl.offsetWidth;
       cardEl.classList.add('highlight-rivalry-card');
       setTimeout(() => cardEl.classList.remove('highlight-rivalry-card'), 3800);
@@ -1964,8 +2103,11 @@ function renderDynamicTactics() {
   const p = PLAYER_WARLORDS[currentMyWarlordId];
 
   container.innerHTML = `
-    <div class="guide-card-box beginner-highlight-box">
-      <h4>🔰 【Lv.${currentAiLevel} ${w.province}｜${w.name}】を討ち破る兵法</h4>
+    <div class="guide-card-box beginner-highlight-box" id="guide-card-dynamic-1">
+      <div class="guide-card-header-row">
+        <h4>🔰 【Lv.${currentAiLevel} ${w.province}｜${w.name}】を討ち破る兵法</h4>
+        <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('guide-card-dynamic-1')">🔊 朗読</button>
+      </div>
       専属軍師・<b>${p.strategistName}</b>による、対「${w.name}」専用の極意に候！<br><br>
       <b class="kw-gold">一、敵将の癖と弱点を見抜け！</b><br>
       ・${w.tacticsHint}<br><br>
@@ -1975,8 +2117,11 @@ function renderDynamicTactics() {
       ・大将が初期位置にいると敵の奇襲で即死いたします。金銀を玉の周りに配し、堅牢な陣形を築いてから出撃されよ！
     </div>
 
-    <div class="guide-card-box">
-      <h4>💡 ${w.name}戦おすすめの「開戦五手」</h4>
+    <div class="guide-card-box" id="guide-card-dynamic-2">
+      <div class="guide-card-header-row">
+        <h4>💡 ${w.name}戦おすすめの「開戦五手」</h4>
+        <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('guide-card-dynamic-2')">🔊 朗読</button>
+      </div>
       対局が始まったら、まずはこの手順で盤面を有利に進められよ！<br>
       1. <b>７六歩</b>（角の道を開き射線を睨ませる）<br>
       2. <b>２六歩</b>（飛車の前の歩を前進させる）<br>
@@ -1988,12 +2133,17 @@ function renderDynamicTactics() {
 }
 
 function openGuideModal() {
+  stopGuideSpeech();
   renderDynamicTactics();
   document.getElementById('guide-modal').style.display = 'flex';
 }
-function closeGuideModal() { document.getElementById('guide-modal').style.display = 'none'; }
+function closeGuideModal() {
+  stopGuideSpeech();
+  document.getElementById('guide-modal').style.display = 'none';
+}
 function switchGuideTab(tabIdx) {
   playPieceSound();
+  stopGuideSpeech();
   const btns = document.querySelectorAll('.guide-tab-btn');
   btns.forEach((b, idx) => b.classList.toggle('active', idx === tabIdx));
   for (let i = 0; i <= 4; i++) {
@@ -2303,7 +2453,7 @@ function replayFromHistory(recordId) {
   const lastSnap = historyStates[reviewingIndex];
   board = cloneBoardState(lastSnap.board);
   hands = JSON.parse(JSON.stringify(lastSnap.hands));
-  lastMove = (reviewingIndex > 0) ? lastSnap.moveObjectsHistory[lastSnap.moveObjectsHistory.length - 1] : null;
+  lastMove = (reviewingIndex > 0) ? lastSnap.moveObjectsHistory[snap.moveObjectsHistory.length - 1] : null;
   isGameOver = true;
 
   renderBoard();

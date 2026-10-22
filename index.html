@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -340,16 +339,24 @@
 <!-- 指南モーダル -->
 <div id="guide-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content guide-modal-box">
-    <h3 style="margin:0 0 7px 0; color:#ffd700; border-bottom:1.5px solid #ffd700; padding-bottom:4px; text-align:center; letter-spacing:1px;">
-      📜 天下布武・兵法指南絵巻
-    </h3>
+    <div class="guide-modal-header">
+      <h3 class="guide-modal-title">📜 天下布武・兵法指南絵巻</h3>
+      <!-- 語り手選択バー（男声／女声の選択） -->
+      <div class="guide-narrator-panel">
+        <span class="narrator-label">🗣 語り手:</span>
+        <div class="narrator-btn-group">
+          <button class="narrator-toggle-btn active" id="btn-voice-male" onclick="setGuideVoiceGender('male')">軍師 (男声)</button>
+          <button class="narrator-toggle-btn" id="btn-voice-female" onclick="setGuideVoiceGender('female')">姫侍 (女声)</button>
+        </div>
+      </div>
+    </div>
     
     <div class="guide-tab-bar">
-      <button class="guide-tab-btn btn-3d active" onclick="switchGuideTab(0)">🔰 対陣の極意</button>
-      <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(1)">其の壱：合戦手引</button>
-      <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(2)">其の弐：兵法極意</button>
-      <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(3)">其の参：敵将十傑</button>
-      <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(4)">其の四：宿命録</button>
+      <button class="guide-tab-btn btn-3d active" onclick="switchGuideTab(0)">🔰 対陣極意</button>
+      <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(1)">其の壱：手順</button>
+      <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(2)">其の弐：兵法</button>
+      <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(3)">其の参：敵将</button>
+      <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(4)">其の四：宿命</button>
     </div>
 
     <div class="guide-scroll-body" id="guide-scroll-container">
@@ -359,16 +366,22 @@
       </div>
 
       <div class="guide-pane" id="guide-pane-1">
-        <div class="guide-card-box">
-          <h4>⚜ 一、合戦の手順（天下統一の道）</h4>
+        <div class="guide-card-box" id="guide-card-step-1">
+          <div class="guide-card-header-row">
+            <h4>⚜ 一、合戦の手順（天下統一の道）</h4>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('guide-card-step-1')">🔊 朗読</button>
+          </div>
           1. <b class="kw-gold">陣容の選定</b>：上下のパネルより「自将（主役五傑）」と進軍先の「敵国（国盗り絵巻）」を決定します。自将ごとに異なる<span class="kw-gold">専属軍師</span>が随伴します。<br>
           2. <b class="kw-gold">振り駒の儀</b>：「⚜ 対局開始」を押すと、五枚の歩が舞い散り天運により<span class="kw-green">先手・後手</span>を定めます。<br>
           3. <b class="kw-gold">布陣と進撃</b>：盤上または手駒をタップすると、進めるマスが鮮やかな<span class="kw-green">若草色</span>に輝きます。<br>
           4. <b class="kw-gold">成り（昇格）</b>：敵陣（上段三段）へ突入、または敵陣から出る際、駒がひっくり返り流麗な<span class="kw-crimson">行書体の成駒（龍王・龍馬など）</span>へと覚醒します。<br>
           5. <b class="kw-gold">領国の平定</b>：敵将の玉将を討ち取る（詰ます）ことで、その国を平定し次の領国へ進軍できます！
         </div>
-        <div class="guide-card-box">
-          <h4>🪭 二、采配ボタンの解説</h4>
+        <div class="guide-card-box" id="guide-card-step-2">
+          <div class="guide-card-header-row">
+            <h4>🪭 二、采配ボタンの解説</h4>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('guide-card-step-2')">🔊 朗読</button>
+          </div>
           ・<b class="kw-gold">🪭 待った</b>：局面を二手前（直前の自軍の手番）まで巻き戻す秘技。<br>
           ・<b class="kw-gold">🏳 投了</b>：形勢覆し難きとき、潔く負けを認めて陣を引きます。<br>
           ・<b class="kw-gold">⚜ 対局開始</b>：振り駒を行い、合戦の火蓋を切って落とします。<br>
@@ -379,34 +392,49 @@
           ・<b class="kw-gold">◀ / ▶ レビュー</b>：直近の合戦記録帯の一手を戻し・進めて局面を再現。<br>
           ・<b class="kw-gold">♪ 音ON/OFF</b>：雅楽BGM・陣太鼓・着手音の響きを切り替えます。
         </div>
-        <div class="guide-card-box">
-          <h4>⚖ 三、戦国特別規約（千日手・反則）</h4>
+        <div class="guide-card-box" id="guide-card-step-3">
+          <div class="guide-card-header-row">
+            <h4>⚖ 三、戦国特別規約（千日手・反則）</h4>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('guide-card-step-3')">🔊 朗読</button>
+          </div>
           ・<b class="kw-gold">千日手</b>：同一局面が四回生じた場合、原則として引き分け（痛み分け）となります。<br>
           ・<b class="kw-crimson">連続王手の千日手</b>：一方が王手をかけ続けて同一局面四回となった場合、<span class="kw-crimson">王手をかけ続けた側の武士道違反（反則負け）</span>となります。
         </div>
       </div>
 
       <div class="guide-pane" id="guide-pane-2">
-        <div class="guide-card-box">
-          <h4>🛡 一、序盤の心得「玉飛接近すべからず」</h4>
+        <div class="guide-card-box" id="guide-card-tactics-1">
+          <div class="guide-card-header-row">
+            <h4>🛡 一、序盤の心得「玉飛接近すべからず」</h4>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('guide-card-tactics-1')">🔊 朗読</button>
+          </div>
           ・戦火の起こる場所へ玉を置くことなかれ。まずは玉を<span class="kw-blue">「美濃囲い」</span>や<span class="kw-blue">「矢倉囲い」</span>などの堅牢な陣形へと囲うべし。<br>
           ・<span class="kw-gold">飛車・角行</span>の大駒の射程を確保するため、歩を突いて道を開き、盤上を制圧するべし。
         </div>
-        <div class="guide-card-box">
-          <h4>⚔ 二、中盤の心得「拠点を制し、連携を重んず」</h4>
+        <div class="guide-card-box" id="guide-card-tactics-2">
+          <div class="guide-card-header-row">
+            <h4>⚔ 二、中盤の心得「拠点を制し、連携を重んず」</h4>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('guide-card-tactics-2')">🔊 朗読</button>
+          </div>
           ・「銀は千鳥に歩け」。歩の頭を銀で叩き、敵陣の急所へ<span class="kw-green">拠点の歩</span>を打ち込め。<br>
           ・守りのない<span class="kw-crimson">「浮き駒」</span>は格好の標的。駒同士の守りの利き（紐付き）を保ち、敵の守りの要である金銀を狙い撃て。
         </div>
-        <div class="guide-card-box">
-          <h4>👑 三、終盤の心得「一手勝ちの美学・玉を包む寄せ」</h4>
+        <div class="guide-card-box" id="guide-card-tactics-3">
+          <div class="guide-card-header-row">
+            <h4>👑 三、終盤の心得「一手勝ちの美学・玉を包む寄せ」</h4>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('guide-card-tactics-3')">🔊 朗読</button>
+          </div>
           ・終盤は「駒の損得より速度」。自玉が詰まないか見極め、一手早く敵玉に<span class="kw-crimson">詰めろ・王手</span>をかけよ。<br>
           ・敵玉は一方向から追うと逃げ延びる。<span class="kw-gold">「玉は包むように寄せよ」</span>。両脇と退路を桂馬・香車・持ち駒で塞ぎ、退路を断つべし。
         </div>
       </div>
 
       <div class="guide-pane" id="guide-pane-3">
-        <div class="guide-card-box">
-          <h4>🪭 一、主役五傑と専属軍師録</h4>
+        <div class="guide-card-box" id="guide-card-warlords-1">
+          <div class="guide-card-header-row">
+            <h4>🪭 一、主役五傑と専属軍師録</h4>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('guide-card-warlords-1')">🔊 朗読</button>
+          </div>
           合戦において自将を支える、戦国屈指の知恵袋・懐刀たちです：<br>
           ・<b class="kw-crimson">真田幸村</b> ＆ 軍師：<b class="kw-gold">真田昌幸</b>（表裏比興の天才謀将）<br>
           ・<b class="kw-gold">前田慶次</b> ＆ 懐刀：<b class="kw-gold">奥村助右衛門</b>（末森城を死守した前田家の名将）<br>
@@ -414,8 +442,11 @@
           ・<b class="kw-gold">直江兼続</b> ＆ 主君：<b class="kw-gold">上杉景勝</b>（義を貫き通す寡黙なる越後総帥）<br>
           ・<b class="kw-gold">本多忠勝</b> ＆ 参謀：<b class="kw-gold">本多正信</b>（徳川幕府の最高頭脳）
         </div>
-        <div class="guide-card-box">
-          <h4>🏯 二、敵将十傑の気風・動員録</h4>
+        <div class="guide-card-box" id="guide-card-warlords-2">
+          <div class="guide-card-header-row">
+            <h4>🏯 二、敵将十傑の気風・動員録</h4>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('guide-card-warlords-2')">🔊 朗読</button>
+          </div>
           <div class="enemy-line-item">
             <span class="enemy-line-left">Lv.1 尾張｜木下藤吉郎</span>
             <span class="enemy-line-right">足軽乱戦（兵力3,200）</span>
@@ -461,16 +492,22 @@
 
       <!-- 其の四：宿命録（完全な歴史絵巻図鑑） -->
       <div class="guide-pane" id="guide-pane-4">
-        <div class="guide-card-box">
-          <h4>🔥 宿命の対決録（史実が紡ぐ五大因縁秘話）</h4>
+        <div class="guide-card-box" id="guide-card-rivalry-intro">
+          <div class="guide-card-header-row">
+            <h4>🔥 宿命の対決録（史実が紡ぐ五大因縁秘話）</h4>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('guide-card-rivalry-intro')">🔊 朗読</button>
+          </div>
           特定の自将と敵将が激突したとき、特別な<span class="kw-crimson">開幕因縁カットイン</span>と<span class="kw-gold">専用の舌戦・掛け合い</span>が盤上で勃発します。史実の背景を知ることで、合戦の熱気は最高潮へと高まります！
         </div>
 
         <!-- 1. 真田幸村 vs 徳川家康 -->
         <div class="guide-card-box rivalry-story-card" id="rivalry-card-sanada_10">
-          <div class="rivalry-card-header">
-            <span class="rivalry-badge-tag">大坂の陣</span>
-            <h4>真田幸村 vs 徳川家康</h4>
+          <div class="guide-card-header-row">
+            <div class="rivalry-card-header">
+              <span class="rivalry-badge-tag">大坂の陣</span>
+              <h4>真田幸村 vs 徳川家康</h4>
+            </div>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('rivalry-card-sanada_10')">🔊 朗読</button>
           </div>
           <div class="rivalry-story-sub">死線を越えた真田赤備えの最終決戦</div>
           <p class="rivalry-story-p">
@@ -483,16 +520,19 @@
             ・幸村「<span class="kw-crimson">不惜身命！ 徳川の天下、この幸村が盤上で覆して見せようぞ！</span>」<br>
             ・家康「<span class="kw-blue">真田か…！ 目の上の瘤め、大坂の雪辱はさせぬぞ！</span>」
           </div>
-          <p class="rivalry-story-p" style="margin-bottom:0; font-size:10.5px; color:#ffe899;">
+          <p class="rivalry-story-p" style="margin-bottom:0; font-size:12px; color:#ffe899;">
             ⚔ <b>盤上の見どころ</b>：家康の築く「江戸幕府の鉄壁（Lv.10最深探索AI）」へ、軍師・真田昌幸の知謀とともに突撃し歴史の雪辱を果たされよ！
           </p>
         </div>
 
         <!-- 2. 前田慶次 vs 前田利家 -->
         <div class="guide-card-box rivalry-story-card" id="rivalry-card-keiji_2">
-          <div class="rivalry-card-header">
-            <span class="rivalry-badge-tag">前田の血脈</span>
-            <h4>前田慶次 vs 前田利家</h4>
+          <div class="guide-card-header-row">
+            <div class="rivalry-card-header">
+              <span class="rivalry-badge-tag">前田の血脈</span>
+              <h4>前田慶次 vs 前田利家</h4>
+            </div>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('rivalry-card-keiji_2')">🔊 朗読</button>
           </div>
           <div class="rivalry-story-sub">掟に生きる当主と、自由を愛した傾奇者</div>
           <p class="rivalry-story-p">
@@ -505,16 +545,19 @@
             ・慶次「<span class="kw-gold">叔父貴、ぬるい水風呂の礼をせねばな！ ど派手に傾くぜ！</span>」<br>
             ・利家「<span class="kw-blue">慶次！ その放蕩、前田の当主として盤上で成敗いたす！</span>」
           </div>
-          <p class="rivalry-story-p" style="margin-bottom:0; font-size:10.5px; color:#ffe899;">
+          <p class="rivalry-story-p" style="margin-bottom:0; font-size:12px; color:#ffe899;">
             ⚔ <b>盤上の見どころ</b>：中央5筋を豪快に突進する叔父・利家の槍（飛車）を、慶次ならではの天下無双の傾奇の一手で跳ね返されよ！
           </p>
         </div>
 
         <!-- 3. 直江兼続 vs 徳川家康 -->
         <div class="guide-card-box rivalry-story-card" id="rivalry-card-kanetsugu_10">
-          <div class="rivalry-card-header">
-            <span class="rivalry-badge-tag">直江状の義戦</span>
-            <h4>直江兼続 vs 徳川家康</h4>
+          <div class="guide-card-header-row">
+            <div class="rivalry-card-header">
+              <span class="rivalry-badge-tag">直江状の義戦</span>
+              <h4>直江兼続 vs 徳川家康</h4>
+            </div>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('rivalry-card-kanetsugu_10')">🔊 朗読</button>
           </div>
           <div class="rivalry-story-sub">天下を震撼させた弾劾状「直江状」</div>
           <p class="rivalry-story-p">
@@ -527,16 +570,19 @@
             ・兼続「<span class="kw-green">不義の天下に道はなし！ 義の刃、盤上にて受けてみよ！</span>」<br>
             ・家康「<span class="kw-blue">直江兼続… 筆鋒鋭き小僧め、盤上で捻り潰してくれる！</span>」
           </div>
-          <p class="rivalry-story-p" style="margin-bottom:0; font-size:10.5px; color:#ffe899;">
+          <p class="rivalry-story-p" style="margin-bottom:0; font-size:12px; color:#ffe899;">
             ⚔ <b>盤上の見どころ</b>：不義を許さぬ上杉の「愛と義の陣形」が家康の覇道と激突。筆鋒のみならず将棋盤上でも天下の正道を示されよ！
           </p>
         </div>
 
         <!-- 4. 伊達政宗 vs 豊臣秀吉 -->
         <div class="guide-card-box rivalry-story-card" id="rivalry-card-masamune_9">
-          <div class="rivalry-card-header">
-            <span class="rivalry-badge-tag">天下への野望</span>
-            <h4>伊達政宗 vs 豊臣秀吉</h4>
+          <div class="guide-card-header-row">
+            <div class="rivalry-card-header">
+              <span class="rivalry-badge-tag">天下への野望</span>
+              <h4>伊達政宗 vs 豊臣秀吉</h4>
+            </div>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('rivalry-card-masamune_9')">🔊 朗読</button>
           </div>
           <div class="rivalry-story-sub">白装束で挑んだ天下人との命懸けの駆け引き</div>
           <p class="rivalry-story-p">
@@ -549,16 +595,19 @@
             ・政宗「<span class="kw-blue">太閤殿下！ 白装束の礼は済んだ、盤上は容赦しねえ！</span>」<br>
             ・秀吉「<span class="kw-gold">伊達の若造、その野心ごとのみ込んで見せようぞ！</span>」
           </div>
-          <p class="rivalry-story-p" style="margin-bottom:0; font-size:10.5px; color:#ffe899;">
+          <p class="rivalry-story-p" style="margin-bottom:0; font-size:12px; color:#ffe899;">
             ⚔ <b>盤上の見どころ</b>：持ち駒を操る太閤の包囲殲滅戦に対し、片倉小十郎とともに竜の牙で挑み「太閤超え」を成就させよ！
           </p>
         </div>
 
         <!-- 5. 本多忠勝 vs 武田信玄 -->
         <div class="guide-card-box rivalry-story-card" id="rivalry-card-tadakatsu_7">
-          <div class="rivalry-card-header">
-            <span class="rivalry-badge-tag">三方ヶ原の死線</span>
-            <h4>本多忠勝 vs 武田信玄</h4>
+          <div class="guide-card-header-row">
+            <div class="rivalry-card-header">
+              <span class="rivalry-badge-tag">三方ヶ原の死線</span>
+              <h4>本多忠勝 vs 武田信玄</h4>
+            </div>
+            <button class="card-speech-btn btn-3d" onclick="toggleCardSpeech('rivalry-card-tadakatsu_7')">🔊 朗読</button>
           </div>
           <div class="rivalry-story-sub">家康生涯最大の惨敗と、単騎防戦の伝説</div>
           <p class="rivalry-story-p">
@@ -571,7 +620,7 @@
             ・忠勝「<span class="kw-gold">信玄公！ 我が蜻蛉切、家康公の盾となり打ち砕かん！</span>」<br>
             ・信玄「<span class="kw-crimson">忠勝、家康に過ぎたるものよ。虎の牙を凌げるか！</span>」
           </div>
-          <p class="rivalry-story-p" style="margin-bottom:0; font-size:10.5px; color:#ffe899;">
+          <p class="rivalry-story-p" style="margin-bottom:0; font-size:12px; color:#ffe899;">
             ⚔ <b>盤上の見どころ</b>：金銀で固めた「風林火山の要塞」に対し、忠勝の剛槍と参謀・本多正信の知謀で立ち向かい虎の喉首を貫かれよ！
           </p>
         </div>

@@ -548,34 +548,33 @@ body {
 }
 
 .rivalry-card-header {
-  display: flex; align-items: center; justify-content: space-between; gap: 6px;
-  margin-bottom: 2px;
+  display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0;
 }
 .rivalry-card-header h4 {
   margin: 0 !important; border-bottom: none !important; padding-bottom: 0 !important;
-  font-size: 13.5px !important; color: #ffe699 !important;
+  font-size: clamp(14.5px, 2.3vh, 16.5px) !important; color: #ffe699 !important;
 }
 
 .rivalry-badge-tag {
-  font-size: 9px; font-weight: 900; color: #fff3cc;
+  font-size: 10px; font-weight: 900; color: #fff3cc;
   background: linear-gradient(180deg, #8a1414 0%, #420808 100%);
   border: 0.8px solid #ffd700; border-radius: 3px;
-  padding: 1px 6px; white-space: nowrap; line-height: 1.1;
+  padding: 1.5px 7px; white-space: nowrap; line-height: 1.1;
 }
 
 .rivalry-story-sub {
-  font-size: 10.5px; font-weight: 800; color: #ffb74d;
-  margin-bottom: 5px; border-bottom: 1px dashed rgba(255, 215, 0, 0.35); padding-bottom: 3px;
+  font-size: clamp(11.5px, 1.8vh, 13px); font-weight: 800; color: #ffb74d;
+  margin-bottom: 7px; border-bottom: 1px dashed rgba(255, 215, 0, 0.35); padding-bottom: 4px;
 }
 
 .rivalry-story-p {
-  margin: 0 0 5px 0; font-size: 11px; line-height: 1.65; color: #fcedcb;
+  margin: 0 0 7px 0; font-size: clamp(12.5px, 2.0vh, 14px); line-height: 1.8; color: #fcedcb;
 }
 
 .rivalry-dialogue-box {
   background: rgba(14, 5, 2, 0.9); border: 1px solid #73511f;
-  border-left: 3px solid #ff3b30; border-radius: 3px;
-  padding: 4px 7px; margin: 5px 0; font-size: 10.5px; line-height: 1.55;
+  border-left: 3.5px solid #ff3b30; border-radius: 4px;
+  padding: 6px 10px; margin: 7px 0; font-size: clamp(12.5px, 2.0vh, 14px); line-height: 1.7;
 }
 
 /* スムーズスクロール到達時の黄金脈動ハイライト演出 */
@@ -724,8 +723,8 @@ body {
 }
 .modal-buttons { margin-top: 10px; display: flex; gap: 8px; justify-content: center; }
 .modal-buttons button {
-  font-family: var(--font-ui); font-size: 12px; font-weight: 900;
-  padding: 5px 18px; border-radius: 4px; border: 1.5px solid #d4af37;
+  font-family: var(--font-ui); font-size: 13px; font-weight: 900;
+  padding: 6px 20px; border-radius: 4px; border: 1.5px solid #d4af37;
   background: linear-gradient(180deg, #3d2111 0%, #170a04 100%); color: #ffe58f; cursor: pointer;
 }
 
@@ -1020,47 +1019,131 @@ body {
 .badge-tennozan { background: #b71c1c; color: #fff; }
 .badge-shock { background: #0d47a1; color: #fff; }
 
-/* 指南モーダル */
+/* =========================================================
+   指南モーダル（文字拡大・レイアウト最適化・音声朗読）
+   ========================================================= */
 .guide-modal-box {
-  width: 96vw; max-width: 530px; height: 88vh; display: flex; flex-direction: column;
+  width: 96vw; max-width: 540px; height: 90vh; display: flex; flex-direction: column;
   background: radial-gradient(circle at center, #2e1408 0%, #0c0401 100%) !important;
   border: 2px solid #ffd700 !important; box-shadow: 0 0 35px rgba(255, 215, 0, 0.45) !important;
+  padding: 10px 12px !important;
 }
-.guide-tab-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin-bottom: 8px; }
+
+.guide-modal-header {
+  display: flex; flex-direction: column; gap: 4px; margin-bottom: 6px;
+  border-bottom: 1.5px solid #ffd700; padding-bottom: 5px;
+}
+
+.guide-modal-title {
+  margin: 0; color: #ffd700; font-size: clamp(14px, 2.5vh, 16px); font-weight: 900;
+  text-align: center; letter-spacing: 1px;
+}
+
+/* 語り手選択バー（男声／女声の選択） */
+.guide-narrator-panel {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: rgba(20, 8, 3, 0.95); border: 1px solid #73511f;
+  border-radius: 4px; padding: 3px 8px;
+}
+
+.narrator-label {
+  font-size: 11.5px; font-weight: 900; color: #ffd700; white-space: nowrap;
+}
+
+.narrator-btn-group { display: flex; gap: 6px; }
+
+.narrator-toggle-btn {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 900;
+  padding: 2.5px 10px; border-radius: 3px; border: 1px solid #a67c33;
+  background: #241207; color: #ebd4a0; cursor: pointer; transition: all 0.2s ease;
+}
+
+.narrator-toggle-btn.active {
+  background: linear-gradient(180deg, #8a1414 0%, #3d0505 100%);
+  border-color: #ffd700; color: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+/* タブバー（スマホで押しやすい横スクロール＆等幅） */
+.guide-tab-bar {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 8px;
+  flex-shrink: 0;
+}
 .guide-tab-btn {
-  font-family: var(--font-ui); font-size: 9.5px; font-weight: 900;
-  padding: 6px 1px; border-radius: 3px; border: 1.2px solid #a67c33;
+  font-family: var(--font-ui); font-size: clamp(10px, 1.6vh, 11.5px); font-weight: 900;
+  padding: 7px 2px; border-radius: 4px; border: 1.2px solid #a67c33;
   background: linear-gradient(180deg, #2f1607 0%, #150802 100%); color: #ebd4a0; cursor: pointer; text-align: center;
-  white-space: nowrap;
+  white-space: nowrap; line-height: 1.1;
 }
 .guide-tab-btn.active {
   background: linear-gradient(180deg, #8a1414 0%, #3d0505 100%);
   border-color: #ffd700; color: #ffffff; box-shadow: 0 0 10px rgba(255,215,0,0.6);
 }
+
+/* スクロール領域（文字サイズ拡大・行間ゆったり） */
 .guide-scroll-body {
-  flex: 1; overflow-y: auto; padding-right: 5px; font-size: 11.5px; line-height: 1.75;
-  background: rgba(10, 4, 1, 0.85); border: 1px solid #8e6c31; border-radius: 4px; padding: 10px;
+  flex: 1; overflow-y: auto; padding-right: 6px;
+  font-size: clamp(13px, 2.1vh, 14.5px); line-height: 1.8;
+  background: rgba(10, 4, 1, 0.85); border: 1.2px solid #8e6c31; border-radius: 4px; padding: 10px 12px;
   box-shadow: inset 0 0 12px rgba(0,0,0,0.9);
 }
 .guide-pane { display: none; }
 .guide-pane.active { display: block; }
 
+/* 指南カード（四角枠ブロック） */
 .guide-card-box {
   background: linear-gradient(180deg, rgba(38, 17, 7, 0.95) 0%, rgba(18, 7, 2, 0.95) 100%);
-  border: 1.2px solid #8e6c31; border-radius: 5px; padding: 9px 11px; margin-bottom: 9px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.85);
+  border: 1.4px solid #8e6c31; border-radius: 6px; padding: 10px 12px; margin-bottom: 11px;
+  box-shadow: 0 2px 7px rgba(0,0,0,0.85); transition: all 0.3s ease;
+  position: relative;
 }
+
+.guide-card-header-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin-bottom: 8px; border-bottom: 1.2px solid #8c671a; padding-bottom: 4px;
+}
+
+.guide-card-box h4 {
+  margin: 0; color: #ffd700; font-size: clamp(14px, 2.3vh, 16px); font-weight: 900;
+  display: flex; align-items: center; gap: 5px; letter-spacing: 0.5px;
+  flex: 1; min-width: 0;
+}
+
+/* 各四角枠の「🔊 朗読」小判ボタン */
+.card-speech-btn {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 900;
+  padding: 3px 8px; border-radius: 3px; border: 1.2px solid #ffd700;
+  background: linear-gradient(180deg, #44210c 0%, #1c0a03 100%);
+  color: #fff4b8; cursor: pointer; white-space: nowrap; line-height: 1.1;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.8); flex-shrink: 0;
+  display: flex; align-items: center; gap: 3px;
+}
+.card-speech-btn:hover { background: linear-gradient(180deg, #663212 0%, #290e04 100%); }
+
+/* 朗読中アクティブ状態（黄金脈動） */
+@keyframes pulse-reading-card {
+  0% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4), inset 0 0 6px rgba(255, 215, 0, 0.2); border-color: #ffd700; }
+  50% { box-shadow: 0 0 22px rgba(255, 215, 0, 0.85), inset 0 0 12px rgba(255, 235, 120, 0.5); border-color: #ffffff; }
+  100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.4), inset 0 0 6px rgba(255, 215, 0, 0.2); border-color: #ffd700; }
+}
+
+.guide-card-box.reading-active {
+  animation: pulse-reading-card 1.6s infinite ease-in-out !important;
+  background: linear-gradient(180deg, rgba(58, 26, 10, 0.98) 0%, rgba(22, 8, 2, 0.98) 100%) !important;
+  border: 1.8px solid #ffffff !important;
+}
+
+.guide-card-box.reading-active .card-speech-btn {
+  background: linear-gradient(180deg, #b81414 0%, #4a0808 100%) !important;
+  border-color: #ffffff !important; color: #ffffff !important;
+}
+
 .beginner-highlight-box {
   border: 2px solid #ffd700 !important;
   background: linear-gradient(180deg, rgba(64, 25, 8, 0.98) 0%, rgba(26, 8, 2, 0.98) 100%) !important;
   box-shadow: 0 0 12px rgba(255, 215, 0, 0.45) !important;
 }
 
-.guide-card-box h4 {
-  margin: 0 0 6px 0; color: #ffd700; font-size: 13px; font-weight: 900;
-  border-bottom: 1.2px solid #8c671a; padding-bottom: 3px; display: flex; align-items: center; gap: 5px;
-  letter-spacing: 0.5px;
-}
 .kw-gold { color: #ffd700; font-weight: 900; }
 .kw-crimson { color: #ff4d4d; font-weight: 900; }
 .kw-green { color: #76ff03; font-weight: 900; }
@@ -1068,10 +1151,10 @@ body {
 
 .enemy-line-item {
   display: flex; justify-content: space-between; align-items: center;
-  border-bottom: 1px dashed rgba(166, 124, 51, 0.35); padding: 2.5px 0;
-  font-size: 10.5px; line-height: 1.35; white-space: nowrap;
+  border-bottom: 1px dashed rgba(166, 124, 51, 0.35); padding: 4px 0;
+  font-size: clamp(12px, 1.9vh, 13.5px); line-height: 1.5; white-space: nowrap;
 }
 .enemy-line-left { font-weight: 900; color: #ffe899; }
-.enemy-line-right { color: #d6be89; font-size: 9.5px; }
+.enemy-line-right { color: #d6be89; font-size: clamp(11px, 1.7vh, 12.5px); }
 
 
