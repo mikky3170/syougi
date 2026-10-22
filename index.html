@@ -25,15 +25,14 @@
     </h1>
   </div>
   <div class="header-actions">
-    <!-- 合戦戦歴一覧を開くボタン -->
+    <!-- 合戦戦歴一覧を開くボタン ＆ 音響切り替え -->
     <button class="header-btn btn-3d btn-history" onclick="openHistoryModal()">📜 戦歴</button>
-    <button class="header-btn btn-3d btn-kifu" onclick="openKifuModal()">📖 棋譜</button>
     <button class="header-btn btn-3d btn-snd" id="sound-toggle" onclick="toggleSound()">♪ 音ON</button>
   </div>
 </div>
 
 <div class="main-wrapper">
-  <!-- 軍師戦況評定エリア（最上段へ配置変更） -->
+  <!-- 軍師戦況評定エリア（最上段） -->
   <div class="situation-banner">
     <div class="situation-title">戦況</div>
     <div class="situation-text" id="situation-text">互角の戦い。両軍ともに布陣を整え、緊迫の機を伺っております。一手一手が天下を動かす刻に候。</div>
@@ -94,7 +93,7 @@
     </div>
   </div>
 
-  <!-- 自将エリア（将棋盤の直下に配置変更・盤を挟んだ対局構造） -->
+  <!-- 自将エリア（将棋盤の直下に配置・盤を挟んだ対局構造） -->
   <div class="warlord-panel panel-player" id="player-panel">
     <div class="warlord-avatar" id="player-avatar-container" onclick="openPlayerWarlordModal()" title="自将変更"></div>
     <div class="warlord-info">
@@ -115,16 +114,16 @@
     <div class="warlord-hand-area" id="player-hand" title="自軍持ち駒"></div>
   </div>
 
-  <!-- 合戦伝令メッセージ帯（自将エリアの下へ配置変更） -->
+  <!-- 合戦伝令メッセージ帯 -->
   <div class="order-message-banner" id="order-message-banner">
     <svg class="order-crest-icon" viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#ffd700"/></svg>
     <div class="order-message-text" id="order-message-text">【初陣の刻】上下のパネルより「自将」と「進軍先」を選定されよ。<br>陣容が定まり次第、「対局開始」にて振り駒を執り行われよ！</div>
   </div>
 
-  <!-- 戦歴棋譜（最新復帰ボタン完備） -->
+  <!-- 下部帯：「📖 棋譜」展開ボタン ＆ 直近手順ストリーム -->
   <div class="kifu-bottom-banner">
     <div class="kifu-nav-col">
-      <div class="kifu-banner-title">合戦記録</div>
+      <button class="btn-kifu-launcher btn-3d" onclick="openKifuModal()" title="全棋譜・形勢推移を展開">📖 棋譜</button>
       <div class="kifu-step-btn-group">
         <button class="kifu-step-btn btn-3d" onclick="stepReview(-1)" title="一手戻る">◀</button>
         <button class="kifu-step-btn btn-3d" onclick="stepReview(1)" title="一手進む">▶</button>
@@ -222,7 +221,7 @@
   </div>
 </div>
 
-<!-- 合戦戦歴帳モーダル（タイトルと通算成績を改行・特大表示） -->
+<!-- 合戦戦歴帳モーダル -->
 <div id="battle-history-modal" class="modal-overlay" style="display: none;">
   <div class="modal-content battle-history-modal-box">
     <div class="history-header-box">
@@ -345,7 +344,7 @@
     </h3>
     
     <div class="guide-tab-bar">
-      <button class="guide-tab-btn btn-3d active" onclick="switchGuideTab(0)">🔰 初陣の極意</button>
+      <button class="guide-tab-btn btn-3d active" onclick="switchGuideTab(0)">🔰 対陣の極意</button>
       <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(1)">其の壱：合戦手引</button>
       <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(2)">其の弐：兵法極意</button>
       <button class="guide-tab-btn btn-3d" onclick="switchGuideTab(3)">其の参：敵将十傑</button>
@@ -353,30 +352,9 @@
     </div>
 
     <div class="guide-scroll-body">
+      <!-- 第1タブ：現在選択中の敵将に合わせた極意・攻略法を動的注入 -->
       <div class="guide-pane active" id="guide-pane-0">
-        <div class="guide-card-box beginner-highlight-box">
-          <h4>🔰 木下藤吉郎（Lv.1）を討ち破る「三箇条の鉄則」</h4>
-          将棋を始めたばかりの主君へ、専属軍師が贈る必勝の秘伝です！難しい定跡は一切不要。この3つだけを守れば、Lv.1は必ず討ち取れます。<br><br>
-          <b class="kw-gold">一、駒に「ヒモ（守り）」がついているか確認せよ！</b><br>
-          ・動かそうとする駒に、後ろの味方の利き（矢印）が重なっているかを見よ。<br>
-          ・取られても味方が取り返せる状態なら安全！ 相手の「ヒモがない駒」はタダで奪い取る絶好の獲物に候！<br><br>
-          <b class="kw-crimson">二、飛車と角の道を開け、敵陣で「龍王・龍馬」に覚醒せよ！</b><br>
-          ・飛車と角は自軍の最強大砲。序盤に前の歩を突いて道を開けよ。<br>
-          ・敵陣（上から3段目以内）へ飛び込み、必ず<span class="kw-crimson">「成る」</span>べし！ 龍王が敵陣に入れば、藤吉郎の陣は一気に崩壊いたします！<br><br>
-          <b class="kw-blue">三、玉将（大将）を真ん中から端へ逃がせ！</b><br>
-          ・初心者が負ける最大の原因は「玉が初期位置にいて流れ弾に当たること」。<br>
-          ・戦火が開く前に、玉を左か右へトコトコと1〜2マス避難させ、金銀で寄り添わせるだけで即死を防げます！
-        </div>
-
-        <div class="guide-card-box">
-          <h4>💡 初陣おすすめの「開戦五手」</h4>
-          対局が始まったら、まずはこの通りに指してみられよ！<br>
-          1. <b>７六歩</b>（角の前の歩を突いて道を開ける）<br>
-          2. <b>２六歩</b>（飛車の前の歩を突いて敵陣を目指す）<br>
-          3. <b>４八銀</b> または <b>６八玉</b>（玉を少し横へ避難させ、銀を前へ）<br>
-          4. <b>２五歩</b>（飛車先の歩をさらに前進）<br>
-          5. 敵陣を破り、飛車を敵陣へ突入させて<b>【龍王】</b>へ成る！
-        </div>
+        <div id="dynamic-tactics-content"></div>
       </div>
 
       <div class="guide-pane" id="guide-pane-1">
@@ -396,8 +374,8 @@
           ・<b class="kw-gold">💡 軍師進言 / 🔥 覚醒進言</b>：自将専属の軍師が次の一手を指南。<span class="kw-crimson">敵将が天下三英傑（Lv.8以上）かつ自軍士気35%以下の劣勢時・王手時</span>に紅蓮の「覚醒進言」へ進化し、最高深度の神算鬼謀を授けます。<br>
           ・<b class="kw-gold">📜 戦歴</b>：これまでの全対戦記録（勝敗、手数、軍師助言回数）を確認・棋譜再現できます。<br>
           ・<b class="kw-gold">🗺 天下絵巻</b>：全国十国の平定状況と城郭地図を確認・進軍先を選定。<br>
-          ・<b class="kw-gold">📖 棋譜</b>：合戦の全手順と形勢グラフを確認。KIF形式で保存可能。<br>
-          ・<b class="kw-gold">◀ / ▶ レビュー</b>：合戦記録帯の一手を戻し・進めて過去の局面を再現。<br>
+          ・<b class="kw-gold">📖 棋譜</b>：下部帯のボタンから開く合戦絵巻。全手順と形勢グラフを確認・KIF保存可能。<br>
+          ・<b class="kw-gold">◀ / ▶ レビュー</b>：直近の合戦記録帯の一手を戻し・進めて局面を再現。<br>
           ・<b class="kw-gold">♪ 音ON/OFF</b>：雅楽BGM・陣太鼓・着手音の響きを切り替えます。
         </div>
         <div class="guide-card-box">
@@ -429,30 +407,55 @@
         <div class="guide-card-box">
           <h4>🪭 一、主役五傑と専属軍師録</h4>
           合戦において自将を支える、戦国屈指の知恵袋・懐刀たちです：<br>
-          ・<b class="kw-crimson">真田幸村</b> ＆ 軍師：<b class="kw-gold">真田昌幸</b>（父。信長・家康を翻弄した表裏比興の天才謀将）<br>
-          ・<b class="kw-gold">前田慶次</b> ＆ 懐刀：<b class="kw-gold">奥村助右衛門</b>（親友。末森城を死守した前田家の名将）<br>
-          ・<b class="kw-blue">伊達政宗</b> ＆ 軍師：<b class="kw-gold">片倉小十郎</b>（右腕。秀吉・家康も一目置いた天下二大軍師）<br>
-          ・<b class="kw-gold">直江兼続</b> ＆ 主君：<b class="kw-gold">上杉景勝</b>（五大老。義の旗の下、兼続を信じ抜く寡黙なる総帥）<br>
-          ・<b class="kw-gold">本多忠勝</b> ＆ 参謀：<b class="kw-gold">本多正信</b>（盟友。剛の忠勝と智の正信、徳川天下取りの最高頭脳）
+          ・<b class="kw-crimson">真田幸村</b> ＆ 軍師：<b class="kw-gold">真田昌幸</b>（表裏比興の天才謀将）<br>
+          ・<b class="kw-gold">前田慶次</b> ＆ 懐刀：<b class="kw-gold">奥村助右衛門</b>（末森城を死守した前田家の名将）<br>
+          ・<b class="kw-blue">伊達政宗</b> ＆ 軍師：<b class="kw-gold">片倉小十郎</b>（天下二大軍師と称された右腕）<br>
+          ・<b class="kw-gold">直江兼続</b> ＆ 主君：<b class="kw-gold">上杉景勝</b>（義を貫き通す寡黙なる越後総帥）<br>
+          ・<b class="kw-gold">本多忠勝</b> ＆ 参謀：<b class="kw-gold">本多正信</b>（徳川幕府の最高頭脳）
         </div>
         <div class="guide-card-box">
-          <h4>🏯 二、敵将十傑の気風・領国録</h4>
-          各武将の好む指し手の気風と動員規模です：<br>
-          ・<b class="kw-gold">Lv.1 尾張国｜木下藤吉郎</b>（兵力 3,200）：足軽乱戦・果敢に銀を進める気風<br>
-          ・<b class="kw-gold">Lv.2 加賀国｜前田利家</b>（兵力 4,500）：槍の又左・飛車を中央に据える豪快な気風<br>
-          ・<b class="kw-gold">Lv.3 越前国｜柴田勝家</b>（兵力 5,600）：鬼柴田の剛腕・歩兵と銀で正面突破を狙う気風<br>
-          ・<b class="kw-gold">Lv.4 近江国｜浅井長政</b>（兵力 6,800）：信義の守護・手堅く飛車を振る持久戦の気風<br>
-          ・<b class="kw-gold">Lv.5 美濃国｜明智光秀</b>（兵力 7,600）：美濃の智謀・機敏に隙を突く鋭い気風<br>
-          ・<b class="kw-gold">Lv.6 越後国｜上杉謙信</b>（兵力 8,400）：軍神の突撃・角行の射程を最大限に活かす気風<br>
-          ・<b class="kw-gold">Lv.7 甲斐国｜武田信玄</b>（兵力 8,900）：風林火山・金銀で玉周りを固める堅牢な気風<br>
-          ・<b class="kw-gold">Lv.8 近江安土｜織田信長</b>（兵力 9,500）：天下布武・成駒の機動力を前面に押し出す超攻撃気風<br>
-          ・<b class="kw-gold">Lv.9 摂津大坂｜豊臣秀吉</b>（兵力 9,800）：太閤陣・持ち駒を巧みに操り盤上を包囲する気風<br>
-          ・<b class="kw-gold">Lv.10 武蔵江戸｜徳川家康</b>（兵力 10,000）：天下泰平・最深探索と思慮深い鉄壁の気風
-        </div>
-        <div class="guide-card-box" style="font-size: 10px; color: #d6be89; line-height: 1.5;">
-          <b>【歴史・将棋用語に関する考証注記】</b><br>
-          ※本作に登場する戦法名（矢倉・美濃・穴熊等）は近代以降に体系化された現代将棋の概念を、各武将の戦風に合わせて擬立てた演出です。<br>
-          ※信長の「三段撃ち」や謙信の「車懸り」、慶次の「大ふへん者」等の言動・戦術には、後世の軍記物・講談や逸話集に由来する伝承を取り入れております。
+          <h4>🏯 二、敵将十傑の気風・動員録</h4>
+          <!-- 1行完結レイアウト：スマホでも絶対に改行しない美しい並び -->
+          <div class="enemy-line-item">
+            <span class="enemy-line-left">Lv.1 尾張｜木下藤吉郎</span>
+            <span class="enemy-line-right">足軽乱戦（兵力3,200）</span>
+          </div>
+          <div class="enemy-line-item">
+            <span class="enemy-line-left">Lv.2 加賀｜前田利家</span>
+            <span class="enemy-line-right">中央突破の槍（兵力4,500）</span>
+          </div>
+          <div class="enemy-line-item">
+            <span class="enemy-line-left">Lv.3 越前｜柴田勝家</span>
+            <span class="enemy-line-right">剛腕の突進（兵力5,600）</span>
+          </div>
+          <div class="enemy-line-item">
+            <span class="enemy-line-left">Lv.4 近江｜浅井長政</span>
+            <span class="enemy-line-right">堅守の三間飛車（兵力6,800）</span>
+          </div>
+          <div class="enemy-line-item">
+            <span class="enemy-line-left">Lv.5 美濃｜明智光秀</span>
+            <span class="enemy-line-right">隙を突く知謀（兵力7,600）</span>
+          </div>
+          <div class="enemy-line-item">
+            <span class="enemy-line-left">Lv.6 越後｜上杉謙信</span>
+            <span class="enemy-line-right">軍神の遠距離射線（兵力8,400）</span>
+          </div>
+          <div class="enemy-line-item">
+            <span class="enemy-line-left">Lv.7 甲斐｜武田信玄</span>
+            <span class="enemy-line-right">風林火山の要塞（兵力8,900）</span>
+          </div>
+          <div class="enemy-line-item">
+            <span class="enemy-line-left">Lv.8 安土｜織田信長</span>
+            <span class="enemy-line-right">成駒電撃戦（兵力9,500）</span>
+          </div>
+          <div class="enemy-line-item">
+            <span class="enemy-line-left">Lv.9 大坂｜豊臣秀吉</span>
+            <span class="enemy-line-right">持ち駒包囲戦（兵力9,800）</span>
+          </div>
+          <div class="enemy-line-item">
+            <span class="enemy-line-left">Lv.10 江戸｜徳川家康</span>
+            <span class="enemy-line-right">最深探索の鉄壁（兵力10,000）</span>
+          </div>
         </div>
       </div>
 
@@ -496,5 +499,4 @@
 <script src="main.js"></script>
 </body>
 </html>
-
 

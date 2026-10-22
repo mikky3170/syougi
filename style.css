@@ -50,15 +50,15 @@ body {
 .top-header {
   width: 100%; max-width: 520px; height: 44px;
   display: flex; justify-content: space-between; align-items: center;
-  border: 2.5px solid #ffd700; border-radius: 6px;
+  border: 2px solid #ffd700; border-radius: 6px;
   background: linear-gradient(180deg, #441d0c 0%, #170702 50%, #351406 100%);
   box-shadow: 
-    0 4px 0 #120501,
-    0 6px 16px rgba(0,0,0,0.98),
+    0 3px 0 #120501,
+    0 5px 14px rgba(0,0,0,0.98),
     inset 0 1.5px 0 rgba(255, 255, 220, 0.9),
     inset 0 -1.5px 0 rgba(0, 0, 0, 0.8),
-    inset 0 0 16px rgba(255, 215, 0, 0.45);
-  padding: 2px 5px; flex-shrink: 0; position: relative; gap: 3px;
+    inset 0 0 14px rgba(255, 215, 0, 0.45);
+  padding: 2px 7px; flex-shrink: 0; position: relative; gap: 5px;
   transition: max-width 0.3s ease;
 }
 
@@ -78,12 +78,12 @@ body {
 }
 
 .title-main-txt {
-  font-size: clamp(12px, 3.0vw, 16px);
+  font-size: clamp(12.5px, 3.1vw, 16px);
   font-weight: 900; letter-spacing: 1.2px; white-space: nowrap;
 }
 
 .title-sub-txt {
-  font-size: clamp(7.5px, 1.8vw, 10px);
+  font-size: clamp(8px, 1.9vw, 10.5px);
   font-weight: 700; letter-spacing: 0.6px; white-space: nowrap; opacity: 0.95;
 }
 
@@ -93,15 +93,15 @@ body {
   .title-sub-txt { font-size: 10.5px; }
 }
 
-.header-actions { display: flex; gap: 3px; flex-shrink: 0; }
+/* ヘッダーボタン：余裕を持たせ文字・ボタンを一回り拡大 */
+.header-actions { display: flex; gap: 5px; flex-shrink: 0; }
 .header-btn {
-  font-family: var(--font-ui); font-size: 9.5px; font-weight: 900;
-  padding: 3px 5px; border-radius: 4px; border: 1.2px solid #ffd700;
-  color: #fff8d6; cursor: pointer; white-space: nowrap;
+  font-family: var(--font-ui); font-size: 11px; font-weight: 900;
+  padding: 4px 8px; border-radius: 4px; border: 1.3px solid #ffd700;
+  color: #fff8d6; cursor: pointer; white-space: nowrap; line-height: 1.1;
 }
 .btn-guide { background: linear-gradient(180deg, #664311 0%, #301f05 100%); border-color: #ffd700; color: #ffefa8; }
 .btn-history { background: linear-gradient(180deg, #661818 0%, #300606 100%); border-color: #ff9e9e; color: #ffe8e8; }
-.btn-kifu { background: linear-gradient(180deg, #1b3a57 0%, #0c1a29 100%); border-color: #5ea8e6; color: #d8eeff; }
 .btn-snd { background: linear-gradient(180deg, #442a4f 0%, #1f1124 100%); border-color: #b97de6; color: #f2e1ff; }
 
 /* 3D押し込みボタン共通設計 */
@@ -139,7 +139,7 @@ body {
    武将金蒔絵パネル（点対称・シンメトリー構造）
    ========================================================= */
 .warlord-panel {
-  width: 100%; min-height: clamp(66px, 9.0vh, 78px);
+  width: 100%; min-height: clamp(62px, 8.5vh, 74px);
   background: linear-gradient(180deg, rgba(38, 19, 8, 0.98) 0%, rgba(14, 6, 2, 0.98) 100%);
   border: 1.8px solid #c99832; border-radius: 5px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,235,150,0.4);
@@ -152,8 +152,8 @@ body {
 }
 
 .warlord-avatar {
-  width: clamp(52px, 7.2vh, 62px) !important;
-  height: clamp(58px, 8.0vh, 68px) !important;
+  width: clamp(48px, 6.8vh, 58px) !important;
+  height: clamp(54px, 7.6vh, 64px) !important;
   border-radius: 6px !important;
   border: 2px solid #ffd700 !important;
   background: radial-gradient(circle at 35% 35%, #3d1c0c 0%, #080301 100%);
@@ -176,7 +176,7 @@ body {
 .warlord-name-row { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
 .name-left-group, .name-right-group { display: flex; align-items: center; gap: 5px; min-width: 0; }
 .panel-enemy .warlord-name-row { justify-content: space-between; }
-.warlord-name { font-size: 14.5px; font-weight: 900; color: #ffe699; letter-spacing: 0.8px; white-space: nowrap; }
+.warlord-name { font-size: 14px; font-weight: 900; color: #ffe699; letter-spacing: 0.8px; white-space: nowrap; }
 
 .warlord-strategist-badge {
   font-size: 9px; font-weight: 900; color: #fff8e7;
@@ -187,8 +187,8 @@ body {
 }
 
 .panel-select-btn {
-  font-family: var(--font-ui); font-size: 11px; font-weight: 900;
-  padding: 3.5px 8.5px; border-radius: 4px; cursor: pointer; white-space: nowrap;
+  font-family: var(--font-ui); font-size: 10.5px; font-weight: 900;
+  padding: 3px 8px; border-radius: 4px; cursor: pointer; white-space: nowrap;
   display: flex; align-items: center; gap: 3px; letter-spacing: 0.5px;
   box-shadow: 0 2.5px 0 rgba(0,0,0,0.9), 0 3px 5px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.4);
 }
@@ -217,7 +217,7 @@ body {
 .morale-player { background: linear-gradient(90deg, #b86b14, #ffd700); }
 
 /* =========================================================
-   取った駒の置き場（駒台）：将棋盤と同色の銘木調天板
+   取った駒の置き場（駒台）
    ========================================================= */
 .warlord-hand-area {
   flex: 1.1; height: 90%; min-width: 85px;
@@ -240,7 +240,7 @@ body {
   .warlord-panel {
     display: grid !important;
     height: auto !important;
-    min-height: 70px !important;
+    min-height: 66px !important;
     padding: 2.5px 5px !important;
     gap: 2px 6px !important;
   }
@@ -250,7 +250,7 @@ body {
   }
   .panel-enemy .warlord-hand-area {
     grid-column: 1 / 2 !important; grid-row: 2 / 3 !important;
-    height: 36px !important; width: 100% !important; justify-content: flex-start !important;
+    height: 33px !important; width: 100% !important; justify-content: flex-start !important;
   }
   .panel-enemy .warlord-info { grid-column: 1 / 2 !important; grid-row: 1 / 2 !important; }
   .panel-enemy .warlord-avatar { grid-column: 2 / 3 !important; grid-row: 1 / 3 !important; align-self: center !important; }
@@ -262,21 +262,21 @@ body {
   .panel-player .warlord-avatar { grid-column: 1 / 2 !important; grid-row: 1 / 3 !important; align-self: center !important; }
   .panel-player .warlord-hand-area {
     grid-column: 2 / 3 !important; grid-row: 1 / 2 !important;
-    height: 36px !important; width: 100% !important; justify-content: flex-end !important;
+    height: 33px !important; width: 100% !important; justify-content: flex-end !important;
   }
   .panel-player .warlord-info { grid-column: 2 / 3 !important; grid-row: 2 / 3 !important; }
 }
 
 /* 軍師戦況評定エリア */
 .situation-banner {
-  width: 100%; min-height: 24px; max-height: 28px;
+  width: 100%; min-height: 22px; max-height: 25px;
   background: linear-gradient(90deg, #1f0f06 0%, #44210c 50%, #1f0f06 100%);
   border: 1.2px solid #b88a32; border-radius: 3px;
   display: flex; align-items: center; gap: 8px;
   padding: 2px 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.85); flex-shrink: 0;
 }
 .situation-title {
-  font-size: 13px; font-weight: 900; white-space: nowrap;
+  font-size: 12px; font-weight: 900; white-space: nowrap;
   border-right: 1.5px solid #8c671a; padding-right: 6px; line-height: 1; letter-spacing: 1.5px;
   background: var(--gold-rich); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
@@ -296,15 +296,14 @@ body {
   padding: 1px 2px;
 }
 
-/* 縦横同一の式でブラウザの自動伸縮を完全に封じ、寸分違わぬ正方形を形成 */
 .shogi-board-frame {
   display: flex; flex-direction: column;
   background: var(--border-frame);
   border: 2px solid #cca135; border-radius: 4px;
   padding: 1px;
   box-shadow: 0 5px 18px rgba(0,0,0,0.98), inset 0 0 10px rgba(0,0,0,0.95);
-  width: min(calc(100vw - 12px), calc(100vh - 350px), 480px);
-  height: min(calc(100vw - 12px), calc(100vh - 350px), 480px);
+  width: min(calc(100vw - 12px), calc(100vh - 325px), 480px);
+  height: min(calc(100vw - 12px), calc(100vh - 325px), 480px);
   max-width: 100%; max-height: 100%;
   flex-shrink: 0;
   position: relative;
@@ -312,8 +311,8 @@ body {
 
 @media (min-width: 600px) {
   .shogi-board-frame {
-    width: min(calc(100vw - 40px), calc(100vh - 350px), 520px) !important;
-    height: min(calc(100vw - 40px), calc(100vh - 350px), 520px) !important;
+    width: min(calc(100vw - 40px), calc(100vh - 325px), 520px) !important;
+    height: min(calc(100vw - 40px), calc(100vh - 325px), 520px) !important;
   }
 }
 
@@ -352,6 +351,7 @@ body {
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; position: relative; transition: background 0.15s ease;
   min-width: 0; min-height: 0; overflow: hidden;
+  padding: 1px;
 }
 .cell.selected { background: rgba(255, 215, 0, 0.88) !important; }
 
@@ -414,48 +414,50 @@ body {
 }
 
 /* =========================================================
-   本格二文字駒：端末を問わずマスに比例する黄金比率
+   本格二文字駒：駒枠に文字が被らない黄金比率（余白確保）
    ========================================================= */
 .piece {
-  width: 95%; height: 97%;
+  width: 90%; height: 92%;
   background: var(--piece-bg); border: 1.2px solid #5a3813;
-  clip-path: polygon(50% 0%, 90% 18%, 100% 100%, 0% 100%, 10% 18%);
+  clip-path: polygon(50% 0%, 88% 18%, 100% 100%, 0% 100%, 12% 18%);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   font-family: var(--font-kaisho);
-  font-size: clamp(12px, calc(min(100vw - 36px, 100vh - 370px, 460px) / 9 * 0.45), 22px);
-  line-height: 1.0; font-weight: 900; pointer-events: none;
+  /* 縮尺を0.34em相当に調整し枠への被りを解消 */
+  font-size: clamp(10.5px, calc(min(100vw - 36px, 100vh - 350px, 460px) / 9 * 0.34), 18px);
+  line-height: 0.95; font-weight: 900; pointer-events: none;
   box-shadow: 0 2px 4px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.95);
   text-align: center;
+  padding: 4px 1px 2px 1px;
 }
 .piece.player { color: var(--player-color); }
 .piece.ai { color: var(--ai-color); transform: rotate(180deg); }
 
 .piece.promoted {
   font-family: var(--font-gyosho) !important;
-  font-size: clamp(13px, calc(min(100vw - 36px, 100vh - 370px, 460px) / 9 * 0.48), 24px) !important;
+  font-size: clamp(11.5px, calc(min(100vw - 36px, 100vh - 350px, 460px) / 9 * 0.37), 19.5px) !important;
   color: var(--promoted-crimson) !important;
   text-shadow: 0 0 1.5px rgba(186,12,12,0.6);
 }
-.piece-char-top { margin-bottom: 0px; }
-.piece-char-bottom { margin-top: 0px; }
+.piece-char-top { margin-bottom: 0px; transform: scale(0.92); }
+.piece-char-bottom { margin-top: -1px; transform: scale(0.92); }
 
 /* 持ち駒 */
 .hand-piece {
-  width: 29px; height: 35px;
+  width: 28px; height: 33px;
   background: var(--piece-bg); border: 1.2px solid #5a3813;
-  clip-path: polygon(50% 0%, 90% 20%, 100% 100%, 0% 100%, 10% 20%);
+  clip-path: polygon(50% 0%, 88% 18%, 100% 100%, 0% 100%, 12% 18%);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  font-family: var(--font-kaisho); font-size: 11px; line-height: 1.0; font-weight: 900;
+  font-family: var(--font-kaisho); font-size: 9.5px; line-height: 0.95; font-weight: 900;
   cursor: pointer; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.7); flex-shrink: 0;
-  text-align: center;
+  text-align: center; padding-top: 2px;
 }
 .hand-piece.player { color: var(--player-color); }
 .hand-piece.ai { color: var(--ai-color); transform: rotate(180deg); }
 .hand-piece.selected { background: #fff59d; box-shadow: 0 0 10px #ffd700; border-color: #ffd700; }
 .hand-piece-count {
-  position: absolute; bottom: 0; right: 0; font-size: 8.5px;
+  position: absolute; bottom: 0; right: 0; font-size: 8px;
   color: #fff; font-weight: 900; background: #960d0d;
-  border-radius: 50%; padding: 0 3.5px; line-height: 1.1;
+  border-radius: 50%; padding: 0 3px; line-height: 1.1;
   border: 0.5px solid #ffd700; box-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
 
@@ -481,13 +483,13 @@ body {
   box-shadow: 0 0 28px rgba(255, 120, 0, 0.95) !important;
 }
 .cutin-text {
-  font-size: 14px; font-weight: 900; color: #fff9e6;
+  font-size: 13.5px; font-weight: 900; color: #fff9e6;
   text-shadow: 0 0 10px #ffd700, 0 2px 4px #000; letter-spacing: 1.2px;
   white-space: nowrap; line-height: 1;
 }
 .cutin-active .cutin-banner { opacity: 1 !important; transform: scale(1) !important; }
 
-/* 合戦伝令メッセージ帯 ＆ インライン軍師顔画像 */
+/* 合戦伝令メッセージ帯 */
 @keyframes breathe-player-turn {
   0% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.3), inset 0 0 4px rgba(255, 215, 0, 0.2); border-color: #cca135; }
   50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.85), inset 0 0 12px rgba(255, 235, 120, 0.6); border-color: #ffffff; }
@@ -501,7 +503,7 @@ body {
 }
 
 .order-message-banner {
-  width: 100%; height: clamp(44px, 6.2vh, 52px);
+  width: 100%; height: clamp(40px, 5.8vh, 48px);
   background: linear-gradient(90deg, #281409 0%, #4a2410 50%, #281409 100%);
   border: 1.8px solid #b88a32; border-radius: 5px;
   display: flex; align-items: center; justify-content: center; gap: 6px;
@@ -510,12 +512,12 @@ body {
 }
 
 .order-crest-icon {
-  width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;
+  width: 16px; height: 16px; fill: #ffd700; flex-shrink: 0;
   filter: drop-shadow(0 0 4px #ffd700);
 }
 
 .order-message-text {
-  font-size: clamp(10.5px, 1.55vh, 12px); font-weight: 800; color: #ffe699; letter-spacing: 0.3px;
+  font-size: clamp(10px, 1.45vh, 11.5px); font-weight: 800; color: #ffe699; letter-spacing: 0.3px;
   line-height: 1.25; text-align: center; flex: 1;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   text-shadow: 0 1px 3px #000;
@@ -523,7 +525,7 @@ body {
 .order-message-banner.my-turn { animation: breathe-player-turn 3.2s infinite ease-in-out !important; }
 .order-message-banner.my-turn .order-message-text { animation: pulse-text-glow 2.2s infinite ease-in-out !important; }
 
-/* 軍師助言用：戦術意図バッジ＆ハイライト装飾 */
+/* 軍師助言用：戦術意図バッジ */
 .tactics-reason-badge {
   font-size: 8.5px; font-weight: 900; padding: 1px 5px; border-radius: 3px;
   border: 0.8px solid #ffd700; white-space: nowrap; margin-right: 3px;
@@ -541,10 +543,9 @@ body {
 .hl-act  { color: #76ff03; font-weight: 900; }
 .hl-prom { color: #ff5252; font-weight: 900; }
 
-/* 軍師助言インライン顔アイコン */
 .strategist-inline-icon {
   display: inline-block;
-  width: 24px; height: 28px;
+  width: 22px; height: 26px;
   object-fit: cover; object-position: center 10%;
   border-radius: 3px; border: 1.2px solid #ffd700;
   box-shadow: 0 0 6px rgba(255, 215, 0, 0.7);
@@ -552,9 +553,11 @@ body {
   margin: 0 3px 1px 3px;
 }
 
-/* 棋譜帯 */
+/* =========================================================
+   下部帯：「📖 棋譜」ボタン ＆ 直近手順ストリーム
+   ========================================================= */
 .kifu-bottom-banner {
-  width: 100%; height: clamp(52px, 7.2vh, 60px);
+  width: 100%; height: clamp(40px, 5.8vh, 46px);
   background: linear-gradient(180deg, rgba(25, 12, 5, 0.98) 0%, rgba(10, 5, 2, 0.98) 100%);
   border: 1.5px solid #a67c33; border-radius: 4px;
   display: flex; align-items: stretch; padding: 2px 4px; gap: 4px;
@@ -562,21 +565,33 @@ body {
 }
 .kifu-nav-col {
   display: flex; flex-direction: column; justify-content: space-between;
-  width: 44px; border-right: 1px solid #73511f; padding-right: 3px; flex-shrink: 0;
+  width: 52px; border-right: 1px solid #73511f; padding-right: 3px; flex-shrink: 0;
 }
-.kifu-banner-title { font-size: 8.5px; font-weight: 900; color: #ffd700; text-align: center; line-height: 1.05; }
+
+/* 「📖 棋譜」展開ボタン（立体山吹黄金） */
+.btn-kifu-launcher {
+  width: 100%; height: 18px; font-family: var(--font-ui);
+  font-size: 10.5px; font-weight: 900; color: #ffd700;
+  background: linear-gradient(180deg, #44210c 0%, #1c0a03 100%);
+  border: 1.2px solid #ffd700; border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; padding: 0; letter-spacing: 0.5px;
+}
+.btn-kifu-launcher:hover { background: linear-gradient(180deg, #663212 0%, #290e04 100%); }
+
 .kifu-step-btn-group { display: flex; gap: 2px; }
 .kifu-step-btn {
-  flex: 1; font-size: 8.5px; padding: 2px 0; border: 1px solid #a67c33;
+  flex: 1; font-size: 9px; padding: 2px 0; border: 1px solid #a67c33;
   background: #2b170c; color: #ffd700; cursor: pointer; border-radius: 2px;
 }
+
 .kifu-stream-box {
-  display: grid; grid-template-rows: repeat(3, 15px); grid-auto-flow: column;
+  display: grid; grid-template-rows: repeat(2, 16px); grid-auto-flow: column;
   gap: 1px 12px; overflow-x: auto; overflow-y: hidden;
-  flex-grow: 1; font-size: 10px; color: #fcedcb; text-align: left;
-  white-space: nowrap; align-items: center; padding-bottom: 2px;
+  flex-grow: 1; font-size: 10.5px; color: #fcedcb; text-align: left;
+  white-space: nowrap; align-items: center; padding-bottom: 1px;
 }
-.kifu-item-cell { display: flex; align-items: center; white-space: nowrap; cursor: pointer; line-height: 15px; }
+.kifu-item-cell { display: flex; align-items: center; white-space: nowrap; cursor: pointer; line-height: 16px; }
 .kifu-item-cell:hover { color: #ffd700; text-decoration: underline; }
 .kifu-item-cell.active-review { color: #ffeb3b; font-weight: 900; text-shadow: 0 0 5px #ffd700; }
 
@@ -649,9 +664,7 @@ body {
   background: linear-gradient(180deg, #3d2111 0%, #170a04 100%); color: #ffe58f; cursor: pointer;
 }
 
-/* =========================================================
-   合戦戦歴帳モーダル：タイトル・通算成績特大銘板
-   ========================================================= */
+/* 合戦戦歴帳モーダル */
 .battle-history-modal-box {
   width: 96vw !important; max-width: 540px !important; height: 88vh !important;
   display: flex; flex-direction: column; justify-content: space-between;
@@ -820,7 +833,7 @@ body {
 }
 .conquest-card-item.cleared { border-color: #ffb300; }
 .conquest-card-item.locked { opacity: 0.5; cursor: not-allowed; background: rgba(14, 7, 3, 0.85); border-color: #4a3416; }
-.conquest-card-left { display: flex; align-items: center; gap: 7px; }
+.conquest-card-left { display: flex; align-items: center; gap: 7px; flex: 1; min-width: 0; }
 
 .conquest-avatar-thumb {
   width: 44px !important; height: 52px !important;
@@ -833,9 +846,17 @@ body {
   object-fit: cover !important; object-position: center 10% !important;
 }
 
+.conquest-card-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.conquest-card-title { font-size: 11.5px; font-weight: 900; color: #fff8e7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.conquest-card-clan { font-size: 9px; color: #d6be89; font-weight: 700; }
+.conquest-card-feature {
+  font-size: 9px; color: #ffe699; line-height: 1.25; margin-top: 1px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
 .conquest-status-badge {
   font-size: 8.5px; font-weight: 900; padding: 1.5px 5px; border-radius: 3px;
-  border: 0.8px solid #ffd700; white-space: nowrap;
+  border: 0.8px solid #ffd700; white-space: nowrap; flex-shrink: 0;
 }
 .badge-conquered { background: #8a1414; color: #ffe699; }
 .badge-challenge { background: #b87b14; color: #ffffff; }
@@ -980,4 +1001,12 @@ body {
 .kw-green { color: #76ff03; font-weight: 900; }
 .kw-blue { color: #4fc3f7; font-weight: 900; }
 
+/* 指南 其の参：1行完結レイアウト */
+.enemy-line-item {
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px dashed rgba(166, 124, 51, 0.35); padding: 2.5px 0;
+  font-size: 10.5px; line-height: 1.35; white-space: nowrap;
+}
+.enemy-line-left { font-weight: 900; color: #ffe899; }
+.enemy-line-right { color: #d6be89; font-size: 9.5px; }
 

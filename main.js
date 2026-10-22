@@ -1,4 +1,3 @@
-
 /* =========================================================
    将棋王 2026 〜 天下統一・戦国決戦 〜
    メインスクリプト（軍略・演出・思考エンジン統合管理）
@@ -412,17 +411,15 @@ self.onmessage = function(e) {
       const m = legals[i];
       const undo = makeMove(m);
 
-      // 軍師・思考エンジンの千日手・往復徹底ペナルティ
       let loopPenalty = 0;
       const nextHash = getBoardHash(board, hands, enemyOwner);
       const hashOccurrences = pastHashes.filter(h => h === nextHash).length;
       if (hashOccurrences >= 2) {
-        loopPenalty += 3500; // 同一局面への回帰を厳禁
+        loopPenalty += 3500;
       } else if (hashOccurrences === 1) {
         loopPenalty += 1200;
       }
 
-      // 直近4手以内の同一駒の単純往復（飛車の後退と即座突入など）を大幅減点
       if (isHintRequest && moveHistory.length >= 4) {
         const lastMyMove = moveHistory[moveHistory.length - 2];
         const prevMyMove = moveHistory[moveHistory.length - 4];
@@ -456,7 +453,7 @@ self.onmessage = function(e) {
 `;
 
 /* =========================================================
-   音響エンジン（周期音ノイズ完全撤廃・高品位BGM/着手音管理）
+   音響エンジン
    ========================================================= */
 let audioCtx = null, soundEnabled = true, isPageHidden = false;
 const bgmAudio = document.getElementById('bgm-audio');
@@ -503,7 +500,6 @@ function toggleSound() {
   else { pauseBgm(); }
 }
 
-/* バックグラウンド・裏画面への移行を監視して完全ミュート */
 function handleVisibilityChange() {
   if (document.hidden) {
     isPageHidden = true;
@@ -651,7 +647,7 @@ function getStrategistInlineImgHtml(imgId) {
                style="display:none;">`;
 }
 
-/* 主役五傑（専属軍師 ＆ 兜・軍師ポートレートアート） */
+/* 主役五傑 */
 const PLAYER_WARLORDS = {
   sanada: {
     id: 'sanada', name: '真田幸村', clan: '信濃国 ｜ 真田赤備隊・日本一の兵', themeColor: '#e61919',
@@ -754,40 +750,46 @@ const PLAYER_WARLORDS = {
   }
 };
 
-/* 敵将十傑 */
+/* 敵将十傑（実戦特徴・ワンポイント攻略付き） */
 const WARLORDS_DATA = {
   1: {
-    id: 'enemy_1', province: '尾張国', name: '木下藤吉郎', clan: '尾張国｜織田足軽隊 (Lv.1)', power: '動員兵力 3,200',
+    id: 'enemy_1', province: '尾張国', name: '木下藤吉郎', clan: '尾張国｜織田足軽隊', power: '動員兵力 3,200',
+    featureShort: '守りのない駒を見落としがち。銀と歩を前進させる足軽戦法。',
     tacticsHint: '藤吉郎は守りのない駒を見落としがち。味方の駒にヒモ（守り）をつけ、角と飛車の道を開いて敵陣へ突入されよ！',
     portraitSvg: `<rect width="100" height="100" rx="6" fill="#140d06"/><path d="M50 20 Q56 28 50 36 Q44 28 50 20 Z M50 36 Q62 50 50 68 Q38 50 50 36 Z M50 68 Q68 85 50 94 Q32 85 50 68 Z" fill="#ffd700"/>`,
     quotes: { default: '「草履取りとて天下を夢見候！ 足軽の意地、見せてくれよう！」', check: '「猿の一撃、侮りめさるな！」', pinch: '「あわわ…！ 信長様にお叱りを受けてしまう！」', adv: '「出世の足音が聞こえてき申した！」' }
   },
   2: {
-    id: 'enemy_2', province: '加賀国', name: '前田利家', clan: '加賀国｜槍の又左 (Lv.2)', power: '動員兵力 4,500',
+    id: 'enemy_2', province: '加賀国', name: '前田利家', clan: '加賀国｜槍の又左', power: '動員兵力 4,500',
+    featureShort: '中央5筋から飛車で豪快に突進。中央を金銀で固めて防げ！',
     tacticsHint: '利家公は中央（5筋）から飛車で突進して参る。真ん中に金銀を配して防壁を築き、飛車の突撃を跳ね返されよ！',
     portraitSvg: `<rect width="100" height="100" rx="6" fill="#180707"/><circle cx="50" cy="50" r="10" fill="#ffd700"/><circle cx="50" cy="24" r="8" fill="#ffd700"/><circle cx="75" cy="42" r="8" fill="#ffd700"/><circle cx="65" cy="74" r="8" fill="#ffd700"/><circle cx="35" cy="74" r="8" fill="#ffd700"/><circle cx="25" cy="42" r="8" fill="#ffd700"/>`,
     quotes: { default: '「我が槍に迷いなし！ 槍の又左が一撃、盤上に受けてみよ！」', check: '「槍の又左、一騎当千の突撃ぞ！」', pinch: '「ぬう…！ 前田の槍衾を崩されるとは！」', adv: '「槍を引くな！ この利家が押し通る！」' }
   },
   3: {
-    id: 'enemy_3', province: '越前国', name: '柴田勝家', clan: '越前国｜鬼柴田 (Lv.3)', power: '動員兵力 5,600',
+    id: 'enemy_3', province: '越前国', name: '柴田勝家', clan: '越前国｜鬼柴田', power: '動員兵力 5,600',
+    featureShort: '歩と銀で力任せに正面突破。角・飛車の遠距離射線で横から突け。',
     tacticsHint: '勝家は歩と銀で正面突破を狙う猪武者。正面から受けて立たず、横から飛車・角の射線で銀の首を狙い撃たれよ！',
     portraitSvg: `<rect width="100" height="100" rx="6" fill="#150a04"/><path d="M30 40 Q50 25 70 40 Q50 48 30 40 Z M30 65 Q50 50 70 65 Q50 73 30 65 Z" fill="#ffd700"/>`,
     quotes: { default: '「かかれ柴田の突進力、小細工など粉砕してくれるわ！」', check: '「鬼柴田の剛腕、いざ受けてみよ！」', pinch: '「ぐぬ… 瓶割り柴田、退路を断って迎え撃つ！」', adv: '「かかれ！ かかれ柴田の猛進を止められるか！」' }
   },
   4: {
-    id: 'enemy_4', province: '近江国', name: '浅井長政', clan: '近江国｜浅井軍総帥 (Lv.4)', power: '動員兵力 6,800',
+    id: 'enemy_4', province: '近江国', name: '浅井長政', clan: '近江国｜浅井軍総帥', power: '動員兵力 6,800',
+    featureShort: '手堅い三間飛車の持久戦。自玉を美濃囲いに囲って対抗せよ。',
     tacticsHint: '長政は三間飛車の持久戦陣形。焦って突っ込まず、自玉を美濃囲い等に囲ってからじっくり攻略されよ。',
     portraitSvg: `<rect width="100" height="100" rx="6" fill="#0d1824"/><g fill="none" stroke="#ffd700" stroke-width="3"><polygon points="50,18 64,26 64,42 50,50 36,42 36,26"/><polygon points="36,44 50,52 50,68 36,76 22,68 22,52"/><polygon points="64,44 78,52 78,68 64,76 50,68 50,52"/></g>`,
     quotes: { default: '「信義を重んじ、我が陣を進めん！ 浅井の誇り、見よ！」', check: '「信義の一撃、ここを退くわけにはいかぬ！」', pinch: '「信義を貫く刻… お市、すまぬ…」', adv: '「我が陣容に乱れなし！ 義の勝利を！」' }
   },
   5: {
-    id: 'enemy_5', province: '美濃国', name: '明智光秀', clan: '美濃国｜智謀の軍総帥 (Lv.5)', power: '動員兵力 7,600',
+    id: 'enemy_5', province: '美濃国', name: '明智光秀', clan: '美濃国｜智謀の軍総帥', power: '動員兵力 7,600',
+    featureShort: '浮き駒を狙う3手先読みの知謀。駒同士の連携を絶対に緩めるな。',
     tacticsHint: '光秀は3手先を読む知謀の士。守りのない浮き駒を狙ってくるため、自陣の駒同士を常に連結させよ。',
     portraitSvg: `<rect width="100" height="100" rx="6" fill="#09141c"/><polygon points="50,18 60,38 82,38 65,52 72,74 50,60 28,74 35,52 18,38 40,38" fill="#ffd700"/>`,
     quotes: { default: '「時は今、天が下知る五月哉。我が智謀、見切れるか！」', check: '「敵は本能寺に… いや、貴殿の本陣にあり！」', pinch: '「天運は我を見放すというのか…！ まだだ！」', adv: '「盤上の全て、我が掌の上にて動いておる。」' }
   },
   6: {
-    id: 'enemy_6', province: '越後国', name: '上杉謙信', clan: '越後国｜越後の龍・軍神 (Lv.6)', power: '動員兵力 8,400',
+    id: 'enemy_6', province: '越後国', name: '上杉謙信', clan: '越後国｜越後の龍・軍神', power: '動員兵力 8,400',
+    featureShort: '角行と龍馬の長距離射線で急襲。斜めのラインを常に警戒せよ。',
     tacticsHint: '謙信公は角行と龍馬の遠距離砲撃を好む。斜めの射線上に自軍の大事な駒を置かぬよう細心の注意を払われよ。',
     portraitSvg: `
       <rect width="100" height="100" rx="6" fill="#14061a"/>
@@ -798,7 +800,8 @@ const WARLORDS_DATA = {
     quotes: { default: '「毘沙門天の御加護、我が軍にあり！ 車懸りの陣、進めよ！」', check: '「龍の爪牙、敵本陣を裂く！」', pinch: '「運は天にあり、鎧は胸にあり！ 毘沙門天よ！」', adv: '「車懸り、休むこと莫れ！ 義戦を完遂せん！」' }
   },
   7: {
-    id: 'enemy_7', province: '甲斐国', name: '武田信玄', clan: '甲斐国｜甲斐の虎 (Lv.7)', power: '動員兵力 8,900',
+    id: 'enemy_7', province: '甲斐国', name: '武田信玄', clan: '甲斐国｜甲斐の虎', power: '動員兵力 8,900',
+    featureShort: '金銀で玉を固める風林火山の要塞。正面を避け端攻めで崩せ。',
     tacticsHint: '信玄公は金銀3枚で玉を固める風林火山の要塞。正面からぶつからず、端攻め（1筋や9筋）から崩すのが妙手。',
     portraitSvg: `
       <rect width="100" height="100" rx="6" fill="#1f0303"/>
@@ -809,7 +812,8 @@ const WARLORDS_DATA = {
     quotes: { default: '「疾きこと風の如く、動かざること山の如し！ 蹂躙してくれる！」', check: '「侵略すること火の如し！ 虎の牙、受けてみよ！」', pinch: '「人は城、人は石垣… 崩れるな、耐えよ！」', adv: '「風林火山の旗の下、天下を呑み込まん！」' }
   },
   8: {
-    id: 'enemy_8', province: '近江安土', name: '織田信長', clan: '近江安土｜第六天魔王 (Lv.8)', power: '動員兵力 9,500',
+    id: 'enemy_8', province: '近江安土', name: '織田信長', clan: '近江安土｜第六天魔王', power: '動員兵力 9,500',
+    featureShort: '龍王・龍馬を先陣に突入させる電撃戦。自玉を深く囲って耐えよ。',
     tacticsHint: '信長公は龍王・龍馬を前線に繰り出す電撃戦。自玉を深く囲い、成駒の突入に耐えつつ反撃の刃を研ぐべし。',
     portraitSvg: `
       <rect width="100" height="100" rx="6" fill="#140606"/>
@@ -821,7 +825,8 @@ const WARLORDS_DATA = {
     quotes: { default: '「是非に及ばず。この信長に挑む愚かさ、骨身に刻め。」', check: '「三段撃ち！ 鉄砲の前に灰燼と帰すがよい！」', pinch: '「人間五十年、下天の内をくらぶれば… まだ死せぬ！」', adv: '「天下布武！ 我が前にひれ伏せ！」' }
   },
   9: {
-    id: 'enemy_9', province: '摂津大坂', name: '豊臣秀吉', clan: '摂津大坂｜天下人・太閤 (Lv.9)', power: '動員兵力 9,800',
+    id: 'enemy_9', province: '摂津大坂', name: '豊臣秀吉', clan: '摂津大坂｜天下人・太閤', power: '動員兵力 9,800',
+    featureShort: '持ち駒を操る包囲殲滅戦。安易な大駒交換は敵の思う壺。',
     tacticsHint: '太閤秀吉は持ち駒を操る包囲戦が得意。持ち駒を渡さないよう、無駄な駒交換を避けて盤上を制圧せよ。',
     portraitSvg: `
       <rect width="100" height="100" rx="6" fill="#241904"/>
@@ -835,7 +840,8 @@ const WARLORDS_DATA = {
     quotes: { default: '「天下は我が手中にある！ 太閤の前に跪くがよい！」', check: '「黄金の茶室ならぬ、黄金の王手を喰らいなされ！」', pinch: '「露と落ち、露と消えにし我が身かな… なにを！」', adv: '「日輪の如く、全てを照らし尽くして見せよう！」' }
   },
   10: {
-    id: 'enemy_10', province: '武蔵江戸', name: '徳川家康', clan: '武蔵江戸｜天下の覇者 (Lv.10)', power: '動員兵力 10,000',
+    id: 'enemy_10', province: '武蔵江戸', name: '徳川家康', clan: '武蔵江戸｜天下の覇者', power: '動員兵力 10,000',
+    featureShort: '最深探索の鉄壁。軍師の【覚醒進言】と連携し打開せよ。',
     tacticsHint: '家康公は最深探索の鉄壁。一分の隙も許さぬため、軍師の【覚醒進言】と連携し神算鬼謀の一撃を狙うべし。',
     portraitSvg: `
       <rect width="100" height="100" rx="6" fill="#080f1f"/>
@@ -1427,7 +1433,7 @@ function createNewWorker() {
 }
 createNewWorker();
 
-/* 軍師進言の手の「戦術理由・意図」を判定するエンジン */
+/* 軍師進言の手の「戦術理由・意図」を判定 */
 function analyzeTacticsIntent(bm) {
   const targetPiece = board[bm.to.r][bm.to.c];
   const movingPieceCode = (bm.type === 'move') ? (board[bm.from.r][bm.from.c]?.code || bm.code) : bm.code;
@@ -1435,7 +1441,6 @@ function analyzeTacticsIntent(bm) {
   const enemyKing = findKing('AI');
   const distToKing = enemyKing ? Math.max(Math.abs(bm.to.r - enemyKing.r), Math.abs(bm.to.c - enemyKing.c)) : 9;
 
-  // 1. 自玉への王手を防ぐ
   if (isCheckState('PLAYER')) {
     return {
       badgeClass: 'badge-tactics-defense',
@@ -1444,7 +1449,6 @@ function analyzeTacticsIntent(bm) {
     };
   }
 
-  // 2. 敵の駒を捕獲する
   if (isCapture) {
     const capName = PIECES[targetPiece.code];
     return {
@@ -1454,7 +1458,6 @@ function analyzeTacticsIntent(bm) {
     };
   }
 
-  // 3. 敵陣突破・成る
   if (bm.promote) {
     const promName = PIECES[PROMOTE_MAP[movingPieceCode]] || '成駒';
     return {
@@ -1464,7 +1467,6 @@ function analyzeTacticsIntent(bm) {
     };
   }
 
-  // 4. 敵玉への包囲・王手狙い
   if (distToKing <= 2) {
     return {
       badgeClass: 'badge-tactics-attack',
@@ -1473,7 +1475,6 @@ function analyzeTacticsIntent(bm) {
     };
   }
 
-  // 5. 大砲（飛車・角行）の道を開ける
   if (bm.type === 'move' && movingPieceCode === 'FU') {
     if ((bm.from.r === 6 && bm.from.c === 2) || (bm.from.r === 6 && bm.from.c === 6)) {
       return {
@@ -1484,7 +1485,6 @@ function analyzeTacticsIntent(bm) {
     }
   }
 
-  // 6. 陣形の補強・玉の囲い
   if (bm.type === 'move' && ['KI','GI','OU'].includes(movingPieceCode)) {
     return {
       badgeClass: 'badge-tactics-defense',
@@ -1493,7 +1493,6 @@ function analyzeTacticsIntent(bm) {
     };
   }
 
-  // 7. 相手に取らせる手（布石・誘引）
   return {
     badgeClass: 'badge-tactics-trap',
     badgeText: '【局面打開】',
@@ -1917,7 +1916,41 @@ function drawEvaluationChart() {
   document.getElementById('chart-eval-num-bottom').textContent = lastPt.pScore < 0 ? `${lastPt.pScore}` : '';
 }
 
-function openGuideModal() { document.getElementById('guide-modal').style.display = 'flex'; }
+/* 指南モーダル：現在選択中の敵将に連動して攻略法を動的生成 */
+function renderDynamicTactics() {
+  const container = document.getElementById('dynamic-tactics-content');
+  if (!container) return;
+  const w = WARLORDS_DATA[currentAiLevel];
+  const p = PLAYER_WARLORDS[currentMyWarlordId];
+
+  container.innerHTML = `
+    <div class="guide-card-box beginner-highlight-box">
+      <h4>🔰 【Lv.${currentAiLevel} ${w.province}｜${w.name}】を討ち破る兵法</h4>
+      専属軍師・<b>${p.strategistName}</b>による、対「${w.name}」専用の極意に候！<br><br>
+      <b class="kw-gold">一、敵将の癖と弱点を見抜け！</b><br>
+      ・${w.tacticsHint}<br><br>
+      <b class="kw-crimson">二、大駒（飛車・角行）を敵陣へ突入させて成れ！</b><br>
+      ・飛車と角は自軍最強の矛。敵陣（上段3段以内）へ飛び込み、必ず<span class="kw-crimson">「成る」</span>べし！ 龍王・龍馬が敵陣に顕現すれば勝勢となります。<br><br>
+      <b class="kw-blue">三、玉将（大将）の守りを固めよ！</b><br>
+      ・大将が初期位置にいると敵の奇襲で即死いたします。金銀を玉の周りに配し、堅牢な陣形を築いてから出撃されよ！
+    </div>
+
+    <div class="guide-card-box">
+      <h4>💡 ${w.name}戦おすすめの「開戦五手」</h4>
+      対局が始まったら、まずはこの手順で盤面を有利に進められよ！<br>
+      1. <b>７六歩</b>（角の道を開き射線を睨ませる）<br>
+      2. <b>２六歩</b>（飛車の前の歩を前進させる）<br>
+      3. <b>４八銀</b> または <b>６八玉</b>（玉を少し避難させ、銀を前線へ）<br>
+      4. <b>２五歩</b>（飛車先の歩をさらに進めて拠点を築く）<br>
+      5. 敵の隙を突き、飛車を敵陣へ突撃させて<b>【龍王】</b>へ覚醒せよ！
+    </div>
+  `;
+}
+
+function openGuideModal() {
+  renderDynamicTactics();
+  document.getElementById('guide-modal').style.display = 'flex';
+}
 function closeGuideModal() { document.getElementById('guide-modal').style.display = 'none'; }
 function switchGuideTab(tabIdx) {
   playPieceSound();
@@ -1954,6 +1987,7 @@ function openPlayerWarlordModal() {
 }
 function closePlayerWarlordModal() { document.getElementById('player-warlord-modal').style.display = 'none'; }
 
+/* 国盗り絵巻UI（重複のLv表記削除 ＆ 実戦ワンポイント特徴の表示） */
 function updateConquestMapUI() {
   const clearedCount = clearedProvinces.length;
   document.getElementById('conquest-pct-disp').textContent = `${clearedCount * 10}%`;
@@ -1994,9 +2028,10 @@ function updateConquestMapUI() {
     d.innerHTML = `
       <div class="conquest-card-left">
         <div class="conquest-avatar-thumb">${getWarlordPortraitHtml(w)}</div>
-        <div>
-          <b>Lv.${i} ${w.province} ｜ ${w.name}</b>
-          <div style="font-size:9.5px;color:#d6be89;">${w.clan}</div>
+        <div class="conquest-card-info">
+          <div class="conquest-card-title">Lv.${i} ${w.province} ｜ ${w.name}</div>
+          <div class="conquest-card-clan">${w.clan} （${w.power}）</div>
+          <div class="conquest-card-feature">⚔ ${w.featureShort}</div>
         </div>
       </div>
       <div>${badgeHtml}</div>`;
@@ -2017,7 +2052,7 @@ function selectConquestProvince(lvl) {
   const w = WARLORDS_DATA[lvl];
   const p = PLAYER_WARLORDS[currentMyWarlordId];
   document.getElementById('ai-name-disp').textContent = w.name;
-  document.getElementById('ai-clan-disp').textContent = w.clan;
+  document.getElementById('ai-clan-disp').textContent = `${w.clan} (Lv.${lvl})`;
   document.getElementById('ai-quote-disp').textContent = w.quotes.default;
   document.getElementById('ai-power-disp').textContent = w.power;
   
@@ -2252,5 +2287,4 @@ document.addEventListener('touchstart', () => initAudio(), { once: true });
 loadProgress();
 setPlayerWarlord(currentMyWarlordId);
 initBoardState();
-
 
