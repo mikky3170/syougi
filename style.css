@@ -20,7 +20,7 @@
 
 * { box-sizing: border-box; }
 
-/* 金漆調スクロールバー（全体の統一美） */
+/* 金漆調スクロールバー */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: rgba(14, 6, 2, 0.9); border-radius: 3px; }
 ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #b88a32 0%, #664414 100%); border-radius: 3px; border: 0.5px solid #ffd700; }
@@ -179,6 +179,49 @@ body {
   .top-header, .main-wrapper, .bottom-command-bar {
     max-width: min(94vw, 680px) !important;
   }
+}
+
+/* =========================================================
+   【新設】合戦再現モード専用・特大告知銘板プレート
+   ========================================================= */
+@keyframes replay-plate-pulse {
+  0%   { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5), inset 0 0 8px rgba(255, 215, 0, 0.3); border-color: #ffd700; }
+  50%  { box-shadow: 0 0 22px rgba(255, 215, 0, 0.9), inset 0 0 16px rgba(255, 235, 120, 0.6); border-color: #ffffff; }
+  100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5), inset 0 0 8px rgba(255, 215, 0, 0.3); border-color: #ffd700; }
+}
+
+.replay-mode-indicator-bar {
+  display: none; /* 通常は非表示、再現モード時にflexで出現 */
+  width: 100%; height: 28px;
+  background: linear-gradient(90deg, #3d1447 0%, #1e0926 50%, #3d1447 100%);
+  border: 1.8px solid #ffd700; border-radius: 4px;
+  align-items: center; justify-content: space-between;
+  padding: 0 8px; flex-shrink: 0;
+  animation: replay-plate-pulse 2.2s infinite ease-in-out;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.9);
+  z-index: 10;
+}
+
+.replay-indicator-title {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-kaisho); font-size: 13px; font-weight: 900;
+  color: #fff6be; text-shadow: 0 1px 3px #000; letter-spacing: 1px;
+}
+.replay-indicator-badge {
+  background: #ff2a2a; color: #fff; font-size: 9.5px; font-weight: 900;
+  padding: 1px 6px; border-radius: 3px; border: 1px solid #ffd700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+.replay-indicator-step {
+  font-size: 11px; font-weight: 900; color: #ffd700;
+  text-shadow: 0 1px 2px #000;
+}
+.btn-exit-replay-top {
+  font-family: var(--font-ui); font-size: 10px; font-weight: 900;
+  padding: 2px 8px; border-radius: 3px; border: 1.2px solid #ffd700;
+  background: linear-gradient(180deg, #c71818 0%, #5e0808 100%);
+  color: #ffffff; cursor: pointer; white-space: nowrap; line-height: 1.2;
+  box-shadow: 0 2px 0 #1c0202, 0 2px 4px rgba(0,0,0,0.8);
 }
 
 /* 軍師戦況評定エリア */
@@ -347,7 +390,7 @@ body {
 }
 
 /* =========================================================
-   【新設】兵力ゲージ（軍勢HPバー）
+   兵力ゲージ（軍勢HPバー）
    ========================================================= */
 .gauge-group { display: flex; flex-direction: column; gap: 1px; margin-top: 1px; }
 .gauge-label-row { display: flex; justify-content: space-between; align-items: center; font-size: 8.5px; }
@@ -446,6 +489,7 @@ body {
   max-width: 100%; max-height: 100%;
   flex-shrink: 0;
   position: relative;
+  transition: all 0.3s ease;
 }
 
 @media (min-width: 600px) {
@@ -453,6 +497,12 @@ body {
     width: min(calc(100vw - 40px), calc(100vh - 325px), 520px) !important;
     height: min(calc(100vw - 40px), calc(100vh - 325px), 520px) !important;
   }
+}
+
+/* 再現モード時の盤面アンバーグロー（金碧絵巻調の光装飾） */
+.mode-replay-active .shogi-board-frame {
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 25px rgba(255, 180, 0, 0.75), 0 5px 18px rgba(0,0,0,0.98), inset 0 0 12px rgba(255, 215, 0, 0.3) !important;
 }
 
 .shogi-board-frame::after {
@@ -736,7 +786,7 @@ body {
   100% { box-shadow: 0 0 6px #ff3300, inset 0 0 4px #ffd700; border-color: #ffd700; }
 }
 .badge-tag-hint-awakened {
-  background: linear-gradient(180deg, #b81400 0%, #4a0800 100%) !important;
+  background: linear-gradient(180deg, #b81400 0%, #4a0808 100%) !important;
   border-color: #ffd700 !important; color: #fff8d6 !important;
   animation: pulse-awakened-badge 1.4s infinite ease-in-out !important;
 }
@@ -757,6 +807,13 @@ body {
   background: linear-gradient(180deg, #7a5015 0%, #301f05 100%);
   border-color: #ffd700; color: #fff3a8;
   text-shadow: 0 1px 2px #000;
+}
+
+/* 再現モード時の陣中鑑札 */
+.badge-tag-replay {
+  background: linear-gradient(180deg, #59196b 0%, #200729 100%) !important;
+  border-color: #ffd700 !important; color: #fce8ff !important;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.6) !important;
 }
 
 /* 軍師肖像札 */
@@ -805,6 +862,23 @@ body {
 }
 .order-message-banner.my-turn .order-message-text { 
   animation: pulse-text-glow 2.0s infinite ease-in-out !important; 
+}
+
+/* ⚔ 対局復帰ボタン（中断した真剣勝負へ戻る・特大朱塗り金覆輪） */
+@keyframes pulse-resume-battle {
+  0%   { transform: scale(1); box-shadow: 0 2.5px 0 #1f0505, 0 0 6px #ffd700; border-color: #ffd700; }
+  50%  { transform: scale(1.05); box-shadow: 0 3px 0 #1f0505, 0 0 18px #ff3300, 0 0 26px #ffd700; border-color: #ffffff; }
+  100% { transform: scale(1); box-shadow: 0 2.5px 0 #1f0505, 0 0 6px #ffd700; border-color: #ffd700; }
+}
+
+.resume-battle-btn {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 900;
+  background: linear-gradient(180deg, #e61919 0%, #7a0808 100%);
+  border: 1.8px solid #ffd700; border-radius: 4px;
+  color: #ffffff; padding: 4.5px 10px; white-space: nowrap; cursor: pointer;
+  animation: pulse-resume-battle 1.4s infinite ease-in-out;
+  flex-shrink: 0; line-height: 1.1;
+  text-shadow: 0 1px 3px #000;
 }
 
 /* 🪭 別の策ボタン */
@@ -868,7 +942,7 @@ body {
 .hl-prom { color: #ff5252; font-weight: 900; }
 
 /* =========================================================
-   下部帯：「📖 棋譜」ボタン ＆ 自動再生・変速 ＆ 直近手順ストリーム
+   【刷新】下部帯：「対局モード」と「再現モード」の完全分離UI
    ========================================================= */
 .kifu-bottom-banner {
   width: 100%; height: clamp(40px, 5.8vh, 46px);
@@ -876,28 +950,68 @@ body {
   border: 1.5px solid #a67c33; border-radius: 4px;
   display: flex; align-items: stretch; padding: 2px 4px; gap: 4px;
   box-shadow: inset 0 0 10px rgba(0,0,0,0.95); flex-shrink: 0;
+  transition: all 0.3s ease;
 }
 
-.kifu-nav-col {
-  display: flex; flex-direction: column; justify-content: space-between;
-  width: 104px; border-right: 1px solid #73511f; padding-right: 3px; flex-shrink: 0;
+/* ① 対局中レイアウト（mode-battle） */
+.kifu-bottom-banner.mode-battle {
+  border-color: #a67c33;
+}
+.kifu-bottom-banner.mode-battle .battle-launcher-box {
+  display: flex !important; width: 84px; flex-shrink: 0;
+}
+.kifu-bottom-banner.mode-battle .replay-full-controls {
+  display: none !important; /* 再生ボタン等は完全非表示 */
+}
+.kifu-bottom-banner.mode-battle .kifu-stream-box {
+  flex-grow: 1;
 }
 
-.kifu-nav-top-row {
-  display: flex; gap: 2px; align-items: center; width: 100%; height: 18px;
-}
-
+/* 「📖 合戦絵巻」起動ボタン（対局時に堂々と配置） */
 .btn-kifu-launcher {
-  flex: 1.2; height: 100%; font-family: var(--font-ui);
-  font-size: 10px; font-weight: 900; color: #ffd700;
-  background: linear-gradient(180deg, #44210c 0%, #1c0a03 100%);
-  border: 1.2px solid #ffd700; border-radius: 3px;
+  width: 100%; height: 100%;
+  font-family: var(--font-ui);
+  font-size: 11px; font-weight: 900; color: #ffd700;
+  background: linear-gradient(180deg, #4d230d 0%, #1c0a03 100%);
+  border: 1.3px solid #ffd700; border-radius: 3px;
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; padding: 0; letter-spacing: 0.2px; white-space: nowrap;
+  cursor: pointer; padding: 0 4px; letter-spacing: 0.4px; white-space: nowrap;
   box-shadow: 0 2px 0 #100401, 0 3px 4px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.4);
 }
+.btn-kifu-launcher:hover {
+  background: linear-gradient(180deg, #6b3314 0%, #290e04 100%);
+}
 
-/* 自動再生ボタン */
+/* ② 再現中レイアウト（mode-replay） */
+.kifu-bottom-banner.mode-replay {
+  border-color: #ffd700 !important;
+  background: linear-gradient(180deg, rgba(38, 14, 45, 0.98) 0%, rgba(16, 5, 20, 0.98) 100%) !important;
+  box-shadow: 0 0 14px rgba(255, 215, 0, 0.5), inset 0 0 10px rgba(0,0,0,0.95) !important;
+}
+.kifu-bottom-banner.mode-replay .battle-launcher-box {
+  display: none !important; /* 「合戦絵巻」ボタンは隠してスッキリ */
+}
+.kifu-bottom-banner.mode-replay .replay-full-controls {
+  display: flex !important; /* 鑑賞コントローラー群を堂々配置 */
+  width: 100%; align-items: center; justify-content: space-between; gap: 4px;
+}
+.kifu-bottom-banner.mode-replay .kifu-stream-box {
+  display: none !important; /* 再現中はコントローラーに全幅を譲る */
+}
+
+/* 鑑賞コントローラー小判ボタン群 */
+.replay-ctrl-left-group {
+  display: flex; align-items: center; gap: 3px; flex-shrink: 0;
+}
+.replay-step-btn {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 900;
+  padding: 4px 8px; border: 1.2px solid #ffd700; border-radius: 3px;
+  background: linear-gradient(180deg, #421c0b 0%, #170702 100%);
+  color: #fff6be; cursor: pointer; white-space: nowrap;
+  box-shadow: 0 2px 0 #080201, 0 2px 4px rgba(0,0,0,0.8);
+}
+.replay-step-btn:hover { background: #5c2710; }
+
 @keyframes pulse-auto-playing {
   0%   { background: linear-gradient(180deg, #b81414 0%, #4a0808 100%); box-shadow: 0 2px 0 #1c0202, 0 0 6px #ff3300; border-color: #ffd700; }
   50%  { background: linear-gradient(180deg, #e62222 0%, #7a0c0c 100%); box-shadow: 0 2px 0 #1c0202, 0 0 14px #ffd700; border-color: #ffffff; }
@@ -905,44 +1019,37 @@ body {
 }
 
 .kifu-auto-btn {
-  flex: 1.4; height: 100%; font-family: var(--font-ui);
-  font-size: 9.5px; font-weight: 900; color: #fff8d6;
-  background: linear-gradient(180deg, #5e330a 0%, #241103 100%);
-  border: 1.2px solid #ffd700; border-radius: 3px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; padding: 0; white-space: nowrap; line-height: 1;
-  box-shadow: 0 2px 0 #0e0501, 0 2px 4px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.4);
-  transition: all 0.2s ease;
+  font-family: var(--font-ui); font-size: 11px; font-weight: 900;
+  padding: 4px 10px; border: 1.5px solid #ffd700; border-radius: 3px;
+  background: linear-gradient(180deg, #703d0d 0%, #2e1604 100%);
+  color: #ffffff; cursor: pointer; white-space: nowrap;
+  box-shadow: 0 2.5px 0 #120501, 0 3px 5px rgba(0,0,0,0.8);
 }
 .kifu-auto-btn.is-playing {
   animation: pulse-auto-playing 1.2s infinite ease-in-out !important;
-  color: #ffffff !important;
 }
 
-/* 速度切替ボタン */
 .kifu-speed-btn {
-  width: 24px; height: 100%; font-family: var(--font-ui);
-  font-size: 9px; font-weight: 900; color: #ffd700;
-  background: linear-gradient(180deg, #2e160a 0%, #120602 100%);
-  border: 1px solid #ffd700; border-radius: 3px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; padding: 0; white-space: nowrap; line-height: 1;
-  box-shadow: 0 2px 0 #080201, 0 2px 3px rgba(0,0,0,0.8);
+  font-family: var(--font-ui); font-size: 10px; font-weight: 900;
+  padding: 4px 6px; border: 1px solid #ffd700; border-radius: 3px;
+  background: #240e04; color: #ffd700; cursor: pointer; white-space: nowrap;
 }
-.kifu-speed-btn:hover { background: #4a2410; }
 
-.kifu-step-btn-group { display: flex; gap: 2px; }
-.kifu-step-btn {
-  flex: 1; font-size: 9px; padding: 2px 0; border: 1px solid #a67c33;
-  background: #2b170c; color: #ffd700; cursor: pointer; border-radius: 2px;
-  box-shadow: 0 2px 0 #0f0502, 0 2px 3px rgba(0,0,0,0.8);
+/* 再現終了・対局へ戻るボタン（右端に堂々と配置） */
+.btn-finish-replay {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 900;
+  padding: 4px 10px; border: 1.5px solid #ff9e9e; border-radius: 3px;
+  background: linear-gradient(180deg, #c71818 0%, #520606 100%);
+  color: #ffffff; cursor: pointer; white-space: nowrap;
+  box-shadow: 0 2.5px 0 #1c0202, 0 3px 6px rgba(0,0,0,0.85);
+  margin-left: auto;
 }
-.btn-step-latest { color: #ffb74d !important; }
 
+/* 棋譜ストリーム */
 .kifu-stream-box {
   display: grid; grid-template-rows: repeat(2, 16px); grid-auto-flow: column;
   gap: 1px 12px; overflow-x: auto; overflow-y: hidden;
-  flex-grow: 1; font-size: 10.5px; color: #fcedcb; text-align: left;
+  font-size: 10.5px; color: #fcedcb; text-align: left;
   white-space: nowrap; align-items: center; padding-bottom: 1px;
 }
 .kifu-item-cell { display: flex; align-items: center; white-space: nowrap; cursor: pointer; line-height: 16px; }
@@ -1061,7 +1168,7 @@ body {
 }
 
 /* =========================================================
-   【大幅刷新】天下合戦勲功録（戦歴帳モーダル）
+   【天下合戦勲功録】（戦歴帳モーダル）
    ========================================================= */
 .battle-history-modal-box {
   width: 96vw !important; max-width: 540px !important; height: 88vh !important;
@@ -1133,7 +1240,7 @@ body {
   padding-right: 3px; margin-bottom: 6px;
 }
 
-/* 合戦絵巻カード（安土桃山風の重厚巻物カード） */
+/* 合戦絵巻カード */
 .history-record-card {
   background: linear-gradient(180deg, rgba(28, 12, 5, 0.98) 0%, rgba(12, 5, 2, 0.98) 100%);
   border: 1.5px solid #8e6c31; border-radius: 6px;
@@ -1149,7 +1256,6 @@ body {
 .history-card-top-row { display: flex; justify-content: space-between; align-items: center; }
 .history-date-txt { font-size: 9px; color: #d6be89; font-weight: 700; }
 
-/* 黄金勝名乗り小判 ＆ 朱塗り討死札 */
 .history-res-badge {
   font-family: var(--font-kaisho);
   font-size: 11px; font-weight: 900; padding: 2px 8px; border-radius: 4px;
@@ -1171,7 +1277,6 @@ body {
   border: 1.3px solid #ffe57f; color: #ffeb3b;
 }
 
-/* 合戦対陣行（兵力対決を明示） */
 .history-matchup-row {
   display: flex; align-items: center; justify-content: space-between;
   font-size: 11.5px; font-weight: 900; color: #fff8e7;
@@ -1196,9 +1301,14 @@ body {
   font-size: 8.5px; font-weight: 900; padding: 1px 6px; border-radius: 3px;
   background: #6e4c0a; color: #fff2a8; border: 0.8px solid #ffd700;
 }
+
+.history-card-actions {
+  display: flex; gap: 5px; align-items: center;
+}
+
 .history-replay-btn {
   font-family: var(--font-ui); font-size: 9.5px; font-weight: 900;
-  padding: 3px 10px; border-radius: 3px; border: 1.2px solid #ffd700;
+  padding: 3px 8px; border-radius: 3px; border: 1.2px solid #ffd700;
   background: linear-gradient(180deg, #573210 0%, #241103 100%);
   color: #ffe899; cursor: pointer;
   box-shadow: 0 2px 0 #100401, 0 2px 4px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.4);
@@ -1239,7 +1349,7 @@ body {
 .furigoma-back { font-family: var(--font-gyosho); transform: rotateY(180deg); color: var(--promoted-crimson); font-size: 13.5px; font-weight: 900; line-height: 1.0; }
 
 /* =========================================================
-   国盗り絵巻モーダル ＆ 総動員力成長プレート
+   【国盗り天下絵巻】（大戦略マップモーダル）
    ========================================================= */
 .conquest-modal-box {
   width: 96vw !important; max-width: 540px !important; height: 88vh !important;
@@ -1255,7 +1365,14 @@ body {
 }
 .conquest-progress-bar { height: 100%; background: linear-gradient(90deg, #ffd700, #ff3b30); width: 0%; transition: width 0.5s ease; }
 
-/* 自軍総動員力成長バナー */
+.conquest-player-link-btn {
+  font-family: var(--font-ui); font-size: 10px; font-weight: 900;
+  padding: 2.5px 8px; border-radius: 3px; border: 1.2px solid #ff9e9e;
+  background: linear-gradient(180deg, #7a1515 0%, #2e0505 100%);
+  color: #fff0f0; cursor: pointer; white-space: nowrap;
+  box-shadow: 0 2px 0 #140202, 0 3px 5px rgba(0,0,0,0.8);
+}
+
 .conquest-troops-growth-banner {
   background: linear-gradient(90deg, #381a0a 0%, #6e2e0f 50%, #381a0a 100%);
   border: 1.3px solid #ffd700; border-radius: 4px;
@@ -1364,7 +1481,7 @@ body {
 }
 
 /* =========================================================
-   【大幅進化】棋譜＆陣地争奪推移モーダル
+   【当局・合戦絵巻】（棋譜＆陣地争奪推移モーダル）
    ========================================================= */
 .modal-kifu-panorama {
   width: 96vw; max-width: 540px; height: 88vh; display: flex; flex-direction: column; gap: 5px;
@@ -1376,7 +1493,6 @@ body {
   background: #240a02; box-shadow: 0 1.5px 3px rgba(0,0,0,0.8);
 }
 
-/* 両軍残存兵力対比カウンター */
 .kifu-troops-confrontation-bar {
   background: linear-gradient(90deg, #3d1405 0%, #160601 50%, #0d1e38 100%);
   border: 1.5px solid #ffd700; border-radius: 5px;
@@ -1440,7 +1556,7 @@ body {
   font-size: 10px; font-weight: 900; text-shadow: 0 1px 3px #000;
 }
 
-/* 棋譜木札リスト（黒漆金箔木札風リスト） */
+/* 棋譜木札リスト */
 .modal-kifu-content {
   flex: 1; overflow-y: auto; border: 1.2px solid #73511f; background: rgba(10,5,2,0.92);
   padding: 4px; font-size: 11px; line-height: 1.6; border-radius: 4px;
